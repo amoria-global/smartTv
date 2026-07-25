@@ -1,0 +1,58 @@
+/*
+ * App-wide typeface: Pragati Narrow, self-hosted (woff2 in /public/fonts)
+ * rather than pulled from the Google Fonts CDN — a TV app can't depend on
+ * that CDN being reachable, and local files render instantly with no FOUT.
+ * Latin + latin-ext subsets cover en/fr/rw.
+ *
+ * This lives in a real global CSS file (imported from _app.tsx, same as
+ * bootstrap-icons) rather than an inline <style> in _document: React
+ * HTML-escapes the single quotes in a <style>{`...`}</style> child to
+ * &#x27;, which the CSS parser then rejects — silently dropping any
+ * font-family that names a multi-word (therefore necessarily quoted)
+ * family. A .css file is served verbatim, so the quotes survive.
+ */
+
+@font-face {
+    font-family: 'Pragati Narrow';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(/fonts/pragati-narrow-400.woff2) format('woff2');
+}
+@font-face {
+    /* latin-ext subset (French/Kinyarwanda accents beyond Latin-1). */
+    font-family: 'Pragati Narrow';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(/fonts/pragati-narrow-400-ext.woff2) format('woff2');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1E00-1E9F, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+    font-family: 'Pragati Narrow';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url(/fonts/pragati-narrow-700.woff2) format('woff2');
+}
+@font-face {
+    font-family: 'Pragati Narrow';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url(/fonts/pragati-narrow-700-ext.woff2) format('woff2');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1E00-1E9F, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/*
+ * react-native-web injects its OWN default system-font stack onto every
+ * Text element (a generated atomic class), which beats a plain body-level
+ * rule — so this override needs !important to actually win. Bootstrap Icons
+ * are unaffected: their glyphs live on ::before pseudo-elements that set
+ * font-family: bootstrap-icons !important directly, and an element-level
+ * font never overrides a pseudo's own !important declaration.
+ */
+body,
+body * {
+    font-family: 'Pragati Narrow', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}

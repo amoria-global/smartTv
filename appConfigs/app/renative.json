@@ -1,0 +1,131 @@
+{
+    "$schema": "../../.rnv/schema/rnv.app.json",
+    "extendsTemplate": "@rnv/template-starter/appConfigs/base/renative.json",
+    "id": "app",
+    "common": {
+        "runtime": {
+            "welcomeMessage": "Connekyt"
+        },
+        "title": "Connekyt",
+        "id": "com.amoriaglobal.smarttv",
+        "description": "Connekyt — watch live events, book photographers, find your photos and donate, on the big screen.",
+        "author": "Amoria Global Tech <info@connekyt.com>",
+        "license": "UNLICENSED",
+        "backgroundColor": "#0B0B10",
+        "includedPermissions": ["INTERNET"]
+    },
+    "platforms": {
+        "androidtv": {
+            "entryFile": "index",
+            "multipleAPKs": false,
+            "assetFolderPlatform": "android",
+            "includedPermissions": ["INTERNET", "ACCESS_NETWORK_STATE"],
+            "minSdkVersion": 22,
+            "targetSdkVersion": 34,
+            "compileSdkVersion": 34,
+            "versionCode": "1",
+            "buildSchemes": {
+                "debug": {
+                    "signingConfig": "Debug",
+                    "bundleAssets": false
+                },
+                "release": {
+                    "signingConfig": "Release",
+                    "multipleAPKs": false,
+                    "aab": true,
+                    "bundleAssets": true,
+                    "bundleIsDev": false
+                }
+            }
+        },
+        "firetv": {
+            "entryFile": "index",
+            "multipleAPKs": false,
+            "assetFolderPlatform": "android",
+            "includedPermissions": ["INTERNET", "ACCESS_NETWORK_STATE"],
+            "minSdkVersion": 22,
+            "targetSdkVersion": 34,
+            "compileSdkVersion": 34,
+            "versionCode": "1",
+            "buildSchemes": {
+                "debug": {
+                    "signingConfig": "Debug",
+                    "bundleAssets": false
+                },
+                "release": {
+                    "signingConfig": "Release",
+                    "multipleAPKs": false,
+                    "bundleAssets": true,
+                    "bundleIsDev": false
+                }
+            }
+        },
+        "tvos": {
+            "entryFile": "index",
+            "provisioningStyle": "Automatic",
+            "includedPermissions": ["*"],
+            "buildSchemes": {
+                "debug": {
+                    "runScheme": "Debug",
+                    "bundleAssets": false
+                },
+                "release": {
+                    "runScheme": "Release",
+                    "bundleAssets": true,
+                    "bundleIsDev": false
+                }
+            }
+        },
+        "tizen": {
+            "appName": "Connekyt",
+            "entryFile": "index",
+            "certificateProfile": "ConnekytCert",
+            "package": "Cnkyt00TV1",
+            "id": "Cnkyt00TV1.Connekyt",
+            "buildSchemes": {
+                "debug": {
+                    "bundleAssets": false
+                },
+                "release": {
+                    "bundleAssets": true,
+                    "bundleIsDev": false
+                }
+            }
+        },
+        "webos": {
+            "entryFile": "index",
+            "id": "com.amoriaglobal.connekyt",
+            "appName": "Connekyt",
+            "buildSchemes": {
+                "debug": {
+                    "bundleAssets": false
+                },
+                "release": {
+                    "bundleAssets": true,
+                    "bundleIsDev": false
+                }
+            }
+        },
+        "web": {
+            "entryFile": "index",
+            "pagesDir": "src/pages",
+            "devServerHost": "0.0.0.0",
+            "buildSchemes": {
+                "debug": {
+                    "bundleAssets": false,
+                    "environment": "development"
+                },
+                "release": {
+                    "bundleAssets": true,
+                    "bundleIsDev": false,
+                    "environment": "production"
+                }
+            },
+            "custom": {
+                "deploy": {
+                    "type": "none"
+                }
+            }
+        }
+    }
+}
