@@ -24,6 +24,7 @@ import {
     sendStreamHeartbeat,
 } from '../features/events/api';
 import { getTvDeviceId } from '../services/deviceId';
+import { paidPurchasesEnabled } from '../config/policy';
 import { useAuth } from '../store/auth';
 import { usePlayerControls } from '../store/playerControls';
 import { useFocusNav } from '../hooks/useFocusNav';
@@ -1082,60 +1083,85 @@ function PayGatePanel({
                 <BackCircleButton onPress={onBack} />
             </View>
 
-            <View style={[styles.payGateCard, { backgroundColor: theme.static.colorSurface, borderColor: theme.static.colorBorder }]}>
-                {/* LEFT — the QR the phone scans */}
-                <View style={styles.payGateQrBoxLg}>
-                    <QRCodeSVG value={payUrl} size={248} bgColor="#FFFFFF" fgColor="#0B0B10" level="M" />
-                </View>
+            {paidPurchasesEnabled ? (
+                <View style={[styles.payGateCard, { backgroundColor: theme.static.colorSurface, borderColor: theme.static.colorBorder }]}>
+                    {/* LEFT — the QR the phone scans */}
+                    <View style={styles.payGateQrBoxLg}>
+                        <QRCodeSVG value={payUrl} size={248} bgColor="#FFFFFF" fgColor="#0B0B10" level="M" />
+                    </View>
 
-                {/* RIGHT — title, price, how-to-pay, status */}
-                <View style={styles.payGateRight}>
-                    <i className="bi bi-qr-code-scan" style={{ fontSize: 30, color: theme.static.colorAccent, marginBottom: 8 }} />
-                    <Text style={[styles.payGateTitleLeft, { color: theme.static.colorTextPrimary }]}>{strings.player.payGateTitle}</Text>
-                    <Text style={[styles.payGateSubtitleLeft, { color: theme.static.colorTextSecondary }]}>
-                        {strings.player.payGateSubtitle}
+                    {/* RIGHT — title, price, how-to-pay, status */}
+                    <View style={styles.payGateRight}>
+                        <i className="bi bi-qr-code-scan" style={{ fontSize: 30, color: theme.static.colorAccent, marginBottom: 8 }} />
+                        <Text style={[styles.payGateTitleLeft, { color: theme.static.colorTextPrimary }]}>{strings.player.payGateTitle}</Text>
+                        <Text style={[styles.payGateSubtitleLeft, { color: theme.static.colorTextSecondary }]}>
+                            {strings.player.payGateSubtitle}
+                        </Text>
+
+                        {priceLabel ? (
+                            <View style={styles.payGatePricePill}>
+                                <Text style={styles.payGatePriceText}>{priceLabel}</Text>
+                            </View>
+                        ) : null}
+
+                        <View style={styles.payGateOptions}>
+                            <View style={styles.payGateOptionRow}>
+                                <i className="bi bi-camera" style={{ fontSize: 15, color: theme.static.colorAccent }} />
+                                <Text style={[styles.payGateOptionText, { color: theme.static.colorTextSecondary }]}>
+                                    {strings.player.payGateOptionCamera}
+                                </Text>
+                            </View>
+                            <View style={styles.payGateOptionRow}>
+                                <i className="bi bi-phone" style={{ fontSize: 15, color: theme.static.colorAccent }} />
+                                <Text style={[styles.payGateOptionText, { color: theme.static.colorTextSecondary }]}>
+                                    {strings.player.payGateOptionApp}
+                                </Text>
+                            </View>
+                        </View>
+
+                        <View style={styles.payGateWaitingRow}>
+                            <ActivityIndicator size="small" color={theme.static.colorAccent} />
+                            <Text style={[styles.payGateWaitingText, { color: theme.static.colorTextSecondary }]}>
+                                {strings.player.payGateWaiting}
+                            </Text>
+                        </View>
+
+                        {/* Already-paid escape hatch — this TV auto-polls every 4s
+                            regardless, so this button doesn't do anything the app
+                            wasn't already going to do on its own; it just gives an
+                            impatient viewer (who just paid, or paid earlier under a
+                            different session on this same device) an immediate,
+                            visible "check right now" instead of a silent wait. */}
+                        <AlreadyPaidButton onPress={onCheckNow} checking={checking} />
+                        {message ? (
+                            <Text style={[styles.alreadyPaidMessage, { color: theme.static.colorTextSecondary }]}>{message}</Text>
+                        ) : null}
+                    </View>
+                </View>
+            ) : (
+                /* Reader mode (paidPurchasesEnabled=false): no purchase QR — store
+                   builds show a neutral "access unlocks automatically" message and
+                   keep only the verify-access button (checking an existing
+                   entitlement is not a purchase). */
+                <View style={[styles.giftCard, { backgroundColor: theme.static.colorSurface, borderColor: theme.static.colorBorder }]}>
+                    <i className="bi bi-lock-fill" style={{ fontSize: 30, color: theme.static.colorAccent, marginBottom: 8 }} />
+                    <Text style={[styles.giftTitle, { color: theme.static.colorTextPrimary }]}>{strings.player.payGateReaderTitle}</Text>
+                    <Text style={[styles.giftSubtitle, { color: theme.static.colorTextSecondary }]}>
+                        {strings.player.payGateReaderBody}
                     </Text>
 
                     {priceLabel ? (
-                        <View style={styles.payGatePricePill}>
+                        <View style={[styles.payGatePricePill, { alignSelf: 'center', marginBottom: 4 }]}>
                             <Text style={styles.payGatePriceText}>{priceLabel}</Text>
                         </View>
                     ) : null}
 
-                    <View style={styles.payGateOptions}>
-                        <View style={styles.payGateOptionRow}>
-                            <i className="bi bi-camera" style={{ fontSize: 15, color: theme.static.colorAccent }} />
-                            <Text style={[styles.payGateOptionText, { color: theme.static.colorTextSecondary }]}>
-                                {strings.player.payGateOptionCamera}
-                            </Text>
-                        </View>
-                        <View style={styles.payGateOptionRow}>
-                            <i className="bi bi-phone" style={{ fontSize: 15, color: theme.static.colorAccent }} />
-                            <Text style={[styles.payGateOptionText, { color: theme.static.colorTextSecondary }]}>
-                                {strings.player.payGateOptionApp}
-                            </Text>
-                        </View>
-                    </View>
-
-                    <View style={styles.payGateWaitingRow}>
-                        <ActivityIndicator size="small" color={theme.static.colorAccent} />
-                        <Text style={[styles.payGateWaitingText, { color: theme.static.colorTextSecondary }]}>
-                            {strings.player.payGateWaiting}
-                        </Text>
-                    </View>
-
-                    {/* Already-paid escape hatch — this TV auto-polls every 4s
-                        regardless, so this button doesn't do anything the app
-                        wasn't already going to do on its own; it just gives an
-                        impatient viewer (who just paid, or paid earlier under a
-                        different session on this same device) an immediate,
-                        visible "check right now" instead of a silent wait. */}
                     <AlreadyPaidButton onPress={onCheckNow} checking={checking} />
                     {message ? (
-                        <Text style={[styles.alreadyPaidMessage, { color: theme.static.colorTextSecondary }]}>{message}</Text>
+                        <Text style={[styles.alreadyPaidMessage, { color: theme.static.colorTextSecondary, textAlign: 'center' }]}>{message}</Text>
                     ) : null}
                 </View>
-            </View>
+            )}
         </View>
     );
 }

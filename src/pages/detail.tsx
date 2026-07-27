@@ -18,8 +18,14 @@ import {
     isCategoryRestricted,
     TvVideo,
 } from '../api/catalog';
-import { joinEvent, reconcileAnonymousStreamAccess } from '../features/events/api';
+import {
+    joinEvent,
+    reconcileAnonymousStreamAccess,
+    resolveViewerIdByFingerprint,
+    checkAnonymousStreamAccess,
+} from '../features/events/api';
 import { getTvDeviceId } from '../services/deviceId';
+import { paidPurchasesEnabled } from '../config/policy';
 import { isBookmarked, toggleBookmark } from '../features/bookmarks/api';
 import { useAuth } from '../store/auth';
 import { useTranslation } from '../i18n';
@@ -72,7 +78,6 @@ export default function DetailScreen() {
     const [shareOpen, setShareOpen] = useState(false);
     const [bookmarked, setBookmarked] = useState(false);
     const [verifyState, setVerifyState] = useState<'idle' | 'checking' | 'notfound'>('idle');
-    const [verifyDebug, setVerifyDebug] = useState<string | null>(null);
     const [paidSuccess, setPaidSuccess] = useState(false);
     const [deviceId, setDeviceId] = useState<string | null>(null);
     const [deviceAccess, setDeviceAccess] = useState(false);
@@ -206,17 +211,11 @@ export default function DetailScreen() {
             // 2) Device path — did a (possibly guest) payment bind to THIS TV
             //    via the pay-to-watch QR? Reconcile re-pulls the transaction.
             let devicePaid = false;
-            let deviceMismatch = false;
             const dev = deviceId ?? (await getTvDeviceId().catch(() => null));
             if (dev) {
                 const rec = await reconcileAnonymousStreamAccess(video.id, dev);
                 devicePaid = rec.hasAccess;
-                deviceMismatch = rec.deviceMismatch === true;
             }
-
-            setVerifyDebug(
-                `account.hasPurchasedAccess=${accountPaid} · device.hasAccess=${devicePaid}${deviceMismatch ? ' (device-mismatch)' : ''} · acct=${user?.email ?? 'not-signed-in'} · streamType=${fresh.streamType ?? 'none'}`,
-            );
 
             if (accountPaid || devicePaid) {
                 goToStreamAfterPayment();
@@ -224,19 +223,27 @@ export default function DetailScreen() {
             }
             setVerifyState('notfound');
         } catch (e) {
-            setVerifyDebug(`request failed: ${e instanceof Error ? e.message : 'unknown error'} · acct=${user?.email ?? 'not-signed-in'}`);
             setVerifyState('notfound');
         }
     };
 
-    // Auto-detect payment: while the Reserve QR is on screen (viewer is paying
-    // on their phone), quietly check every 4s — BOTH the account (web/mobile
-    // payment) and this device (guest pay-to-watch QR). The instant either
-    // shows access, take the viewer to the stream — no button press needed.
+    // Simplest possible experience: while a paid event is open and not yet
+    // unlocked, the TV keeps checking on its own every 5s — BOTH the account
+    // (paid on web/mobile signed in) and this device (paid via the TV's QR as
+    // a guest). The instant either shows access, it takes the viewer straight
+    // to the stream. No login, no typing, no button to press — they scan the
+    // TV's code, pay on their phone, and the TV unlocks itself.
+    //
+    // Uses the light "read status" checks for the loop (a couple of GETs);
+    // the heavier force-recheck (reconcile) is reserved for the manual
+    // "Already paid? Verify access" backup button.
     useEffect(() => {
-        if (!reserveOpen || !video || video.hasPurchasedAccess) return;
+        if (!video || video.hasPurchasedAccess || deviceAccess || paidSuccess) return;
+        const isPaid = video.streamType === 'entry_fee' || (video.streamFee ?? 0) > 0;
+        const canGoLive = video.status === 'UPCOMING' || video.status === 'LIVE';
+        if (!isPaid || !canGoLive) return;
         let active = true;
-        const t = setInterval(async () => {
+        const tick = async () => {
             try {
                 const fresh = await fetchVideoDetails(video.id);
                 if (active && fresh.id && fresh.hasPurchasedAccess) {
@@ -245,19 +252,21 @@ export default function DetailScreen() {
                     return;
                 }
                 const dev = deviceId ?? (await getTvDeviceId().catch(() => null));
-                if (active && dev) {
-                    const rec = await reconcileAnonymousStreamAccess(video.id, dev);
-                    if (active && rec.hasAccess) goToStreamAfterPayment();
-                }
+                if (!active || !dev) return;
+                const viewerId = await resolveViewerIdByFingerprint(video.id, dev);
+                if (!active || !viewerId) return;
+                const res = await checkAnonymousStreamAccess(video.id, viewerId, dev);
+                if (active && res.hasAccess) goToStreamAfterPayment();
             } catch {
                 /* transient — keep polling */
             }
-        }, 4000);
+        };
+        const t = setInterval(tick, 5000);
         return () => {
             active = false;
             clearInterval(t);
         };
-    }, [reserveOpen, video?.id, video?.hasPurchasedAccess, deviceId]);
+    }, [video?.id, video?.hasPurchasedAccess, video?.streamType, video?.streamFee, video?.status, deviceAccess, paidSuccess, deviceId]);
 
     if (loading) {
         return (
@@ -371,7 +380,10 @@ export default function DetailScreen() {
             }
           : isUpcoming && hasPaidAccess
             ? { title: strings.detail.watchLive, icon: 'bi-play-fill', onPress: () => router.push(`/player?id=${video.id}`) }
-            : isUpcoming
+            : // Reserve is an in-app purchase QR for PAID events. In reader mode
+              // (paidPurchasesEnabled=false, the store-safe fallback) suppress it
+              // for paid events — free-entry RSVP isn't a purchase, so it stays.
+              isUpcoming && (paidPurchasesEnabled || isFreeEntry)
               ? { title: strings.detail.reserveYourSpot, icon: 'bi-ticket-perforated-fill', price: isFreeEntry ? undefined : priceLabel, onPress: () => setReserveOpen(true) }
               : null;
 
@@ -490,6 +502,17 @@ export default function DetailScreen() {
                             </View>
                         ) : null}
 
+                        {/* Reader mode: paid event with no in-app purchase — explain
+                            that access is granted elsewhere and unlocks here. */}
+                        {isUpcoming && !hasPaidAccess && !isFreeEntry && !video.isFree && !paidPurchasesEnabled ? (
+                            <View style={styles.reservedNoteRow}>
+                                <i className="bi bi-lock-fill" style={{ fontSize: 14, color: theme.static.colorTextSecondary }} />
+                                <Text style={[styles.reservedNoteText, { color: theme.static.colorTextSecondary }]}>
+                                    {strings.detail.paidReaderNote}
+                                </Text>
+                            </View>
+                        ) : null}
+
                         {verifyState === 'notfound' && !hasPaidAccess ? (
                             <View style={{ marginTop: 10, maxWidth: 620 }}>
                                 <Text style={[styles.rsvpError, { color: theme.static.colorTextSecondary, marginTop: 0 }]}>
@@ -501,11 +524,6 @@ export default function DetailScreen() {
                                 <Text style={[styles.verifyHint, { color: theme.static.colorTextSecondary }]}>
                                     {strings.detail.verifySignedInAs} <Text style={{ fontWeight: '700' }}>{user?.email ?? '—'}</Text>. {strings.detail.verifyPayHint}
                                 </Text>
-                                {verifyDebug ? (
-                                    <Text selectable style={styles.verifyDebug}>
-                                        {'⚙ '}{verifyDebug}
-                                    </Text>
-                                ) : null}
                             </View>
                         ) : null}
 
@@ -933,7 +951,6 @@ const styles = StyleSheet.create({
 
     rsvpError: { fontSize: 13, marginTop: 12, maxWidth: 560 },
     verifyHint: { fontSize: 13, lineHeight: 19, marginTop: 6, opacity: 0.85 },
-    verifyDebug: { fontSize: 12, lineHeight: 17, marginTop: 8, color: '#8FE3B0', fontFamily: 'monospace' } as object,
     reservedNoteRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 16, maxWidth: 560 },
     reservedNoteText: { fontSize: 14, fontWeight: '600', flex: 1 },
 
