@@ -88,6 +88,7 @@ const en = {
             'Point your camera at the QR code →',
         ],
         switchToRemote: "Can't scan? Use remote to type instead",
+        pairingRevoked: 'This TV was disconnected from the account. Sign in again to reconnect it.',
         remoteInstructions: 'Enter your Connekyt email and password.',
         emailPlaceholder: 'Email',
         passwordPlaceholder: 'Password',

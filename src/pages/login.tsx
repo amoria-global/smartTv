@@ -50,7 +50,7 @@ export default function LoginScreen() {
     //   quietly retrying after a failed initiate call. Never shown as an
     //   alarming error; a TV login screen should read as calm, not broken.
     const [pairingCode, setPairingCode] = useState<string | null>(null);
-    const [qrStatus, setQrStatus] = useState<'preparing' | 'waiting' | 'connected'>('preparing');
+    const [qrStatus, setQrStatus] = useState<'preparing' | 'waiting' | 'connected' | 'revoked'>('preparing');
     const [secondsLeft, setSecondsLeft] = useState(PAIRING_TTL_SECONDS);
     const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
     const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -77,11 +77,12 @@ export default function LoginScreen() {
         setPairingCode(null);
         setQrStatus('preparing');
         try {
-            const { pairingCode: code } = await initiateTvPairing();
+            const { pairingCode: code, deviceSecret, ttlSeconds } = await initiateTvPairing();
             if (!mountedRef.current) return;
             setPairingCode(code);
             setQrStatus('waiting');
-            setSecondsLeft(PAIRING_TTL_SECONDS);
+            // The server owns the TTL; fall back only if an older build omits it.
+            setSecondsLeft(ttlSeconds ?? PAIRING_TTL_SECONDS);
 
             countdownRef.current = setInterval(() => {
                 setSecondsLeft((s) => Math.max(0, s - 1));
@@ -89,7 +90,10 @@ export default function LoginScreen() {
 
             pollRef.current = setInterval(async () => {
                 try {
-                    const session = await pollTvPairingStatus(code);
+                    // The secret, never the code, is what unlocks the session
+                    // (CONN-TV-1). It is deliberately not put in state that any
+                    // render path can reach - nothing on screen may show it.
+                    const session = await pollTvPairingStatus(code, deviceSecret);
                     if (!mountedRef.current) return;
                     if (session) {
                         setQrStatus('connected');
@@ -97,10 +101,28 @@ export default function LoginScreen() {
                         applySession(session);
                         setTimeout(() => router.replace('/profiles'), 900);
                     }
-                } catch {
-                    // Code expired or was invalidated — quietly fetch a fresh one
-                    // rather than stopping and waiting for the user to tap refresh.
+                } catch (err) {
                     if (!mountedRef.current) return;
+                    const status = (err as { status?: number } | null)?.status;
+                    const message = (err as { message?: string } | null)?.message ?? '';
+
+                    // Someone removed this TV from the account. Restarting here
+                    // would silently re-pair a device that was deliberately
+                    // disconnected, so stop and say so instead (CONN-TV-6).
+                    if (message.includes('disconnected from the account')) {
+                        stopTimers();
+                        setQrStatus('revoked');
+                        return;
+                    }
+
+                    // Rate limited. The old blanket restart turned a 429 into a
+                    // retry storm: every rejection immediately called initiate
+                    // again, which is the behaviour the limiter exists to stop.
+                    // Back off and let the existing code ride out the window.
+                    if (status === 429) return;
+
+                    // Anything else (expired, invalidated) — quietly fetch a
+                    // fresh code rather than waiting for the user to tap refresh.
                     startPairing();
                 }
             }, POLL_INTERVAL_MS);
@@ -237,17 +259,31 @@ export default function LoginScreen() {
                         <View style={[styles.qrCard, styles.glass, { padding: Math.round(32 * qrScale) }]}>
                             <CornerBrackets color={theme.static.colorAccent} />
                             <View style={[styles.qrBox, { width: qrBoxSize, height: qrBoxSize }]}>
-                                {!pairingCode ? (
+                                {qrStatus === 'revoked' ? (
+                                    // Someone removed this TV from the account. Showing a
+                                    // fresh QR here would invite the user to undo a
+                                    // deliberate disconnect without realising (CONN-TV-6).
+                                    <Text
+                                        accessibilityRole="alert"
+                                        style={[styles.instructions, { color: '#0B0B10', textAlign: 'center' }]}
+                                    >
+                                        {strings.login.pairingRevoked}
+                                    </Text>
+                                ) : !pairingCode ? (
                                     <ActivityIndicator size="large" color={theme.static.colorAccent} />
-                                ) : pairingCode ? (
+                                ) : (
                                     <QRCodeSVG
+                                        // Only the human code. The device secret must never
+                                        // reach the screen: anything rendered here is
+                                        // photographable, which is the whole premise of
+                                        // CONN-TV-1.
                                         value={JSON.stringify({ code: pairingCode })}
                                         size={Math.round(220 * qrScale)}
                                         bgColor="#FFFFFF"
                                         fgColor="#0B0B10"
                                         level="M"
                                     />
-                                ) : null}
+                                )}
                             </View>
                         </View>
                     </View>

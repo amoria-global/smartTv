@@ -81,19 +81,42 @@ export async function initiateTvPairing(): Promise<TvPairingInitiation> {
 /**
  * Polls the pairing status. Returns null while still pending, an
  * AuthSession once the phone confirms it, or throws if the code expired.
+ *
+ * `deviceSecret` is what actually unlocks the session (CONN-TV-1). Without it
+ * the backend answers with lifecycle state only - no tokens, no account
+ * details - which is what makes the code on the screen safe to display. It
+ * travels as a header rather than in the path so it stays out of access logs
+ * and proxy logs, where URL-borne credentials leak from.
  */
-export async function pollTvPairingStatus(pairingCode: string): Promise<AuthSession | null> {
+export async function pollTvPairingStatus(
+    pairingCode: string,
+    deviceSecret?: string,
+): Promise<AuthSession | null> {
     const res = await api.get<{ action: number; message?: string; data?: TvPairingStatus }>(
         `/tv/pairing/status/${encodeURIComponent(pairingCode)}`,
-        { skipAuth: true },
+        {
+            skipAuth: true,
+            ...(deviceSecret ? { headers: { 'X-Device-Secret': deviceSecret } } : {}),
+        },
     );
     if (res.action !== 1 || !res.data) {
         throw { status: 400, message: res.message || 'Pairing session not found.' } satisfies ApiError;
+    }
+    if (res.data.status === 'REVOKED') {
+        // Not the same as expiry: someone removed this TV from the account.
+        // Offering "refresh for a new code" here would just re-pair a device
+        // that was deliberately disconnected.
+        throw {
+            status: 410,
+            message: 'This TV was disconnected from the account. Sign in again to reconnect.',
+        } satisfies ApiError;
     }
     if (res.data.status === 'EXPIRED') {
         throw { status: 410, message: 'This QR code expired. Refresh to get a new one.' } satisfies ApiError;
     }
     if (res.data.status === 'PENDING') return null;
+    // We hold a session already and polled again; nothing new to claim.
+    if (res.data.status === 'ALREADY_CLAIMED') return null;
 
     const loginRes = res.data as LoginResponse & { status: 'ACTIVE' };
     if (!loginRes.token) return null;

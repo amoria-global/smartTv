@@ -87,6 +87,7 @@ const fr: Strings = {
             'Pointez votre caméra vers le code QR →',
         ],
         switchToRemote: 'Impossible de scanner ? Utilisez la télécommande pour saisir',
+        pairingRevoked: 'Ce téléviseur a été déconnecté du compte. Reconnectez-vous pour le relier à nouveau.',
         remoteInstructions: 'Entrez votre e-mail et mot de passe Connekyt.',
         emailPlaceholder: 'E-mail',
         passwordPlaceholder: 'Mot de passe',
