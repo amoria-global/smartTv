@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
     bookmarkButton: {
         width: 24,
         height: 24,
-        borderRadius: 12,
+        borderRadius: 9999,
         backgroundColor: 'rgba(0,0,0,0.45)',
         alignItems: 'center',
         justifyContent: 'center',

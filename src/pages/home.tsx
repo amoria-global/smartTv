@@ -980,7 +980,7 @@ const styles = StyleSheet.create({
     pageFooterChipIcon: {
         width: 26,
         height: 26,
-        borderRadius: 13,
+        borderRadius: 9999,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundImage: 'linear-gradient(135deg, #083A85 0%, #F20C8F 100%)',

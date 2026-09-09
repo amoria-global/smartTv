@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
     // cluster gives up, the more headroom the center nav pill has before
     // French/Kinyarwanda's longer labels start crowding it again.
     right: { flexDirection: 'row', alignItems: 'center', justifySelf: 'end', gap: 10 } as object,
-    iconButton: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
+    iconButton: { width: 36, height: 36, borderRadius: 9999, alignItems: 'center', justifyContent: 'center' },
     avatarButton: {},
     avatar: { width: 36, height: 36, borderRadius: 18 },
     avatarFallback: { alignItems: 'center', justifyContent: 'center' },

@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     cta: {
         paddingVertical: 16,
         paddingHorizontal: 48,
-        borderRadius: 10,
+        borderRadius: 9999,
         marginBottom: 24,
     },
     ctaText: { color: '#fff', fontSize: 16, fontWeight: '800' },

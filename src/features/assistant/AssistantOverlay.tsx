@@ -324,8 +324,8 @@ const styles = StyleSheet.create({
     bubbleText: { fontSize: 14, lineHeight: 20 },
     loadingIndicator: { marginTop: 4, alignSelf: 'flex-start' },
     inputRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 8 },
-    micButton: { width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center' },
+    micButton: { width: 48, height: 48, borderRadius: 9999, alignItems: 'center', justifyContent: 'center' },
     input: { flex: 1, borderWidth: 1, borderRadius: 10, paddingHorizontal: 16, paddingVertical: 12, fontSize: 14 },
-    sendButton: { borderRadius: 10, paddingVertical: 12, paddingHorizontal: 20 },
+    sendButton: { borderRadius: 9999, paddingVertical: 12, paddingHorizontal: 20 },
     sendButtonText: { fontSize: 13, fontWeight: '800' },
 });

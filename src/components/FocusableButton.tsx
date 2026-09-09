@@ -39,7 +39,7 @@ export function FocusableButton({ title, onPress, hasTVPreferredFocus, disabled,
 
 const styles = StyleSheet.create({
     button: {
-        borderRadius: 8,
+        borderRadius: 9999,
         borderWidth: 2,
         paddingVertical: 12,
         paddingHorizontal: 24,

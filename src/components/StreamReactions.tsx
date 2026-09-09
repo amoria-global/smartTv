@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     reactionButton: {
         width: 44,
         height: 44,
-        borderRadius: 22,
+        borderRadius: 9999,
         backgroundColor: 'rgba(21,21,28,0.55)',
         alignItems: 'center',
         justifyContent: 'center',
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
     hideButton: {
         width: 40,
         height: 40,
-        borderRadius: 20,
+        borderRadius: 9999,
         backgroundColor: 'rgba(21,21,28,0.6)',
         alignItems: 'center',
         justifyContent: 'center',

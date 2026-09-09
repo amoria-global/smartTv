@@ -1,5 +1,6 @@
 {
     "name": "smarttv",
+    "packageManager": "yarn@1.22.22",
     "devDependencies": {
         "@flexn/assets-renative-outline": "0.3.5",
         "@flexn/typescript-config": "1.0.0",
