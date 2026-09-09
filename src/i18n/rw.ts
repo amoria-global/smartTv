@@ -87,6 +87,7 @@ const rw: Strings = {
             'Erekeza kamera yawe kuri kode ya QR →',
         ],
         switchToRemote: 'Ntushobora gusikana? Koresha telecommande wandike',
+        pairingRevoked: 'Iyi TV yakuwe kuri konti. Ongera winjire kugira ngo uyihuze.',
         remoteInstructions: "Andika email n'ijambo ry'ibanga rya Connekyt.",
         emailPlaceholder: 'Imeyili',
         passwordPlaceholder: "Ijambo ry'ibanga",
