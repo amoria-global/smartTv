@@ -509,7 +509,7 @@ const styles = StyleSheet.create({
     passwordInput: { paddingRight: 70 },
     showPasswordButton: { position: 'absolute', right: 16, top: 14, bottom: 16, justifyContent: 'center' },
     showPasswordText: { fontSize: 14, fontWeight: '700' },
-    signInButton: { borderRadius: 10, paddingVertical: 16, alignItems: 'center', marginTop: 8 },
+    signInButton: { borderRadius: 9999, paddingVertical: 16, alignItems: 'center', marginTop: 8 },
     signInText: { color: '#fff', fontSize: 16, fontWeight: '700' },
     qrCard: { borderRadius: 20, padding: 32, position: 'relative' },
     formCard: { borderRadius: 20, padding: 32, maxWidth: 480 },
@@ -578,6 +578,6 @@ const styles = StyleSheet.create({
     },
     alertTitle: { fontSize: 20, fontWeight: '800', marginBottom: 8, textAlign: 'center' },
     alertMessage: { fontSize: 14, textAlign: 'center', lineHeight: 20, marginBottom: 24 },
-    alertButton: { alignSelf: 'stretch', borderRadius: 10, paddingVertical: 14, alignItems: 'center' },
+    alertButton: { alignSelf: 'stretch', borderRadius: 9999, paddingVertical: 14, alignItems: 'center' },
     alertButtonText: { color: '#fff', fontSize: 15, fontWeight: '700' },
 });
