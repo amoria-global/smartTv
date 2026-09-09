@@ -32,7 +32,21 @@ export const useAuth = create<AuthState>((set) => ({
 
     bootstrap: async () => {
         set({ status: 'loading' });
-        setOnAuthExpired(() => set({ status: 'unauthenticated', session: null, user: null }));
+        // A failed refresh means this device's session is gone for good - the
+        // access token expired AND the refresh token was rejected, which is
+        // exactly what "Disconnect this TV" does from the owner's phone.
+        //
+        // Clearing in-memory state is not enough. loadSession() reads the
+        // persisted session straight back with no validation, so a TV that was
+        // deliberately disconnected would show the login screen, then restart
+        // and boot itself back into a signed-in UI for the revoked account,
+        // 401ing on every request. A television is a SHARED device: the next
+        // person in the room would be looking at the previous owner's account
+        // shell. The stored tokens have to go with the state.
+        setOnAuthExpired(() => {
+            void authApi.clearSession();
+            set({ status: 'unauthenticated', session: null, user: null });
+        });
 
         const session = await authApi.loadSession();
         if (session) {

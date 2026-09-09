@@ -2,6 +2,7 @@ import React, { useCallback, useContext, useEffect, useRef, useState } from 'rea
 import { ActivityIndicator, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'next/router';
 import { QRCodeSVG } from 'qrcode.react';
+import { FocusableButton } from '../components/FocusableButton';
 import { ThemeContext, ICON_LOGO } from '../config';
 import { initiateTvPairing, login, pollTvPairingStatus } from '../features/auth/api';
 import { useAuth, isApiError } from '../store/auth';
@@ -260,15 +261,25 @@ export default function LoginScreen() {
                             <CornerBrackets color={theme.static.colorAccent} />
                             <View style={[styles.qrBox, { width: qrBoxSize, height: qrBoxSize }]}>
                                 {qrStatus === 'revoked' ? (
-                                    // Someone removed this TV from the account. Showing a
-                                    // fresh QR here would invite the user to undo a
-                                    // deliberate disconnect without realising (CONN-TV-6).
-                                    <Text
-                                        accessibilityRole="alert"
-                                        style={[styles.instructions, { color: '#0B0B10', textAlign: 'center' }]}
-                                    >
-                                        {strings.login.pairingRevoked}
-                                    </Text>
+                                    // Someone removed this TV from the account. A fresh QR
+                                    // must not appear on its own - that would silently undo
+                                    // a deliberate disconnect (CONN-TV-6). Reconnecting is
+                                    // offered, but only behind an explicit press, and the
+                                    // button is focusable because a remote is the only input
+                                    // a television has.
+                                    <View style={{ alignItems: 'center', paddingHorizontal: gap(16) }}>
+                                        <Text
+                                            accessibilityRole="alert"
+                                            style={[styles.instructions, { color: '#0B0B10', textAlign: 'center', marginBottom: gap(20) }]}
+                                        >
+                                            {strings.login.pairingRevoked}
+                                        </Text>
+                                        <FocusableButton
+                                            title={strings.login.tryAgainButton}
+                                            onPress={startPairing}
+                                            hasTVPreferredFocus
+                                        />
+                                    </View>
                                 ) : !pairingCode ? (
                                     <ActivityIndicator size="large" color={theme.static.colorAccent} />
                                 ) : (
