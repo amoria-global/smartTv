@@ -28,7 +28,10 @@ export function Navbar() {
     const router = useRouter();
     const user = useAuth((s) => s.user);
     const logout = useAuth((s) => s.logout);
-    const initial = (user?.firstName?.[0] ?? user?.email?.[0] ?? '?').toUpperCase();
+    // firstName -> lastName -> '?'. Was firstName -> email[0], but the QR
+    // pairing handoff no longer carries an email (CONN-TV-5) and lastName is
+    // already in the payload, so this covers the same gap without needing one.
+    const initial = (user?.firstName?.[0] ?? user?.lastName?.[0] ?? '?').toUpperCase();
     // Falls back to the initials circle if the photo URL 404s/is unreachable
     // (e.g. dev profilePicture URLs point at a LAN IP) — Image renders
     // nothing on load failure otherwise, leaving an invisible gap.
