@@ -5,7 +5,13 @@ export type CustomerType = 'Photographer' | 'Client' | 'Coordinator' | 'Viewer';
 
 export type User = {
     customerId: ID;
-    email: string;
+    /**
+     * Optional because the QR pairing path does not receive it. The backend
+     * stopped sending email in the TV handoff (CONN-TV-5): a television is a
+     * shared screen and nothing here renders an address. The remote
+     * email/password path still has it, because the user typed it.
+     */
+    email?: string;
     firstName?: string;
     lastName?: string;
     phone?: string;
