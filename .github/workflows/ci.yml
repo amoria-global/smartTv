@@ -1,0 +1,45 @@
+name: ci
+
+# The first CI this repo has ever had (CONN-TEST-6).
+#
+# The testing epic listed SmartTV as "not available to assess". It is
+# amoria-global/smartTv, and it already had a Vitest suite, but with no
+# workflow nothing ran it: the tests only ran when someone remembered, and none
+# of them touched pairing or sign-out, which is where the SmartTV epic's
+# defects were. src/features/auth/api.test.ts now covers that flow.
+#
+# Node 20 and yarn 1.22.22 with --frozen-lockfile, matching what developers run
+# here. Verified before committing with a clean install in a throwaway copy:
+# install, typecheck and test all exit 0. The ReNative postinstall hook
+# (scripts/postinstall.js) catches its own errors, so it cannot fail an install.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: yarn
+
+      - name: Install dependencies
+        # --frozen-lockfile, not --immutable: yarn 1.22.22 with a v1 lockfile,
+        # and --immutable is Berry-only syntax.
+        run: yarn install --frozen-lockfile --non-interactive
+
+      - name: Typecheck
+        run: yarn typecheck
+
+      - name: Test
+        run: yarn test

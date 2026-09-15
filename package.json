@@ -30,6 +30,7 @@
     "scripts": {
         "postinstall": "node scripts/postinstall.js",
         "test": "vitest run",
+        "typecheck": "tsc --noEmit",
         "test:watch": "vitest"
     },
     "version": "0.1.0",
