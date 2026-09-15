@@ -38,6 +38,25 @@ jobs:
         # and --immutable is Berry-only syntax.
         run: yarn install --frozen-lockfile --non-interactive
 
+      - name: Generate the ReNative runtime config
+        # src/config.tsx imports platformAssets/renative.runtime.json, which rnv
+        # writes during run/build and .gitignore excludes, so a fresh checkout
+        # does not have it and tsc fails with TS2307. rnv builds it by merging
+        # the `runtime` blocks of the committed app config
+        # (@rnv/core configs/platformAssets.js); this writes the same merge from
+        # appConfigs/app/renative.json, without needing any TV platform
+        # toolchain. Skipped if the file already exists.
+        run: |
+          node -e '
+            const fs = require("fs");
+            const out = "platformAssets/renative.runtime.json";
+            if (fs.existsSync(out)) process.exit(0);
+            const app = require("./appConfigs/app/renative.json");
+            fs.mkdirSync("platformAssets", { recursive: true });
+            fs.writeFileSync(out, JSON.stringify({ ...(app.runtime || {}), ...((app.common || {}).runtime || {}) }, null, 4));
+            console.log("wrote " + out + ": " + fs.readFileSync(out, "utf8"));
+          '
+
       - name: Typecheck
         run: yarn typecheck
 
