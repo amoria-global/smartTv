@@ -37,7 +37,13 @@ vi.mock('../../services/storage', () => ({
         set: vi.fn(async (k: string, v: string) => void stored.set(k, v)),
         remove: vi.fn(async (k: string) => void stored.delete(k)),
     },
-    StorageKeys: { authToken: 'auth.token', refreshToken: 'auth.refreshToken', session: 'auth.session' },
+    StorageKeys: {
+        authToken: 'auth.token',
+        refreshToken: 'auth.refreshToken',
+        session: 'auth.session',
+        tvPairingCode: 'tv.pairingCode',
+        tvDeviceSecret: 'tv.deviceSecret',
+    },
 }));
 
 const auth = await import('./api');
@@ -114,6 +120,19 @@ describe('pollTvPairingStatus: what the TV does with each answer', () => {
         expect(stored.get('auth.refreshToken'))
             .toBe('refresh.tv');
         expect(session?.user.customerType).toBe('Coordinator');
+    });
+
+    it('keeps the pairing code and device secret so Send to TV can reach this TV', async () => {
+        nextResponse = envelope({ status: 'ACTIVE', action: 1, token: 'access.tv', refreshToken: 'refresh.tv', customerId: 'c-1' });
+
+        await auth.pollTvPairingStatus('ABC123', 'device-secret');
+
+        expect(stored.get('tv.pairingCode')).toBe('ABC123');
+        expect(stored.get('tv.deviceSecret')).toBe('device-secret');
+
+        await auth.clearSession();
+        expect(stored.has('tv.pairingCode')).toBe(false);
+        expect(stored.has('tv.deviceSecret')).toBe(false);
     });
 
     it('does not need an email in the handoff', async () => {

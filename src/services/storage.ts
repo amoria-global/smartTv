@@ -43,4 +43,8 @@ export const StorageKeys = {
     // Device-local "hide the floating reactions overlay" preference (see
     // player.tsx) — purely a display choice for this TV, not account-level.
     reactionsHidden: 'playback.reactionsHidden',
+    // The pairing code and device secret of this TV, kept after pairing so the phone's "Send to TV" can find it.
+    // The secret is what proves this is the paired device (see features/tv/cast.ts); it never reaches the screen.
+    tvPairingCode: 'tv.pairingCode',
+    tvDeviceSecret: 'tv.deviceSecret',
 } as const;

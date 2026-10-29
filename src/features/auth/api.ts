@@ -126,6 +126,11 @@ export async function pollTvPairingStatus(
         user: userFromResponse(loginRes, ''),
     };
     await persistSession(session);
+    // Kept so "Send to TV" from the phone can reach this TV. Cleared with the session.
+    if (deviceSecret) {
+        await storage.set(StorageKeys.tvPairingCode, pairingCode);
+        await storage.set(StorageKeys.tvDeviceSecret, deviceSecret);
+    }
     return session;
 }
 
@@ -175,4 +180,6 @@ export async function clearSession(): Promise<void> {
     await storage.remove(StorageKeys.authToken);
     await storage.remove(StorageKeys.refreshToken);
     await storage.remove(StorageKeys.session);
+    await storage.remove(StorageKeys.tvPairingCode);
+    await storage.remove(StorageKeys.tvDeviceSecret);
 }
