@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { sceneBackground } from '../components/glass/glassStyle';
 import { useRouter } from 'next/router';
 import { ThemeContext } from '../config';
 import { useAuth } from '../store/auth';
@@ -73,7 +74,7 @@ export default function SplashScreen() {
     const skip = () => setVideoDone(true);
 
     return (
-        <View style={[styles.container, { backgroundColor: theme.static.colorBgPrimary }]} onTouchStart={skip}>
+        <View style={[styles.container, sceneBackground(theme.static.colorBgPrimary)]} onTouchStart={skip}>
             <video
                 ref={videoRef}
                 src="/images/splash.mp4"

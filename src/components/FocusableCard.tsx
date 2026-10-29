@@ -7,6 +7,7 @@ import { formatDateBadge } from '../utils/date';
 import { parseEventStart, formatShortCountdown } from '../utils/countdown';
 import { isBookmarked, toggleBookmark } from '../features/bookmarks/api';
 import type { UiEventStatus } from '../api/catalog';
+import { glassSurface, focusGlow } from './glass/glassStyle';
 
 type Badge = { label: string; color: string; live?: boolean };
 
@@ -110,11 +111,9 @@ export function FocusableCard({
             ? `${strings.common.fromPricePrefix} ${streamFeeCurrencySymbol ?? ''}${streamFee}`
             : strings.common.free;
 
-    const borderColor = focused
-        ? theme.static.colorFocusRing
-        : badge?.live
-          ? theme.static.colorError
-          : theme.static.colorBorder;
+    // Glass frame; a live card keeps a red rim, and focus lifts it with a glow (red for live, blue otherwise).
+    const frame = glassSurface(theme.static, { radius: 20, raised: true });
+    const rim = badge?.live && !focused ? { borderColor: theme.static.colorLive } : null;
 
     return (
         <TouchableOpacity
@@ -123,8 +122,10 @@ export function FocusableCard({
             {...focusProps}
             style={[
                 styles.card,
-                { width, height, borderColor, backgroundColor: theme.static.colorSurface },
-                focused && { transform: [{ scale: 1.04 }] },
+                frame,
+                { width, height },
+                rim,
+                focusGlow(theme.static, focused, !!badge?.live),
             ]}
         >
             {image && !imageError ? (
@@ -147,7 +148,7 @@ export function FocusableCard({
 
             <View style={styles.topRightRow}>
                 {badge ? (
-                    <View style={[styles.statusPill, { backgroundColor: badge.color }]}>
+                    <View style={[styles.statusPill, { backgroundColor: badge.live ? theme.static.colorLive : badge.color }, badge.live ? ({ boxShadow: `0 0 14px ${theme.static.colorLiveGlow}` } as object) : null]}>
                         {badge.live ? <View style={styles.liveDot} /> : null}
                         <Text style={styles.statusPillText}>{badge.label}</Text>
                     </View>
@@ -205,8 +206,6 @@ export function FocusableCard({
 
 const styles = StyleSheet.create({
     card: {
-        borderRadius: 16,
-        borderWidth: 2,
         marginRight: 16,
         overflow: 'hidden',
         position: 'relative',
@@ -219,14 +218,18 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 10,
         left: 10,
-        backgroundColor: '#fff',
-        borderRadius: 10,
+        backgroundColor: 'rgba(10,18,32,0.62)',
+        borderWidth: 1,
+        borderColor: 'rgba(255,255,255,0.22)',
+        borderRadius: 12,
         paddingVertical: 4,
-        paddingHorizontal: 8,
+        paddingHorizontal: 9,
         alignItems: 'center',
-    },
-    dateBadgeMonth: { color: '#0B0B10', fontSize: 9, fontWeight: '800' },
-    dateBadgeDay: { color: '#0B0B10', fontSize: 13, fontWeight: '800' },
+        backdropFilter: 'blur(10px)',
+        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2)',
+    } as object,
+    dateBadgeMonth: { color: '#F6A5D4', fontSize: 9, fontWeight: '800' },
+    dateBadgeDay: { color: '#FFFFFF', fontSize: 14, fontWeight: '800' },
 
     topRightRow: {
         position: 'absolute',
@@ -262,7 +265,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         padding: 12,
         paddingTop: 40,
-        backgroundImage: 'linear-gradient(180deg, rgba(11,11,16,0), rgba(11,11,16,0.65) 40%, rgba(11,11,16,0.95))',
+        backgroundImage: 'linear-gradient(180deg, rgba(10,18,32,0), rgba(10,18,32,0.7) 40%, rgba(10,18,32,0.96))',
     } as object,
     countdownChip: {
         flexDirection: 'row',

@@ -9,6 +9,7 @@ import { useAssistant } from '../store/assistant';
 import { useTranslation } from '../i18n';
 import { EventTabFilter, fetchEventsPage } from '../api/catalog';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { glassSurface, raisedButton, focusGlow, midnightGlass } from './glass/glassStyle';
 
 // Global nav destinations, in order: Home (the curated dashboard), then the
 // same All/Live/Upcoming/Ended filters /events itself supports — living
@@ -70,7 +71,7 @@ export function Navbar() {
         key === 'ALL' ? strings.events.tabAll : key === 'LIVE' ? strings.events.tabLive : key === 'UPCOMING' ? strings.events.tabUpcoming : strings.events.tabEnded;
 
     return (
-        <View style={[styles.bar, { backgroundColor: 'rgba(21, 21, 28, 0.55)', borderBottomColor: theme.static.colorBorder }]}>
+        <View style={[styles.bar, { backgroundColor: 'rgba(10, 18, 32, 0.62)', borderBottomColor: theme.static.glassStroke, boxShadow: `inset 0 -1px 0 ${theme.static.glassStroke}, 0 10px 30px rgba(0,0,0,0.35)` } as object]}>
             <View style={styles.left}>
                 <View style={styles.brandRow}>
                     <Image source={ICON_LOGO} style={styles.logo} resizeMode="contain" />
@@ -79,7 +80,7 @@ export function Navbar() {
             </View>
 
             <View style={styles.center}>
-                <View style={[styles.navTrack, styles.glass]}>
+                <View style={[styles.navTrack, glassSurface(theme.static, { radius: 999 })]}>
                     <NavLink
                         label={strings.navbar.welcome}
                         isActive={router.pathname === '/home'}
@@ -119,10 +120,7 @@ export function Navbar() {
 
                     {profileMenuOpen ? (
                         <View
-                            style={[
-                                styles.profileMenu,
-                                { backgroundColor: theme.static.colorSurface, borderColor: theme.static.colorBorder },
-                            ]}
+                            style={[styles.profileMenu, glassSurface(theme.static, { radius: 16, raised: true })]}
                         >
                             <ProfileMenuItem
                                 icon="bi-person-circle"
@@ -177,8 +175,7 @@ function NavLink({
             {...focusProps}
             style={[
                 styles.navLink,
-                isActive && { backgroundColor: theme.static.colorBrand },
-                focused && !isActive && { backgroundColor: 'rgba(255,255,255,0.08)' },
+                isActive ? raisedButton(theme.static, 'primary', { focused }) : focused ? raisedButton(theme.static, 'glass', { focused: true }) : null,
             ]}
         >
             {icon ? <i className={`bi ${icon}`} style={{ fontSize: 14, color: textColor }} /> : null}
@@ -199,11 +196,11 @@ function IconButton({ icon, onPress }: { icon: string; onPress: () => void }) {
         <TouchableOpacity
             onPress={onPress}
             {...focusProps}
-            style={[styles.iconButton, focused && { backgroundColor: theme.static.colorFocusRing }]}
+            style={[styles.iconButton, raisedButton(theme.static, 'glass', { focused })]}
         >
             <i
                 className={`bi ${icon}`}
-                style={{ fontSize: 18, color: focused ? '#fff' : theme.static.colorTextPrimary }}
+                style={{ fontSize: 18, color: theme.static.colorTextPrimary }}
             />
         </TouchableOpacity>
     );
@@ -227,7 +224,7 @@ function ProfileMenuItem({
         <TouchableOpacity
             onPress={onPress}
             {...focusProps}
-            style={[styles.profileMenuItem, focused && { backgroundColor: theme.static.colorFocusRing }]}
+            style={[styles.profileMenuItem, focused && { backgroundColor: theme.static.colorBrand }]}
         >
             <i className={`bi ${icon}`} style={{ fontSize: 15, color: focused ? '#fff' : color }} />
             <Text style={[styles.profileMenuItemText, { color: focused ? '#fff' : color }]}>{label}</Text>
@@ -276,13 +273,7 @@ const styles = StyleSheet.create({
     // track (HotLiveTrendsBar's styles.glass) — kept in sync deliberately so
     // both read as the same "rounded segmented control" component, not two
     // different takes on it.
-    glass: {
-        backgroundColor: 'rgba(21, 21, 28, 0.42)',
-        borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.12)',
-        backdropFilter: 'blur(24px) saturate(160%)',
-        WebkitBackdropFilter: 'blur(24px) saturate(160%)',
-    } as object,
+    glass: midnightGlass as object,
     navTrack: { flexDirection: 'row', borderRadius: 999, padding: 6, gap: 4 },
     navLink: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 10, paddingHorizontal: 18, borderRadius: 999 },
     navLinkText: { fontSize: 15, fontWeight: '700' },
@@ -292,7 +283,7 @@ const styles = StyleSheet.create({
     // cluster gives up, the more headroom the center nav pill has before
     // French/Kinyarwanda's longer labels start crowding it again.
     right: { flexDirection: 'row', alignItems: 'center', justifySelf: 'end', gap: 10 } as object,
-    iconButton: { width: 36, height: 36, borderRadius: 9999, alignItems: 'center', justifyContent: 'center' },
+    iconButton: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
     avatarButton: {},
     avatar: { width: 36, height: 36, borderRadius: 18 },
     avatarFallback: { alignItems: 'center', justifyContent: 'center' },
@@ -304,9 +295,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 44,
         right: 0,
-        minWidth: 200,
-        borderRadius: 12,
-        borderWidth: 1,
+        minWidth: 220,
         paddingVertical: 6,
         zIndex: 20,
     } as object,

@@ -74,12 +74,12 @@ export default function MyListScreen() {
 
                 {loading ? (
                     <View style={styles.center}>
-                        <ActivityIndicator size="large" color={theme.static.colorAccent} />
+                        <ActivityIndicator size="large" color={theme.static.colorPrimaryLight} />
                     </View>
                 ) : videos.length === 0 ? (
                     <View style={styles.emptyState}>
                         <View style={[styles.emptyIconCircle, { backgroundColor: theme.static.colorSurfaceMuted }]}>
-                            <i className="bi bi-bookmark-heart" style={{ fontSize: 30, color: theme.static.colorAccent }} />
+                            <i className="bi bi-bookmark-heart" style={{ fontSize: 30, color: theme.static.colorPrimaryLight }} />
                         </View>
                         <Text style={[styles.body, { color: theme.static.colorTextSecondary }]}>{strings.myList.body}</Text>
                     </View>

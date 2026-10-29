@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { midnightGlass } from '../components/glass/glassStyle';
 import { useRouter } from 'next/router';
 import { QRCodeSVG } from 'qrcode.react';
 import { ThemeContext } from '../config';
@@ -106,7 +107,7 @@ export default function LegalScreen() {
                         ))}
 
                         <View style={[styles.canonicalNote, { borderTopColor: theme.static.colorBorder }]}>
-                            <i className="bi bi-info-circle" style={{ fontSize: 15, color: theme.static.colorAccent }} />
+                            <i className="bi bi-info-circle" style={{ fontSize: 15, color: theme.static.colorPrimaryLight }} />
                             <Text style={[styles.canonicalText, { color: theme.static.colorTextSecondary }]}>{strings.legal.canonicalNote}</Text>
                         </View>
                     </View>
@@ -138,13 +139,13 @@ function DocTab({
             {...focusProps}
             style={[
                 styles.docTab,
-                active && { backgroundColor: 'rgba(242, 12, 143, 0.14)' },
+                active && { backgroundColor: 'rgba(62, 111, 216, 0.22)', borderWidth: 1, borderColor: 'rgba(91,140,255,0.4)' },
                 focused && { backgroundColor: theme.static.colorFocusRing },
             ]}
         >
             <i
                 className={`bi ${icon}`}
-                style={{ fontSize: 16, color: focused ? '#fff' : active ? theme.static.colorAccent : theme.static.colorTextSecondary }}
+                style={{ fontSize: 16, color: focused ? '#fff' : active ? theme.static.colorPrimaryLight : theme.static.colorTextSecondary }}
             />
             <Text
                 style={[
@@ -192,12 +193,5 @@ const styles = StyleSheet.create({
     canonicalNote: { flexDirection: 'row', alignItems: 'flex-start', gap: 12, marginTop: 32, paddingTop: 24, borderTopWidth: 1 },
     canonicalText: { flex: 1, fontSize: 14, lineHeight: 20 },
 
-    glass: {
-        backgroundColor: 'rgba(21, 21, 28, 0.42)',
-        borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.12)',
-        backdropFilter: 'blur(32px) saturate(160%)',
-        WebkitBackdropFilter: 'blur(32px) saturate(160%)',
-        boxShadow: '0 20px 50px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.10)',
-    } as object,
+    glass: midnightGlass as object,
 });

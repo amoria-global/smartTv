@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
+import { midnightGlass } from '../components/glass/glassStyle';
 import { useRouter } from 'next/router';
 import { ThemeContext } from '../config';
 import { ScreenWrapper } from '../components/ScreenWrapper';
@@ -216,7 +217,7 @@ export default function SearchScreen() {
                         {!query ? (
                             <View style={styles.emptyState}>
                                 <View style={[styles.emptyIconCircle, { backgroundColor: theme.static.colorSurfaceMuted }]}>
-                                    <i className="bi bi-search" style={{ fontSize: 30, color: theme.static.colorAccent }} />
+                                    <i className="bi bi-search" style={{ fontSize: 30, color: theme.static.colorPrimaryLight }} />
                                 </View>
                                 <Text style={[styles.emptyText, { color: theme.static.colorTextSecondary }]}>
                                     {strings.search.idleHint}
@@ -224,12 +225,12 @@ export default function SearchScreen() {
                             </View>
                         ) : loading ? (
                             <View style={styles.center}>
-                                <ActivityIndicator size="large" color={theme.static.colorAccent} />
+                                <ActivityIndicator size="large" color={theme.static.colorPrimaryLight} />
                             </View>
                         ) : videos.length === 0 ? (
                             <View style={styles.emptyState}>
                                 <View style={[styles.emptyIconCircle, { backgroundColor: theme.static.colorSurfaceMuted }]}>
-                                    <i className="bi bi-emoji-frown" style={{ fontSize: 30, color: theme.static.colorAccent }} />
+                                    <i className="bi bi-emoji-frown" style={{ fontSize: 30, color: theme.static.colorPrimaryLight }} />
                                 </View>
                                 <Text style={[styles.emptyText, { color: theme.static.colorTextSecondary }]}>
                                     {strings.search.noResultsPrefix} "{query}"
@@ -364,12 +365,7 @@ const styles = StyleSheet.create({
     // Frosted-glass pill (same treatment as the events page's filter track
     // and the login screen's own cards) instead of a flat bordered box —
     // matches the rest of the app's input/card language.
-    glass: {
-        backgroundColor: 'rgba(255, 255, 255, 0.04)',
-        borderWidth: 1,
-        backdropFilter: 'blur(24px) saturate(160%)',
-        WebkitBackdropFilter: 'blur(24px) saturate(160%)',
-    } as object,
+    glass: midnightGlass as object,
     inputWrap: {
         flexDirection: 'row',
         alignItems: 'center',

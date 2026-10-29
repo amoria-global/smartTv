@@ -32,6 +32,7 @@ import { useBackHandler } from '../hooks/useBackHandler';
 import { OnScreenKeyboard } from '../components/OnScreenKeyboard';
 import { useStreamReactions, FloatingReactionsOverlay, ReactionBar, ViewerCountBadge, HideReactionsButton } from '../components/StreamReactions';
 import { ChatPanel } from '../components/StreamChatPanel';
+import { midnightGlass, raisedButton, glassWell } from '../components/glass/glassStyle';
 
 // Temporary way to eyeball the player chrome (watermark, controls, auto-hide)
 // against real moving footage without needing an actual live WHEP broadcast
@@ -954,8 +955,7 @@ function GiftButton({ onPress }: { onPress: () => void }) {
             {...focusProps}
             style={[
                 styles.giftButton,
-                { backgroundColor: theme.static.colorAccent },
-                focused && { transform: [{ scale: 1.05 }] },
+                raisedButton(theme.static, 'accent', { focused }),
             ]}
         >
             <i className="bi bi-gift-fill" style={{ fontSize: 16, color: '#fff' }} />
@@ -973,7 +973,7 @@ function ChatButton({ onPress }: { onPress: () => void }) {
             {...focusProps}
             style={[
                 styles.giftButton,
-                { backgroundColor: theme.static.colorSurface, borderWidth: 1, borderColor: theme.static.colorBorder },
+                midnightGlass as object,
                 focused && { transform: [{ scale: 1.05 }] },
             ]}
         >
@@ -992,7 +992,7 @@ function DonateButton({ onPress }: { onPress: () => void }) {
             {...focusProps}
             style={[
                 styles.giftButton,
-                { backgroundColor: theme.static.colorSurface, borderWidth: 1, borderColor: theme.static.colorBorder },
+                midnightGlass as object,
                 focused && { transform: [{ scale: 1.05 }] },
             ]}
         >
@@ -1084,7 +1084,7 @@ function PayGatePanel({
             </View>
 
             {paidPurchasesEnabled ? (
-                <View style={[styles.payGateCard, { backgroundColor: theme.static.colorSurface, borderColor: theme.static.colorBorder }]}>
+                <View style={[styles.payGateCard, midnightGlass as object]}>
                     {/* LEFT — the QR the phone scans */}
                     <View style={styles.payGateQrBoxLg}>
                         <QRCodeSVG value={payUrl} size={248} bgColor="#FFFFFF" fgColor="#0B0B10" level="M" />
@@ -1143,7 +1143,7 @@ function PayGatePanel({
                    builds show a neutral "access unlocks automatically" message and
                    keep only the verify-access button (checking an existing
                    entitlement is not a purchase). */
-                <View style={[styles.giftCard, { backgroundColor: theme.static.colorSurface, borderColor: theme.static.colorBorder }]}>
+                <View style={[styles.giftCard, midnightGlass as object]}>
                     <i className="bi bi-lock-fill" style={{ fontSize: 30, color: theme.static.colorAccent, marginBottom: 8 }} />
                     <Text style={[styles.giftTitle, { color: theme.static.colorTextPrimary }]}>{strings.player.payGateReaderTitle}</Text>
                     <Text style={[styles.giftSubtitle, { color: theme.static.colorTextSecondary }]}>
@@ -1247,7 +1247,7 @@ function InviteGate({
                 <BackCircleButton onPress={onBack} />
             </View>
 
-            <View style={[styles.giftCard, { backgroundColor: theme.static.colorSurface, borderColor: theme.static.colorBorder }]}>
+            <View style={[styles.giftCard, midnightGlass as object]}>
                 <Image source={ICON_LOGO} style={styles.inviteLogo} resizeMode="contain" />
                 <i className="bi bi-ticket-perforated-fill" style={{ fontSize: 36, color: theme.static.colorAccent, marginBottom: 12 }} />
                 <Text style={[styles.giftTitle, { color: theme.static.colorTextPrimary }]}>{strings.player.joinStreamTitle}</Text>
@@ -1267,7 +1267,7 @@ function InviteGate({
                     hasTVPreferredFocus
                     style={[
                         styles.inviteInput,
-                        { color: theme.static.colorTextPrimary, borderColor: theme.static.colorBorder },
+                        glassWell(theme.static), { color: theme.static.colorTextPrimary },
                         inputFocused && { borderColor: theme.static.colorFocusRing },
                     ]}
                 />
@@ -1297,11 +1297,10 @@ function InviteJoinButton({ label, disabled, onPress }: { label: string; disable
             {...focusProps}
             style={[
                 styles.inviteJoinButton,
-                { backgroundColor: disabled ? theme.static.colorSurfaceMuted : theme.static.colorAccent },
-                focused && !disabled && { transform: [{ scale: 1.04 }] },
+                raisedButton(theme.static, 'primary', { focused, disabled }),
             ]}
         >
-            <Text style={[styles.inviteJoinButtonText, { color: disabled ? theme.static.colorTextSecondary : '#fff' }]}>
+            <Text style={[styles.inviteJoinButtonText, { color: '#fff' }]}>
                 {label}
             </Text>
         </TouchableOpacity>
@@ -1350,7 +1349,9 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 20,
-        backgroundColor: 'rgba(21,21,28,0.6)',
+        backgroundColor: 'rgba(22,36,60,0.7)',
+        borderWidth: 1,
+        borderColor: 'rgba(170,195,240,0.2)',
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -1451,7 +1452,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(242,12,143,0.14)',
         marginBottom: 20,
     },
-    payGatePriceText: { color: '#F20C8F', fontSize: 16, fontWeight: '800' },
+    payGatePriceText: { color: '#FF6FBF', fontSize: 16, fontWeight: '800' },
     payGateOptions: { alignSelf: 'stretch', gap: 10, marginBottom: 4 },
     payGateOptionRow: { flexDirection: 'row', alignItems: 'center', gap: 10, justifyContent: 'flex-start' },
     payGateOptionText: { fontSize: 13, fontWeight: '600' },
@@ -1481,7 +1482,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         marginBottom: 12,
     },
-    inviteJoinButton: { width: '100%', borderRadius: 9999, paddingVertical: 12, alignItems: 'center' },
+    inviteJoinButton: { width: '100%', paddingVertical: 14, alignItems: 'center' },
     inviteJoinButtonText: { fontSize: 14, fontWeight: '700' },
     inviteErrorText: { fontSize: 13, textAlign: 'center', marginTop: 12 },
 });

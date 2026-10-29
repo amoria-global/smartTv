@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { sceneBackground } from '../components/glass/glassStyle';
 import { useRouter } from 'next/router';
 import { ThemeContext } from '../config';
 import { useFocusNav } from '../hooks/useFocusNav';
@@ -35,6 +36,7 @@ export default function ProfilesScreen() {
         <View style={[styles.root, { backgroundColor: theme.static.colorBgPrimary }]}>
             <Image source={{ uri: '/images/login.png' }} style={StyleSheet.absoluteFillObject} blurRadius={18} />
             <View style={[styles.scrim, { backgroundColor: theme.static.colorBgPrimary }]} />
+            <View pointerEvents="none" style={[StyleSheet.absoluteFillObject, sceneBackground('transparent')]} />
 
             <View style={styles.topRight}>
                 <LanguageSwitcher />
@@ -99,7 +101,7 @@ export default function ProfilesScreen() {
                         palette as just navy + this pink. Using the accent
                         color here matches every other interactive element in
                         the app (Sign In button, focus rings, Shift key). */}
-                    <Text style={[styles.manageLinkText, { color: theme.static.colorAccent }]}>
+                    <Text style={[styles.manageLinkText, { color: theme.static.colorPrimaryLight }]}>
                         {strings.profiles.manageProfiles}
                     </Text>
                 </TouchableOpacity>

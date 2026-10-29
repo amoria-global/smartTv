@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { midnightGlass } from './glass/glassStyle';
 import { QRCodeSVG } from 'qrcode.react';
 import { ThemeContext } from '../config';
 import { useFocusNav } from '../hooks/useFocusNav';
@@ -33,7 +34,7 @@ export function ChatPanel({ eventId, chatUrl, onClose }: { eventId: string; chat
     }, [eventId]);
 
     return (
-        <View style={[styles.panel, { backgroundColor: theme.static.colorSurface, borderColor: theme.static.colorBorder }]}>
+        <View style={[styles.panel, midnightGlass as object]}>
             <View style={styles.header}>
                 <Text style={[styles.headerText, { color: theme.static.colorTextPrimary }]}>Live Chat</Text>
                 <TouchableOpacity onPress={onClose} style={styles.closeButton}>
@@ -54,7 +55,7 @@ export function ChatPanel({ eventId, chatUrl, onClose }: { eventId: string; chat
                 ) : (
                     messages.map((m) => (
                         <View key={m.id} style={styles.bubble}>
-                            <Text style={[styles.bubbleName, { color: theme.static.colorAccent }]}>{m.viewerUsername ?? 'Viewer'}</Text>
+                            <Text style={[styles.bubbleName, { color: theme.static.colorPrimaryLight }]}>{m.viewerUsername ?? 'Viewer'}</Text>
                             <Text style={[styles.bubbleMessage, { color: theme.static.colorTextPrimary }]}>{m.message}</Text>
                         </View>
                     ))
@@ -63,7 +64,7 @@ export function ChatPanel({ eventId, chatUrl, onClose }: { eventId: string; chat
 
             <View style={[styles.replyRow, { borderColor: theme.static.colorBorder }]}>
                 <View style={styles.replyQrBox}>
-                    <QRCodeSVG value={chatUrl} size={72} bgColor="#FFFFFF" fgColor="#0B0B10" level="M" />
+                    <QRCodeSVG value={chatUrl} size={72} bgColor="#FFFFFF" fgColor="#0A1220" level="M" />
                 </View>
                 <Text style={[styles.replyText, { color: theme.static.colorTextSecondary }]}>
                     Scan to reply from your phone

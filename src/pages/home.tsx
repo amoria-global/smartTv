@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { midnightGlass } from '../components/glass/glassStyle';
 import { useRouter } from 'next/router';
 import { QRCodeSVG } from 'qrcode.react';
 import { ThemeContext, ICON_LOGO } from '../config';
@@ -252,7 +253,7 @@ function HeroRow({ videoTitle, photoTitle, liveVideoTitle }: { videoTitle: strin
 function VideoHeroTile({ src, fit, title }: { src: string; fit: 'contain' | 'cover'; title: string }) {
     return (
         <View style={styles.heroTile}>
-            <View style={[StyleSheet.absoluteFillObject, { backgroundColor: '#0B0B10' }]} />
+            <View style={[StyleSheet.absoluteFillObject, { backgroundColor: '#0A1220' }]} />
             <video
                 src={src}
                 autoPlay
@@ -668,11 +669,14 @@ const styles = StyleSheet.create({
     heroTile: {
         flex: 1,
         aspectRatio: 16 / 9,
-        borderRadius: 16,
+        borderRadius: 20,
         overflow: 'hidden',
         position: 'relative',
-        backgroundColor: '#1A1A24',
-    },
+        backgroundColor: '#16243C',
+        borderWidth: 1,
+        borderColor: 'rgba(170,195,240,0.18)',
+        boxShadow: '0 16 36px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.14)',
+    } as object,
     heroScrim: {
         ...StyleSheet.absoluteFillObject,
         backgroundImage: 'linear-gradient(0deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.2) 42%, rgba(0,0,0,0) 68%)',
@@ -691,14 +695,23 @@ const styles = StyleSheet.create({
     genreTile: {
         flex: 1,
         height: 160,
-        borderRadius: 16,
+        borderRadius: 20,
         padding: 16,
         justifyContent: 'flex-end',
         overflow: 'hidden',
         position: 'relative',
-        backgroundColor: '#1A1A24',
-    },
-    genreTileFocused: { transform: [{ scale: 1.03 }] },
+        backgroundColor: '#16243C',
+        borderWidth: 1,
+        borderColor: 'rgba(170,195,240,0.18)',
+        boxShadow: '0 12px 28px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.14)',
+        transitionProperty: 'transform, box-shadow',
+        transitionDuration: '160ms',
+    } as object,
+    genreTileFocused: {
+        transform: [{ scale: 1.05 }],
+        borderColor: 'rgba(255,255,255,0.9)',
+        boxShadow: '0 0 0 3px rgba(255,255,255,0.9), 0 0 40px 8px rgba(91,140,255,0.6), 0 22px 40px rgba(0,0,0,0.5)',
+    } as object,
     genreScrim: {
         ...StyleSheet.absoluteFillObject,
         backgroundImage: 'linear-gradient(0deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.15) 55%, rgba(0,0,0,0.05) 100%)',
@@ -764,8 +777,9 @@ const styles = StyleSheet.create({
         padding: 32,
         borderRadius: 24,
         borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.14)',
+        borderColor: 'rgba(170, 195, 240, 0.2)',
         backgroundImage: 'linear-gradient(135deg, #0B1E4D 0%, #3B1B63 55%, #7A1458 100%)',
+        boxShadow: '0 22px 50px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.18)',
         overflow: 'hidden',
     } as object,
     promoLeft: { flex: 1 },
@@ -774,12 +788,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'flex-start',
         gap: 6,
-        backgroundColor: '#E31B4C',
+        backgroundColor: '#FF0033',
+        boxShadow: '0 0 16px rgba(255,0,51,0.55)',
         borderRadius: 999,
         paddingVertical: 4,
         paddingHorizontal: 10,
         marginBottom: 14,
-    },
+    } as object,
     promoLiveDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: '#fff' },
     promoLiveText: { color: '#fff', fontSize: 10, fontWeight: '800', letterSpacing: 0.5 },
     promoBrand: { color: '#fff', fontSize: 32, fontWeight: '800' },
@@ -852,12 +867,10 @@ const styles = StyleSheet.create({
     // to this app's dark glass-card language instead of a light theme.
     featureGrid: { flexDirection: 'row', gap: 20, marginHorizontal: 48, marginBottom: 40, alignItems: 'stretch' },
     featureCard: {
-        borderRadius: 20,
-        borderWidth: 1,
-        borderColor: 'rgba(255,255,255,0.12)',
-        backgroundColor: 'rgba(255,255,255,0.04)',
+        ...midnightGlass,
+        borderRadius: 24,
         padding: 24,
-    },
+    } as object,
     featureCardTall: { flex: 0.85, justifyContent: 'space-between' },
     featureCardBody: {},
     // Overrides featureCard's own padding/background — this card is a
@@ -872,7 +885,7 @@ const styles = StyleSheet.create({
     // Brand-pink outline instead of the reference's blue — same "this one's
     // the highlighted option" treatment, using this app's actual accent
     // color instead of copying the reference's palette.
-    featureCardAccent: { borderColor: '#F20C8F', borderWidth: 1.5 },
+    featureCardAccent: { borderColor: 'rgba(91,140,255,0.6)', boxShadow: '0 0 28px rgba(91,140,255,0.22), 0 22px 54px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.18)' } as object,
     featureEyebrowRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 10 },
     featureEyebrowDash: { width: 16, height: 1.5, backgroundColor: 'rgba(255,255,255,0.4)' },
     featureEyebrowText: { fontSize: 11, fontWeight: '700', letterSpacing: 1.2, textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)' },
@@ -896,7 +909,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         overflow: 'hidden',
         position: 'relative',
-        backgroundColor: '#1A1A24',
+        backgroundColor: '#16243C',
     },
     photoCardTall: { flex: 0.85, minHeight: 380 },
     photoCardWide: { minHeight: 170 },
@@ -959,11 +972,10 @@ const styles = StyleSheet.create({
         gap: 18,
         borderRadius: 999,
         borderWidth: 1,
-        borderColor: 'rgba(255,255,255,0.12)',
-        backgroundColor: 'rgba(255,255,255,0.04)',
         paddingVertical: 14,
         paddingHorizontal: 30,
-    },
+        ...midnightGlass,
+    } as object,
     pageFooterCredit: { fontSize: 13, fontWeight: '500', letterSpacing: 0.2, color: 'rgba(255,255,255,0.55)' },
     // Same brand→accent gradient credit treatment as the login screen's
     // own footer (see login.tsx's footerBrand).
@@ -999,10 +1011,8 @@ const styles = StyleSheet.create({
         borderRadius: 999,
         paddingVertical: 14,
         paddingHorizontal: 26,
-        backgroundColor: 'rgba(11,11,16,0.92)',
-        borderWidth: 1,
-        borderColor: 'rgba(255,255,255,0.14)',
         zIndex: 60,
+        ...midnightGlass,
     } as object,
     exitToastText: { color: '#fff', fontSize: 14, fontWeight: '700', letterSpacing: 0.2 },
 });

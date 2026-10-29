@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { midnightGlass } from './glass/glassStyle';
 import { ThemeContext } from '../config';
 import { useFocusNav } from '../hooks/useFocusNav';
 import { fetchRecentReactions, fetchViewerCount, sendReaction } from '../features/events/api';
@@ -149,7 +150,7 @@ export function ViewerCountBadge({ count }: { count: number }) {
     const { theme } = useContext(ThemeContext);
     if (count <= 0) return null;
     return (
-        <View style={[styles.viewerBadge, { backgroundColor: theme.static.colorSurface, borderColor: theme.static.colorBorder }]}>
+        <View style={[styles.viewerBadge, midnightGlass as object]}>
             <i className="bi bi-eye-fill" style={{ fontSize: 12, color: theme.static.colorTextSecondary }} />
             <Text style={[styles.viewerBadgeText, { color: theme.static.colorTextPrimary }]}>{count.toLocaleString()}</Text>
         </View>
@@ -182,7 +183,9 @@ const styles = StyleSheet.create({
         width: 44,
         height: 44,
         borderRadius: 9999,
-        backgroundColor: 'rgba(21,21,28,0.55)',
+        backgroundColor: 'rgba(22,36,60,0.66)',
+        borderWidth: 1,
+        borderColor: 'rgba(170,195,240,0.18)',
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -203,7 +206,9 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 9999,
-        backgroundColor: 'rgba(21,21,28,0.6)',
+        backgroundColor: 'rgba(22,36,60,0.7)',
+        borderWidth: 1,
+        borderColor: 'rgba(170,195,240,0.18)',
         alignItems: 'center',
         justifyContent: 'center',
     },
