@@ -8,6 +8,7 @@ import { I18nProvider } from '../i18n';
 import { AssistantOverlay } from '../features/assistant/AssistantOverlay';
 import { initSpatialNavigation } from '../utils/spatialNavigation';
 import { initBackHandler } from '../utils/backHandler';
+import { useSentEvents } from '../features/tv/useSentEvents';
 
 export default function MyApp({ Component, pageProps }) {
     const router = useRouter();
@@ -16,6 +17,9 @@ export default function MyApp({ Component, pageProps }) {
     // client-only. Every screen's Touchables are already focusable, so this
     // needs no per-component wiring (see utils/spatialNavigation).
     useEffect(() => initSpatialNavigation(), []);
+
+    // Send to TV: opens the player when the phone sends an event to this TV.
+    useSentEvents();
 
     // TV remote Back/Return key. Open modals register their own close via
     // useBackHandler and take priority; with none open, Back navigates back.
