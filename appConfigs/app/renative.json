@@ -7,7 +7,7 @@
             "welcomeMessage": "Connekyt"
         },
         "title": "Connekyt",
-        "id": "com.amoriaglobal.smarttv",
+        "id": "com.connekyt.tv",
         "description": "Connekyt — watch live events, book photographers, find your photos and donate, on the big screen.",
         "author": "Amoria Global Tech <info@connekyt.com>",
         "license": "UNLICENSED",
@@ -23,7 +23,7 @@
             "minSdkVersion": 22,
             "targetSdkVersion": 34,
             "compileSdkVersion": 34,
-            "versionCode": "1",
+            "versionCode": "2",
             "buildSchemes": {
                 "debug": {
                     "signingConfig": "Debug",
@@ -46,7 +46,7 @@
             "minSdkVersion": 22,
             "targetSdkVersion": 34,
             "compileSdkVersion": 34,
-            "versionCode": "1",
+            "versionCode": "2",
             "buildSchemes": {
                 "debug": {
                     "signingConfig": "Debug",
