@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { midnightGlass } from './glass/glassStyle';
 import { QRCodeSVG } from 'qrcode.react';
 import { ThemeContext } from '../config';
 import { useFocusNav } from '../hooks/useFocusNav';
@@ -43,7 +44,7 @@ export function QrHandoffCard({
     const { focused, focusProps } = useFocusNav();
     return (
         <View style={[styles.overlay, { zIndex: overlayZIndex }]}>
-            <View style={[styles.card, { backgroundColor: theme.static.colorSurface, borderColor: theme.static.colorBorder }]}>
+            <View style={[styles.card, midnightGlass as object]}>
                 {onClose ? (
                     <TouchableOpacity
                         onPress={onClose}
@@ -62,7 +63,7 @@ export function QrHandoffCard({
 
                 {/* RIGHT — icon, title, price, steps, status */}
                 <View style={styles.right}>
-                    <i className={`bi ${icon}`} style={{ fontSize: 30, color: theme.static.colorAccent, marginBottom: 8 }} />
+                    <i className={`bi ${icon}`} style={{ fontSize: 30, color: theme.static.colorPrimaryLight, marginBottom: 8 }} />
                     <Text style={[styles.title, { color: theme.static.colorTextPrimary }]}>{title}</Text>
                     <Text style={[styles.subtitle, { color: theme.static.colorTextSecondary }]}>{subtitle}</Text>
 
@@ -144,7 +145,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(242,12,143,0.14)',
         marginBottom: 20,
     },
-    priceText: { color: '#F20C8F', fontSize: 16, fontWeight: '800' },
+    priceText: { color: '#FF6FBF', fontSize: 16, fontWeight: '800' },
     options: { alignSelf: 'stretch', gap: 12, marginBottom: 4 },
     optionRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
     optionText: { fontSize: 13.5, fontWeight: '600' },

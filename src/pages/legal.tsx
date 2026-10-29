@@ -107,7 +107,7 @@ export default function LegalScreen() {
                         ))}
 
                         <View style={[styles.canonicalNote, { borderTopColor: theme.static.colorBorder }]}>
-                            <i className="bi bi-info-circle" style={{ fontSize: 15, color: theme.static.colorAccent }} />
+                            <i className="bi bi-info-circle" style={{ fontSize: 15, color: theme.static.colorPrimaryLight }} />
                             <Text style={[styles.canonicalText, { color: theme.static.colorTextSecondary }]}>{strings.legal.canonicalNote}</Text>
                         </View>
                     </View>
@@ -139,13 +139,13 @@ function DocTab({
             {...focusProps}
             style={[
                 styles.docTab,
-                active && { backgroundColor: 'rgba(242, 12, 143, 0.14)' },
+                active && { backgroundColor: 'rgba(62, 111, 216, 0.22)', borderWidth: 1, borderColor: 'rgba(91,140,255,0.4)' },
                 focused && { backgroundColor: theme.static.colorFocusRing },
             ]}
         >
             <i
                 className={`bi ${icon}`}
-                style={{ fontSize: 16, color: focused ? '#fff' : active ? theme.static.colorAccent : theme.static.colorTextSecondary }}
+                style={{ fontSize: 16, color: focused ? '#fff' : active ? theme.static.colorPrimaryLight : theme.static.colorTextSecondary }}
             />
             <Text
                 style={[

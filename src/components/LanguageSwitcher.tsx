@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { midnightGlass } from './glass/glassStyle';
 import { ThemeContext } from '../config';
 import { useFocusNav } from '../hooks/useFocusNav';
 import { useBackHandler } from '../hooks/useBackHandler';
@@ -37,7 +38,7 @@ export function LanguageSwitcher() {
                 <View
                     style={[
                         styles.langMenu,
-                        { backgroundColor: theme.static.colorSurface, borderColor: theme.static.colorBorder },
+                        midnightGlass as object,
                     ]}
                 >
                     {LOCALES.map((l) => (

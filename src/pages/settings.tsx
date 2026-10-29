@@ -158,7 +158,7 @@ export default function SettingsScreen() {
             <ScreenWrapper noPadding>
                 <Navbar />
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <ActivityIndicator size="large" color={theme.static.colorAccent} />
+                    <ActivityIndicator size="large" color={theme.static.colorPrimaryLight} />
                 </View>
             </ScreenWrapper>
         );
@@ -267,7 +267,7 @@ export default function SettingsScreen() {
 
                             {/* --- Tip --- */}
                             <View style={[styles.tipRow, styles.glass]}>
-                                <i className="bi bi-info-circle" style={{ fontSize: 18, color: theme.static.colorAccent }} />
+                                <i className="bi bi-info-circle" style={{ fontSize: 18, color: theme.static.colorPrimaryLight }} />
                                 <Text style={[styles.tipText, { color: theme.static.colorTextSecondary }]}>{strings.settings.tip}</Text>
                             </View>
                         </>
@@ -292,7 +292,7 @@ export default function SettingsScreen() {
                                     {strings.settings.devicesDesc}
                                 </Text>
                                 {devicesLoading ? (
-                                    <ActivityIndicator color={theme.static.colorAccent} style={{ marginTop: 16 }} />
+                                    <ActivityIndicator color={theme.static.colorPrimaryLight} style={{ marginTop: 16 }} />
                                 ) : !devices?.length ? (
                                     <Text style={[styles.info, { color: theme.static.colorTextSecondary, marginTop: 8 }]}>
                                         {strings.settings.noDevices}
@@ -540,7 +540,7 @@ function SelectRow({ title, description, active, onPress }: { title: string; des
                 <Text style={[styles.toggleTitle, { color: theme.static.colorTextPrimary }]}>{title}</Text>
                 <Text style={[styles.toggleDescription, { color: theme.static.colorTextSecondary }]}>{description}</Text>
             </View>
-            {active ? <i className="bi bi-check-lg" style={{ fontSize: 18, color: theme.static.colorAccent }} /> : null}
+            {active ? <i className="bi bi-check-lg" style={{ fontSize: 18, color: theme.static.colorPrimaryLight }} /> : null}
         </TouchableOpacity>
     );
 }
@@ -577,7 +577,7 @@ function LockScreen({ onUnlock }: { onUnlock: () => void }) {
     return (
         <View style={styles.lockWrap}>
             <View style={[styles.lockCard, styles.glass]}>
-                <i className="bi bi-shield-lock" style={{ fontSize: 32, color: theme.static.colorAccent, marginBottom: 12 }} />
+                <i className="bi bi-shield-lock" style={{ fontSize: 32, color: theme.static.colorPrimaryLight, marginBottom: 12 }} />
                 <Text style={[styles.lockTitle, { color: theme.static.colorTextPrimary }]}>{strings.settings.lockTitle}</Text>
                 <Text style={[styles.lockSubtitle, { color: theme.static.colorTextSecondary }]}>{strings.settings.lockSubtitle}</Text>
 
@@ -598,7 +598,7 @@ function LockScreen({ onUnlock }: { onUnlock: () => void }) {
                 <FocusableButton
                     title={verifying ? '…' : strings.settings.unlock}
                     onPress={() => submit(pin)}
-                    style={{ backgroundColor: theme.static.colorAccent, borderColor: theme.static.colorAccent, marginTop: 20, alignSelf: 'stretch', alignItems: 'center' }}
+                    style={{ backgroundColor: theme.static.colorBrand, borderColor: theme.static.colorBrand, marginTop: 20, alignSelf: 'stretch', alignItems: 'center' }}
                 />
             </View>
         </View>
@@ -739,7 +739,7 @@ function ParentalControlsPanel({ enabled, onChanged }: { enabled: boolean; onCha
                             <FocusableButton
                                 title={saving ? '…' : strings.common.save}
                                 onPress={submitSave}
-                                style={{ backgroundColor: theme.static.colorAccent, borderColor: theme.static.colorAccent }}
+                                style={{ backgroundColor: theme.static.colorBrand, borderColor: theme.static.colorBrand }}
                             />
                             {enabled ? (
                                 <FocusableButton
@@ -796,7 +796,7 @@ function PinKey({ label, onPress, disabled }: { label: string; onPress: () => vo
             style={[
                 styles.pinKey,
                 { backgroundColor: 'rgba(255,255,255,0.06)', borderColor: theme.static.colorBorder },
-                focused && { backgroundColor: theme.static.colorAccent, borderColor: theme.static.colorFocusRing },
+                focused && { backgroundColor: theme.static.colorBrand, borderColor: theme.static.colorFocusRing },
             ]}
         >
             <Text style={[styles.pinKeyText, { color: theme.static.colorTextPrimary }]}>{label}</Text>
@@ -843,7 +843,7 @@ function CategoryLockPanel() {
                     {strings.settings.categoryLockDesc}
                 </Text>
                 {allCategories === null ? (
-                    <ActivityIndicator color={theme.static.colorAccent} />
+                    <ActivityIndicator color={theme.static.colorPrimaryLight} />
                 ) : allCategories.length === 0 ? (
                     <Text style={[styles.info, { color: theme.static.colorTextSecondary }]}>{strings.settings.noCategoriesYet}</Text>
                 ) : (
@@ -894,7 +894,7 @@ function LanguageRow({ label, active, onPress }: { label: string; active: boolea
             <View style={{ flex: 1 }}>
                 <Text style={[styles.toggleTitle, { color: theme.static.colorTextPrimary }]}>{label}</Text>
             </View>
-            {active ? <i className="bi bi-check-lg" style={{ fontSize: 18, color: theme.static.colorAccent }} /> : null}
+            {active ? <i className="bi bi-check-lg" style={{ fontSize: 18, color: theme.static.colorPrimaryLight }} /> : null}
         </TouchableOpacity>
     );
 }
@@ -920,13 +920,13 @@ function SidebarTab({
             {...focusProps}
             style={[
                 styles.sidebarTab,
-                active && { backgroundColor: 'rgba(242, 12, 143, 0.14)' },
+                active && { backgroundColor: 'rgba(62, 111, 216, 0.22)', borderWidth: 1, borderColor: 'rgba(91,140,255,0.4)' },
                 focused && { backgroundColor: theme.static.colorFocusRing },
             ]}
         >
             <i
                 className={`bi ${icon}`}
-                style={{ fontSize: 17, color: focused ? '#fff' : active ? theme.static.colorAccent : theme.static.colorTextSecondary }}
+                style={{ fontSize: 17, color: focused ? '#fff' : active ? theme.static.colorPrimaryLight : theme.static.colorTextSecondary }}
             />
             <Text
                 style={[
@@ -1024,12 +1024,12 @@ function ToggleRow({
                 <Text style={[styles.toggleDescription, { color: theme.static.colorTextSecondary }]}>{description}</Text>
             </View>
             {loading ? (
-                <ActivityIndicator color={theme.static.colorAccent} />
+                <ActivityIndicator color={theme.static.colorPrimaryLight} />
             ) : (
                 <View
                     style={[
                         styles.switchTrack,
-                        { backgroundColor: value ? theme.static.colorAccent : 'rgba(255,255,255,0.14)' },
+                        { backgroundColor: value ? theme.static.colorPrimaryLight : 'rgba(255,255,255,0.14)' },
                         focused && { borderColor: theme.static.colorFocusRing },
                     ]}
                 >

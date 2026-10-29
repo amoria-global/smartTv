@@ -217,7 +217,7 @@ export default function SearchScreen() {
                         {!query ? (
                             <View style={styles.emptyState}>
                                 <View style={[styles.emptyIconCircle, { backgroundColor: theme.static.colorSurfaceMuted }]}>
-                                    <i className="bi bi-search" style={{ fontSize: 30, color: theme.static.colorAccent }} />
+                                    <i className="bi bi-search" style={{ fontSize: 30, color: theme.static.colorPrimaryLight }} />
                                 </View>
                                 <Text style={[styles.emptyText, { color: theme.static.colorTextSecondary }]}>
                                     {strings.search.idleHint}
@@ -225,12 +225,12 @@ export default function SearchScreen() {
                             </View>
                         ) : loading ? (
                             <View style={styles.center}>
-                                <ActivityIndicator size="large" color={theme.static.colorAccent} />
+                                <ActivityIndicator size="large" color={theme.static.colorPrimaryLight} />
                             </View>
                         ) : videos.length === 0 ? (
                             <View style={styles.emptyState}>
                                 <View style={[styles.emptyIconCircle, { backgroundColor: theme.static.colorSurfaceMuted }]}>
-                                    <i className="bi bi-emoji-frown" style={{ fontSize: 30, color: theme.static.colorAccent }} />
+                                    <i className="bi bi-emoji-frown" style={{ fontSize: 30, color: theme.static.colorPrimaryLight }} />
                                 </View>
                                 <Text style={[styles.emptyText, { color: theme.static.colorTextSecondary }]}>
                                     {strings.search.noResultsPrefix} "{query}"

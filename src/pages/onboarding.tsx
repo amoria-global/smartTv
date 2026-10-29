@@ -1,5 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Image, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { raisedButton, sceneBackground } from '../components/glass/glassStyle';
+import { useFocusNav } from '../hooks/useFocusNav';
 import { useRouter } from 'next/router';
 import { ThemeContext, ICON_LOGO } from '../config';
 import { storage, StorageKeys } from '../services/storage';
@@ -16,6 +18,16 @@ const TERMS_URL = 'https://connekyt.com/user/terms-of-service';
 // splash.tsx if you'd rather match mobile's behavior exactly.
 async function markSeen() {
     await storage.set(StorageKeys.onboardingSeen, 'true');
+}
+
+function CtaButton({ onPress, children }: { onPress: () => void; children: React.ReactNode }) {
+    const { theme } = useContext(ThemeContext);
+    const { focused, focusProps } = useFocusNav();
+    return (
+        <TouchableOpacity onPress={onPress} hasTVPreferredFocus {...focusProps} style={[styles.cta, raisedButton(theme.static, 'primary', { focused })]}>
+            {children}
+        </TouchableOpacity>
+    );
 }
 
 export default function OnboardingScreen() {
@@ -52,12 +64,13 @@ export default function OnboardingScreen() {
         <View style={[styles.root, { backgroundColor: theme.static.colorBgPrimary }]}>
             <Image source={{ uri: '/images/login.png' }} style={StyleSheet.absoluteFillObject} blurRadius={18} />
             <View style={[styles.scrim, { backgroundColor: theme.static.colorBgPrimary }]} />
+            <View pointerEvents="none" style={[StyleSheet.absoluteFillObject, sceneBackground('transparent')]} />
 
             <TopBar onSignIn={finish} />
 
             <View style={styles.content}>
                 <View style={styles.iconBadge}>
-                    <i className={`bi ${slide.icon}`} style={{ fontSize: 40, color: theme.static.colorAccent }} />
+                    <i className={`bi ${slide.icon}`} style={{ fontSize: 40, color: theme.static.colorPrimaryLight }} />
                 </View>
                 <Text style={styles.title}>{slide.title}</Text>
                 <Text style={styles.body}>{slide.body}</Text>
@@ -70,15 +83,15 @@ export default function OnboardingScreen() {
                             key={s.title}
                             style={[
                                 styles.dot,
-                                i === index && { width: 26, backgroundColor: theme.static.colorAccent },
+                                i === index && { width: 26, backgroundColor: theme.static.colorBrand },
                             ]}
                         />
                     ))}
                 </View>
 
-                <TouchableOpacity onPress={next} hasTVPreferredFocus style={[styles.cta, { backgroundColor: theme.static.colorAccent }]}>
+                <CtaButton onPress={next}>
                     <Text style={styles.ctaText}>{strings.onboarding.getStarted}</Text>
-                </TouchableOpacity>
+                </CtaButton>
 
                 <View style={styles.legalRow}>
                     <TouchableOpacity onPress={() => Linking.openURL(PRIVACY_URL)}>
@@ -135,7 +148,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 28,
         paddingVertical: 14,
         borderRadius: 26,
-        backgroundColor: 'rgba(21, 21, 28, 0.55)',
+        backgroundColor: 'rgba(22, 36, 60, 0.55)',
         borderWidth: 1,
         borderColor: 'rgba(255, 255, 255, 0.10)',
         backdropFilter: 'blur(24px)',

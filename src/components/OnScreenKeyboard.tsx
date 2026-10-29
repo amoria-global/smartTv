@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { raisedButton } from './glass/glassStyle';
 import { ThemeContext } from '../config';
 import { useFocusNav } from '../hooks/useFocusNav';
 import { useTranslation } from '../i18n';
@@ -92,15 +93,10 @@ function Key({
             style={[
                 styles.key,
                 width ? { minWidth: width } : null,
-                {
-                    backgroundColor: isAccent ? accent : active ? theme.static.colorFocusRing : theme.static.colorSurface,
-                    borderWidth: 1,
-                    borderColor: isAccent ? accent : active ? theme.static.colorFocusRing : theme.static.colorBorder,
-                },
-                focused && { backgroundColor: theme.static.colorAccent, borderColor: theme.static.colorFocusRing },
+                raisedButton(theme.static, isAccent || active ? 'primary' : 'glass', { focused }),
             ]}
         >
-            <Text style={[styles.keyText, { color: isAccent || active || focused ? '#fff' : theme.static.colorTextPrimary }]}>
+            <Text style={[styles.keyText, { color: isAccent || active ? '#fff' : theme.static.colorTextPrimary }]}>
                 {label}
             </Text>
         </TouchableOpacity>
@@ -113,7 +109,6 @@ const styles = StyleSheet.create({
     key: {
         minWidth: 48,
         height: 48,
-        borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
         paddingHorizontal: 10,

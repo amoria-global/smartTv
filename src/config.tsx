@@ -53,7 +53,7 @@ const staticTheme = {
     colorLiveGlow: 'rgba(255,0,51,0.55)',
     colorAccent: '#F20C8F',
     colorAccentLight: '#ff4fae',
-    colorFocusRing: '#F20C8F',
+    colorFocusRing: '#5B8CFF',
     colorSuccess: '#34D399',
     colorWarning: '#FBBF24',
     colorError: '#F87171',
