@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { ActivityIndicator, Image, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { midnightGlass } from '../components/glass/glassStyle';
 import { useRouter } from 'next/router';
 import { QRCodeSVG } from 'qrcode.react';
 import { ThemeContext } from '../config';
@@ -1078,14 +1079,7 @@ const styles = StyleSheet.create({
 
     mainContent: { flex: 1 },
     mainContentInner: { padding: 48, paddingTop: 40, paddingBottom: 80 },
-    glass: {
-        backgroundColor: 'rgba(21, 21, 28, 0.42)',
-        borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.12)',
-        backdropFilter: 'blur(32px) saturate(160%)',
-        WebkitBackdropFilter: 'blur(32px) saturate(160%)',
-        boxShadow: '0 20px 50px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.10)',
-    } as object,
+    glass: midnightGlass as object,
 
     summaryCard: {
         flexDirection: 'row',

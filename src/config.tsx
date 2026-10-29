@@ -45,8 +45,12 @@ const staticTheme = {
     iconSize: getScaledValue(20),
     buttonSize: getScaledValue(30),
     colorLight: '#FFFFFF',
-    colorBrand: '#083A85',
-    colorBrandDark: '#062d6b',
+    colorBrand: '#3E6FD8',
+    colorBrandDark: '#2F59B8',
+    colorBrandNavy: '#083A85',
+    colorPrimaryLight: '#5B8CFF',
+    colorLive: '#FF0033',
+    colorLiveGlow: 'rgba(255,0,51,0.55)',
     colorAccent: '#F20C8F',
     colorAccentLight: '#ff4fae',
     colorFocusRing: '#F20C8F',
@@ -58,32 +62,46 @@ const staticTheme = {
 
 export const gradients = {
     brand: ['#083A85', '#F20C8F'] as const,
+    primary: ['#5B8CFF', '#3E6FD8', '#2F59B8'] as const,
+    live: ['#FF2D55', '#FF0033', '#C8001F'] as const,
     accent: ['#F20C8F', '#ff4fae'] as const,
     // Bottom-up scrim used behind hero banner text/controls.
-    overlay: ['rgba(11,11,16,0)', 'rgba(11,11,16,0.85)', '#0B0B10'] as const,
+    overlay: ['rgba(10,18,32,0)', 'rgba(10,18,32,0.85)', '#0A1220'] as const,
 };
 
 const staticThemes = {
     // Cinematic dark theme — near-black rather than pure black, matching a
     // 10-foot Netflix-style TV experience.
     dark: {
-        colorBgPrimary: '#0B0B10',
-        colorSurface: '#15151C',
-        colorSurfaceMuted: '#1F1F29',
-        colorTextPrimary: '#FFFFFF',
-        colorTextSecondary: '#AAAAAA',
-        colorBorder: '#2A2A35',
-        colorBorderSoft: '#33333F',
+        colorBgPrimary: '#0A1220',
+        colorSurface: '#16243C',
+        colorSurfaceMuted: '#1B2B46',
+        colorTextPrimary: '#EAF0FA',
+        colorTextSecondary: '#93A3BE',
+        colorBorder: '#2A3B58',
+        colorBorderSoft: '#1E2D47',
+        glassTop: 'rgba(32,50,82,0.62)',
+        glassBottom: 'rgba(18,30,52,0.52)',
+        glassSolid: '#16243C',
+        glassStroke: 'rgba(170,195,240,0.14)',
+        glassHighlight: 'rgba(255,255,255,0.16)',
+        glassWell: 'rgba(4,9,18,0.55)',
         ...staticTheme,
     },
     light: {
-        colorBgPrimary: '#FFFFFF',
-        colorSurface: '#F4F6FB',
+        colorBgPrimary: '#F4F6FB',
+        colorSurface: '#FFFFFF',
         colorSurfaceMuted: '#E9EAEE',
-        colorTextPrimary: '#000000',
-        colorTextSecondary: '#333333',
+        colorTextPrimary: '#0B1626',
+        colorTextSecondary: '#33415C',
         colorBorder: '#D4D6DC',
         colorBorderSoft: '#E6E7EC',
+        glassTop: 'rgba(255,255,255,0.82)',
+        glassBottom: 'rgba(255,255,255,0.66)',
+        glassSolid: '#FFFFFF',
+        glassStroke: 'rgba(8,58,133,0.12)',
+        glassHighlight: 'rgba(255,255,255,0.9)',
+        glassWell: 'rgba(8,58,133,0.06)',
         ...staticTheme,
     },
 };
@@ -178,6 +196,10 @@ export type ThemeInterface = {
             colorLight: string;
             colorBrand: string;
             colorBrandDark: string;
+            colorBrandNavy: string;
+            colorPrimaryLight: string;
+            colorLive: string;
+            colorLiveGlow: string;
             colorAccent: string;
             colorAccentLight: string;
             colorFocusRing: string;
@@ -192,6 +214,12 @@ export type ThemeInterface = {
             colorTextSecondary: string;
             colorBorder: string;
             colorBorderSoft: string;
+            glassTop: string;
+            glassBottom: string;
+            glassSolid: string;
+            glassStroke: string;
+            glassHighlight: string;
+            glassWell: string;
         };
         styles: {
             wrapper: ViewStyle;

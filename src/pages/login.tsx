@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { midnightGlass, raisedButton, sceneBackground, glassWell } from '../components/glass/glassStyle';
 import { useRouter } from 'next/router';
 import { QRCodeSVG } from 'qrcode.react';
 import { FocusableButton } from '../components/FocusableButton';
@@ -200,6 +201,7 @@ export default function LoginScreen() {
         <View style={[styles.root, { backgroundColor: theme.static.colorBgPrimary }]}>
             <Image source={{ uri: '/images/login.png' }} style={StyleSheet.absoluteFillObject} blurRadius={18} />
             <View style={[styles.scrim, { backgroundColor: theme.static.colorBgPrimary }]} />
+            <View pointerEvents="none" style={[StyleSheet.absoluteFillObject, sceneBackground('transparent')]} />
 
             <View style={[styles.wrapper, { paddingVertical: Math.max(24, Math.round(56 * scale)) }]}>
             <View style={[styles.topRow, { marginBottom: gap(40) }]}>
@@ -243,14 +245,14 @@ export default function LoginScreen() {
                         </Text>
                         {strings.login.steps.map((step, i) => (
                             <View key={step} style={[styles.stepRow, { marginBottom: gap(18) }]}>
-                                <View style={[styles.stepBadge, { borderColor: theme.static.colorAccent }]}>
-                                    <Text style={[styles.stepNumber, { color: theme.static.colorAccent }]}>{i + 1}</Text>
+                                <View style={[styles.stepBadge, { borderColor: theme.static.colorPrimaryLight, backgroundColor: 'rgba(91,140,255,0.14)' }]}>
+                                    <Text style={[styles.stepNumber, { color: theme.static.colorPrimaryLight }]}>{i + 1}</Text>
                                 </View>
                                 <Text style={[styles.stepText, { color: theme.static.colorTextPrimary }]}>{step}</Text>
                             </View>
                         ))}
                         <TouchableOpacity onPress={() => setTab('remote')} style={[styles.switchLink, { marginTop: gap(24) }]}>
-                            <Text style={[styles.switchLinkText, { color: theme.static.colorAccent }]}>
+                            <Text style={[styles.switchLinkText, { color: theme.static.colorPrimaryLight }]}>
                                 {strings.login.switchToRemote}
                             </Text>
                         </TouchableOpacity>
@@ -258,7 +260,7 @@ export default function LoginScreen() {
 
                     <View style={styles.rightCol}>
                         <View style={[styles.qrCard, styles.glass, { padding: Math.round(32 * qrScale) }]}>
-                            <CornerBrackets color={theme.static.colorAccent} />
+                            <CornerBrackets color={theme.static.colorPrimaryLight} />
                             <View style={[styles.qrBox, { width: qrBoxSize, height: qrBoxSize }]}>
                                 {qrStatus === 'revoked' ? (
                                     // Someone removed this TV from the account. A fresh QR
@@ -270,7 +272,7 @@ export default function LoginScreen() {
                                     <View style={{ alignItems: 'center', paddingHorizontal: gap(16) }}>
                                         <Text
                                             accessibilityRole="alert"
-                                            style={[styles.instructions, { color: '#0B0B10', textAlign: 'center', marginBottom: gap(20) }]}
+                                            style={[styles.instructions, { color: '#0A1220', textAlign: 'center', marginBottom: gap(20) }]}
                                         >
                                             {strings.login.pairingRevoked}
                                         </Text>
@@ -281,7 +283,7 @@ export default function LoginScreen() {
                                         />
                                     </View>
                                 ) : !pairingCode ? (
-                                    <ActivityIndicator size="large" color={theme.static.colorAccent} />
+                                    <ActivityIndicator size="large" color={theme.static.colorPrimaryLight} />
                                 ) : (
                                     <QRCodeSVG
                                         // Only the human code. The device secret must never
@@ -317,8 +319,9 @@ export default function LoginScreen() {
                             hasTVPreferredFocus
                             style={[
                                 styles.input,
-                                { color: theme.static.colorTextPrimary, borderColor: theme.static.colorBorder, marginBottom: gap(16) },
-                                activeField === 'email' && { borderColor: theme.static.colorFocusRing },
+                                glassWell(theme.static),
+                                { color: theme.static.colorTextPrimary, marginBottom: gap(16) },
+                                activeField === 'email' && { borderColor: theme.static.colorPrimaryLight, boxShadow: '0 0 0 3px rgba(91,140,255,0.45)' } as object,
                             ]}
                         />
                         <View style={styles.passwordRow}>
@@ -332,22 +335,23 @@ export default function LoginScreen() {
                                 style={[
                                     styles.input,
                                     styles.passwordInput,
-                                    { color: theme.static.colorTextPrimary, borderColor: theme.static.colorBorder },
-                                    activeField === 'password' && { borderColor: theme.static.colorFocusRing },
+                                    glassWell(theme.static),
+                                    { color: theme.static.colorTextPrimary },
+                                    activeField === 'password' && { borderColor: theme.static.colorPrimaryLight, boxShadow: '0 0 0 3px rgba(91,140,255,0.45)' } as object,
                                 ]}
                             />
                             <TouchableOpacity
                                 onPress={() => setShowPassword((s) => !s)}
                                 style={styles.showPasswordButton}
                             >
-                                <Text style={[styles.showPasswordText, { color: theme.static.colorAccent }]}>
+                                <Text style={[styles.showPasswordText, { color: theme.static.colorPrimaryLight }]}>
                                     {showPassword ? strings.login.hide : strings.login.show}
                                 </Text>
                             </TouchableOpacity>
                         </View>
                         <SignInButton onPress={onSignIn} loading={signingIn} label={strings.login.signInButton} />
                         <TouchableOpacity onPress={() => setTab('qr')} style={[styles.switchLink, { marginTop: gap(24) }]}>
-                            <Text style={[styles.switchLinkText, { color: theme.static.colorAccent }]}>
+                            <Text style={[styles.switchLinkText, { color: theme.static.colorPrimaryLight }]}>
                                 {strings.login.switchToQr}
                             </Text>
                         </TouchableOpacity>
@@ -417,11 +421,7 @@ function TryAgainButton({ onPress, label }: { onPress: () => void; label: string
             onPress={onPress}
             hasTVPreferredFocus
             {...focusProps}
-            style={[
-                styles.alertButton,
-                { backgroundColor: theme.static.colorAccent },
-                focused && { borderWidth: 2, borderColor: theme.static.colorFocusRing },
-            ]}
+            style={[styles.alertButton, raisedButton(theme.static, 'primary', { focused })]}
         >
             <Text style={styles.alertButtonText}>{label}</Text>
         </TouchableOpacity>
@@ -438,8 +438,7 @@ function TabButton({ label, active, onPress, first }: { label: string; active: b
             {...focusProps}
             style={[
                 styles.tabButton,
-                active && { backgroundColor: theme.static.colorAccent },
-                focused && !active && { backgroundColor: 'rgba(255,255,255,0.08)' },
+                active ? raisedButton(theme.static, 'primary', { focused }) : focused ? raisedButton(theme.static, 'glass', { focused: true }) : null,
             ]}
         >
             <Text style={[styles.tabText, { color: active ? '#fff' : theme.static.colorTextSecondary }]}>{label}</Text>
@@ -455,11 +454,7 @@ function SignInButton({ onPress, loading, label }: { onPress: () => void; loadin
             onPress={onPress}
             disabled={loading}
             {...focusProps}
-            style={[
-                styles.signInButton,
-                { backgroundColor: theme.static.colorAccent },
-                focused && { borderWidth: 2, borderColor: theme.static.colorFocusRing },
-            ]}
+            style={[styles.signInButton, raisedButton(theme.static, 'primary', { focused, disabled: loading })]}
         >
             {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.signInText}>{label}</Text>}
         </TouchableOpacity>
@@ -525,12 +520,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginBottom: 40,
         alignSelf: 'flex-start',
-        backgroundColor: 'rgba(255, 255, 255, 0.06)',
+        backgroundColor: 'rgba(4, 9, 18, 0.55)',
         borderRadius: 999,
         borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.10)',
+        borderColor: 'rgba(170, 195, 240, 0.14)',
+        boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.45)',
         padding: 5,
-    },
+    } as object,
     tabButton: { paddingVertical: 14, paddingHorizontal: 28, borderRadius: 999 },
     tabText: { fontSize: 15, fontWeight: '700' },
     columns: { flexDirection: 'row', gap: 64 },
@@ -551,12 +547,12 @@ const styles = StyleSheet.create({
     stepText: { fontSize: 16, flex: 1 },
     switchLink: { marginTop: 24 },
     switchLinkText: { fontSize: 14 },
-    input: { borderWidth: 1, borderRadius: 10, paddingHorizontal: 16, paddingVertical: 14, fontSize: 16, marginBottom: 16 },
+    input: { paddingHorizontal: 18, paddingVertical: 14, fontSize: 16, marginBottom: 16 },
     passwordRow: { position: 'relative', justifyContent: 'center' },
     passwordInput: { paddingRight: 70 },
     showPasswordButton: { position: 'absolute', right: 16, top: 14, bottom: 16, justifyContent: 'center' },
     showPasswordText: { fontSize: 14, fontWeight: '700' },
-    signInButton: { borderRadius: 9999, paddingVertical: 16, alignItems: 'center', marginTop: 8 },
+    signInButton: { paddingVertical: 16, alignItems: 'center', marginTop: 8 },
     signInText: { color: '#fff', fontSize: 16, fontWeight: '700' },
     qrCard: { borderRadius: 20, padding: 32, position: 'relative' },
     formCard: { borderRadius: 20, padding: 32, maxWidth: 480 },
@@ -566,14 +562,7 @@ const styles = StyleSheet.create({
     // brighter edge highlight, and a soft elevation shadow with an inset
     // top highlight so the card reads as a pane of glass catching light,
     // not just a dark box.
-    glass: {
-        backgroundColor: 'rgba(21, 21, 28, 0.38)',
-        borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.16)',
-        backdropFilter: 'blur(40px) saturate(160%)',
-        WebkitBackdropFilter: 'blur(40px) saturate(160%)',
-        boxShadow: '0 24px 60px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.12)',
-    } as object,
+    glass: midnightGlass as object,
     qrBox: {
         width: 260,
         height: 260,
@@ -581,7 +570,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#FFFFFF',
-    },
+        boxShadow: '0 0 0 6px rgba(255,255,255,0.08), 0 12px 30px rgba(0,0,0,0.4)',
+    } as object,
     // Sits in normal flow, right after centerGroup, with its own breathing
     // room above it — not pinned to the viewport bottom, so it can never
     // overlap the centered content no matter the screen's aspect ratio.
@@ -625,6 +615,6 @@ const styles = StyleSheet.create({
     },
     alertTitle: { fontSize: 20, fontWeight: '800', marginBottom: 8, textAlign: 'center' },
     alertMessage: { fontSize: 14, textAlign: 'center', lineHeight: 20, marginBottom: 24 },
-    alertButton: { alignSelf: 'stretch', borderRadius: 9999, paddingVertical: 14, alignItems: 'center' },
+    alertButton: { alignSelf: 'stretch', paddingVertical: 14, alignItems: 'center' },
     alertButtonText: { color: '#fff', fontSize: 15, fontWeight: '700' },
 });

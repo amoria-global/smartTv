@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, Image, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
+import { midnightGlass } from '../components/glass/glassStyle';
 import { useRouter } from 'next/router';
 import { QRCodeSVG } from 'qrcode.react';
 import { ThemeContext } from '../config';
@@ -343,7 +344,7 @@ export default function DetailScreen() {
             : isEnded
               ? strings.detail.ended
               : null;
-    const statusColor = isLive ? theme.static.colorError : isUpcoming ? theme.static.colorAccent : isCancelled ? theme.static.colorError : theme.static.colorTextSecondary;
+    const statusColor = isLive ? theme.static.colorLive : isUpcoming ? theme.static.colorAccent : isCancelled ? theme.static.colorError : theme.static.colorTextSecondary;
 
     const handleJoin = async () => {
         setJoinState('joining');
@@ -747,10 +748,10 @@ function ActionButton({
                 styles.actionButton,
                 isPrimary
                     ? styles.actionPrimary
-                    : { backgroundColor: 'rgba(21,21,28,0.66)', borderColor: theme.static.colorBorder },
+                    : { backgroundColor: 'rgba(22,36,60,0.66)', borderColor: theme.static.colorBorder },
                 focused && (isPrimary
                     ? { borderColor: '#fff', transform: [{ scale: 1.05 }] }
-                    : { borderColor: theme.static.colorFocusRing, transform: [{ scale: 1.05 }], backgroundColor: 'rgba(21,21,28,0.92)' }),
+                    : { borderColor: theme.static.colorFocusRing, transform: [{ scale: 1.05 }], backgroundColor: 'rgba(22,36,60,0.92)' }),
                 disabled && { opacity: 0.55 },
             ]}
         >
@@ -884,7 +885,7 @@ const styles = StyleSheet.create({
         width: 44,
         height: 44,
         borderRadius: 22,
-        backgroundColor: 'rgba(21,21,28,0.66)',
+        backgroundColor: 'rgba(22,36,60,0.66)',
         borderWidth: 1,
         borderColor: 'rgba(255,255,255,0.14)',
         alignItems: 'center',
@@ -896,7 +897,7 @@ const styles = StyleSheet.create({
         width: 44,
         height: 44,
         borderRadius: 22,
-        backgroundColor: 'rgba(21,21,28,0.66)',
+        backgroundColor: 'rgba(22,36,60,0.66)',
         borderWidth: 1,
         borderColor: 'rgba(255,255,255,0.14)',
         alignItems: 'center',
@@ -918,7 +919,7 @@ const styles = StyleSheet.create({
     },
     liveDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: '#fff' },
     statusPillText: { color: '#fff', fontSize: 13, fontWeight: '800', textTransform: 'uppercase', letterSpacing: 0.5 },
-    categoryPill: { paddingVertical: 7, paddingHorizontal: 15, borderRadius: 999, backgroundColor: 'rgba(21,21,28,0.7)' },
+    categoryPill: { paddingVertical: 7, paddingHorizontal: 15, borderRadius: 999, backgroundColor: 'rgba(22,36,60,0.7)' },
     categoryPillText: { color: '#fff', fontSize: 12, fontWeight: '800', letterSpacing: 0.4 },
     heroTitle: { fontSize: 52, fontWeight: '800', marginBottom: 10, maxWidth: 1000, letterSpacing: -0.5 },
     heroSubtitle: { fontSize: 19, marginBottom: 18 },
@@ -942,7 +943,8 @@ const styles = StyleSheet.create({
     // gradient the Home promo card uses; RN-web needs `backgroundImage`, not
     // `background`, for it to actually paint.
     actionPrimary: {
-        backgroundImage: 'linear-gradient(135deg, #083A85 0%, #F20C8F 100%)',
+        backgroundImage: 'linear-gradient(180deg, #5B8CFF 0%, #3E6FD8 55%, #2F59B8 100%)',
+        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.38), inset 0 -2px 0 rgba(0,0,0,0.22), 0 12px 26px rgba(0,0,0,0.4)',
         borderColor: 'rgba(255,255,255,0.16)',
     } as object,
     actionButtonText: { fontSize: 17, fontWeight: '700' },
@@ -958,13 +960,7 @@ const styles = StyleSheet.create({
     leftColumn: { flex: 1.6 },
     rightColumn: { flex: 1, gap: 24 },
 
-    glass: {
-        backgroundColor: 'rgba(21, 21, 28, 0.42)',
-        borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.12)',
-        backdropFilter: 'blur(24px) saturate(160%)',
-        WebkitBackdropFilter: 'blur(24px) saturate(160%)',
-    } as object,
+    glass: midnightGlass as object,
     card: { borderRadius: 16, padding: 24, marginBottom: 24 },
 
     sectionHeader: { fontSize: 14, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 12, opacity: 0.8 },

@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { ThemeContext } from '../config';
+import { sceneBackground } from './glass/glassStyle';
 
 type Props = {
     children: React.ReactNode;
@@ -17,8 +18,9 @@ export function ScreenWrapper({ children, noPadding = false }: Props) {
 
     return (
         <View style={[styles.root, { backgroundColor: theme.static.colorBgPrimary }]}>
-            <Image source={{ uri: '/images/login.png' }} style={StyleSheet.absoluteFillObject} blurRadius={18} />
+            <Image source={{ uri: '/images/login.png' }} style={styles.photo} blurRadius={18} />
             <View style={[styles.scrim, { backgroundColor: theme.static.colorBgPrimary }]} />
+            <View pointerEvents="none" style={[StyleSheet.absoluteFillObject, sceneBackground('transparent')]} />
             <View style={[styles.container, !noPadding && styles.padding]}>{children}</View>
         </View>
     );
@@ -26,7 +28,9 @@ export function ScreenWrapper({ children, noPadding = false }: Props) {
 
 const styles = StyleSheet.create({
     root: { flex: 1, minHeight: '100vh', position: 'relative' } as object,
-    scrim: { ...StyleSheet.absoluteFillObject, opacity: 0.6 } as object,
+    // The photo stays as faint texture under the glowing scene; the scrim keeps text readable over it.
+    photo: { ...StyleSheet.absoluteFillObject, opacity: 0.35 } as object,
+    scrim: { ...StyleSheet.absoluteFillObject, opacity: 0.55 } as object,
     container: {
         flex: 1,
         flexDirection: 'column',

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
+import { midnightGlass } from '../components/glass/glassStyle';
 import { useRouter } from 'next/router';
 import { ThemeContext } from '../config';
 import { ScreenWrapper } from '../components/ScreenWrapper';
@@ -364,12 +365,7 @@ const styles = StyleSheet.create({
     // Frosted-glass pill (same treatment as the events page's filter track
     // and the login screen's own cards) instead of a flat bordered box —
     // matches the rest of the app's input/card language.
-    glass: {
-        backgroundColor: 'rgba(255, 255, 255, 0.04)',
-        borderWidth: 1,
-        backdropFilter: 'blur(24px) saturate(160%)',
-        WebkitBackdropFilter: 'blur(24px) saturate(160%)',
-    } as object,
+    glass: midnightGlass as object,
     inputWrap: {
         flexDirection: 'row',
         alignItems: 'center',

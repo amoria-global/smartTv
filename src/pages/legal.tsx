@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { midnightGlass } from '../components/glass/glassStyle';
 import { useRouter } from 'next/router';
 import { QRCodeSVG } from 'qrcode.react';
 import { ThemeContext } from '../config';
@@ -192,12 +193,5 @@ const styles = StyleSheet.create({
     canonicalNote: { flexDirection: 'row', alignItems: 'flex-start', gap: 12, marginTop: 32, paddingTop: 24, borderTopWidth: 1 },
     canonicalText: { flex: 1, fontSize: 14, lineHeight: 20 },
 
-    glass: {
-        backgroundColor: 'rgba(21, 21, 28, 0.42)',
-        borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.12)',
-        backdropFilter: 'blur(32px) saturate(160%)',
-        WebkitBackdropFilter: 'blur(32px) saturate(160%)',
-        boxShadow: '0 20px 50px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.10)',
-    } as object,
+    glass: midnightGlass as object,
 });
