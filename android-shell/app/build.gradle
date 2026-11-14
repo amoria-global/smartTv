@@ -1,0 +1,33 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+// The Connekyt TV app for Android TV: a full-screen shell around the TV web app at https://tv.connekyt.com.
+// The release bundle is built unsigned; the upload key signs it by hand (jarsigner), so no password lives here.
+android {
+    namespace 'com.connekyt.tv'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId 'com.connekyt.tv'
+        minSdk 22
+        targetSdk 36
+        versionCode 3
+        versionName '0.3.0'
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions { jvmTarget = '17' }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.15.0'
+}
