@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, Image, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
+import { AppText } from '../components/AppText';
 import { midnightGlass } from '../components/glass/glassStyle';
 import { useRouter } from 'next/router';
 import { QRCodeSVG } from 'qrcode.react';
@@ -286,12 +287,12 @@ export default function DetailScreen() {
                 <Navbar />
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 48 }}>
                     <i className="bi bi-emoji-frown" style={{ fontSize: 40, color: theme.static.colorAccent, marginBottom: 16 }} />
-                    <Text style={[styles.heroTitle, { color: theme.static.colorTextPrimary, fontSize: 28, textAlign: 'center' }]}>
+                    <AppText variant="display" style={[styles.heroTitle, { color: theme.static.colorTextPrimary, fontSize: 28, textAlign: 'center' }]}>
                         {strings.detail.eventNotFoundTitle}
-                    </Text>
-                    <Text style={[styles.heroSubtitle, { color: theme.static.colorTextSecondary, textAlign: 'center', maxWidth: 480, marginBottom: 32 }]}>
+                    </AppText>
+                    <AppText style={[styles.heroSubtitle, { color: theme.static.colorTextSecondary, textAlign: 'center', maxWidth: 480, marginBottom: 32 }]}>
                         {strings.detail.eventNotFoundBody}
-                    </Text>
+                    </AppText>
                     <FocusableButton title={strings.detail.back} onPress={() => router.back()} hasTVPreferredFocus />
                 </View>
             </ScreenWrapper>
@@ -304,12 +305,12 @@ export default function DetailScreen() {
                 <Navbar />
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 48 }}>
                     <i className="bi bi-shield-lock" style={{ fontSize: 40, color: theme.static.colorAccent, marginBottom: 16 }} />
-                    <Text style={[styles.heroTitle, { color: theme.static.colorTextPrimary, fontSize: 28, textAlign: 'center' }]}>
+                    <AppText variant="display" style={[styles.heroTitle, { color: theme.static.colorTextPrimary, fontSize: 28, textAlign: 'center' }]}>
                         {strings.detail.restrictedTitle}
-                    </Text>
-                    <Text style={[styles.heroSubtitle, { color: theme.static.colorTextSecondary, textAlign: 'center', maxWidth: 480, marginBottom: 32 }]}>
+                    </AppText>
+                    <AppText style={[styles.heroSubtitle, { color: theme.static.colorTextSecondary, textAlign: 'center', maxWidth: 480, marginBottom: 32 }]}>
                         {strings.detail.restrictedBody}
-                    </Text>
+                    </AppText>
                     <FocusableButton title={strings.detail.back} onPress={() => router.back()} hasTVPreferredFocus />
                 </View>
             </ScreenWrapper>
@@ -440,20 +441,20 @@ export default function DetailScreen() {
                             {statusLabel ? (
                                 <View style={[styles.statusPill, { backgroundColor: statusColor }]}>
                                     {isLive ? <View style={styles.liveDot} /> : <i className="bi bi-broadcast" style={{ fontSize: 13, color: palette.white }} />}
-                                    <Text style={styles.statusPillText}>{statusLabel}</Text>
+                                    <AppText variant="display" style={styles.statusPillText}>{statusLabel}</AppText>
                                 </View>
                             ) : null}
                             {video.category ? (
                                 <View style={styles.categoryPill}>
-                                    <Text style={styles.categoryPillText}>{video.category.toUpperCase()}</Text>
+                                    <AppText variant="display" style={styles.categoryPillText}>{video.category.toUpperCase()}</AppText>
                                 </View>
                             ) : null}
                         </View>
 
-                        <Text style={[styles.heroTitle, { color: theme.static.colorTextPrimary }]}>{video.title}</Text>
+                        <AppText variant="display" style={[styles.heroTitle, { color: theme.static.colorTextPrimary }]}>{video.title}</AppText>
 
                         {video.subtitle ? (
-                            <Text style={[styles.heroSubtitle, { color: theme.static.colorTextSecondary }]}>{video.subtitle}</Text>
+                            <AppText style={[styles.heroSubtitle, { color: theme.static.colorTextSecondary }]}>{video.subtitle}</AppText>
                         ) : null}
 
                         {/* Inline meta row: date · time · venue · capacity */}
@@ -478,9 +479,9 @@ export default function DetailScreen() {
                                     variant="primary"
                                 />
                             ) : isLive ? (
-                                <Text style={[styles.rsvpError, { color: theme.static.colorTextSecondary }]}>
+                                <AppText style={[styles.rsvpError, { color: theme.static.colorTextSecondary }]}>
                                     {strings.detail.streamNotReadyNote}
-                                </Text>
+                                </AppText>
                             ) : null}
 
                             {secondaryAction ? (
@@ -497,9 +498,9 @@ export default function DetailScreen() {
                         {isUpcoming && hasPaidAccess ? (
                             <View style={styles.reservedNoteRow}>
                                 <i className="bi bi-check-circle-fill" style={{ fontSize: 15, color: theme.static.colorSuccess }} />
-                                <Text style={[styles.reservedNoteText, { color: theme.static.colorTextSecondary }]}>
+                                <AppText style={[styles.reservedNoteText, { color: theme.static.colorTextSecondary }]}>
                                     {strings.detail.reservedNote}
-                                </Text>
+                                </AppText>
                             </View>
                         ) : null}
 
@@ -508,28 +509,28 @@ export default function DetailScreen() {
                         {isUpcoming && !hasPaidAccess && !isFreeEntry && !video.isFree && !paidPurchasesEnabled ? (
                             <View style={styles.reservedNoteRow}>
                                 <i className="bi bi-lock-fill" style={{ fontSize: 14, color: theme.static.colorTextSecondary }} />
-                                <Text style={[styles.reservedNoteText, { color: theme.static.colorTextSecondary }]}>
+                                <AppText style={[styles.reservedNoteText, { color: theme.static.colorTextSecondary }]}>
                                     {strings.detail.paidReaderNote}
-                                </Text>
+                                </AppText>
                             </View>
                         ) : null}
 
                         {verifyState === 'notfound' && !hasPaidAccess ? (
                             <View style={{ marginTop: 10, maxWidth: 620 }}>
-                                <Text style={[styles.rsvpError, { color: theme.static.colorTextSecondary, marginTop: 0 }]}>
+                                <AppText style={[styles.rsvpError, { color: theme.static.colorTextSecondary, marginTop: 0 }]}>
                                     {strings.detail.verifyNotFound}
-                                </Text>
+                                </AppText>
                                 {/* The TV can only see a payment made under the account it's
                                     signed into — surfacing which account makes a guest/wrong
                                     -account payment obvious instead of a silent dead end. */}
-                                <Text style={[styles.verifyHint, { color: theme.static.colorTextSecondary }]}>
-                                    {strings.detail.verifySignedInAs} <Text style={{ fontWeight: '700' }}>{user?.email ?? '—'}</Text>. {strings.detail.verifyPayHint}
-                                </Text>
+                                <AppText style={[styles.verifyHint, { color: theme.static.colorTextSecondary }]}>
+                                    {strings.detail.verifySignedInAs} <AppText style={{ fontWeight: '700' }}>{user?.email ?? '—'}</AppText>. {strings.detail.verifyPayHint}
+                                </AppText>
                             </View>
                         ) : null}
 
                         {joinState === 'failed' ? (
-                            <Text style={[styles.rsvpError, { color: theme.static.colorError, marginTop: 10 }]}>{strings.detail.rsvpFailed}</Text>
+                            <AppText style={[styles.rsvpError, { color: theme.static.colorError, marginTop: 10 }]}>{strings.detail.rsvpFailed}</AppText>
                         ) : null}
                     </View>
                 </View>
@@ -539,20 +540,20 @@ export default function DetailScreen() {
                     <View style={styles.leftColumn}>
                         <SectionHeader label={strings.detail.aboutHeader} />
                         <View style={[styles.card, styles.glass]}>
-                            <Text style={[styles.description, { color: theme.static.colorTextPrimary }]}>
+                            <AppText style={[styles.description, { color: theme.static.colorTextPrimary }]}>
                                 {video.description || strings.detail.noDescription}
-                            </Text>
+                            </AppText>
                             {video.tags?.length ? (
                                 <View style={styles.tagRow}>
                                     {video.tags.map((tag) => (
                                         <View key={tag} style={styles.tagPill}>
-                                            <Text style={[styles.tagText, { color: theme.static.colorTextSecondary }]}>#{tag}</Text>
+                                            <AppText style={[styles.tagText, { color: theme.static.colorTextSecondary }]}>#{tag}</AppText>
                                         </View>
                                     ))}
                                 </View>
                             ) : null}
                             {isEnded ? (
-                                <Text style={[styles.replayNote, { color: theme.static.colorTextSecondary }]}>{strings.detail.replayNote}</Text>
+                                <AppText style={[styles.replayNote, { color: theme.static.colorTextSecondary }]}>{strings.detail.replayNote}</AppText>
                             ) : null}
                         </View>
 
@@ -596,21 +597,21 @@ export default function DetailScreen() {
                                     <>
                                         <View style={styles.priceBoxTitleRow}>
                                             <i className="bi bi-check-circle-fill" style={{ fontSize: 16, color: theme.static.colorSuccess }} />
-                                            <Text style={[styles.priceBoxTitle, { color: theme.static.colorSuccess }]}>{strings.detail.reservedPaid}</Text>
+                                            <AppText variant="display" style={[styles.priceBoxTitle, { color: theme.static.colorSuccess }]}>{strings.detail.reservedPaid}</AppText>
                                         </View>
-                                        <Text style={[styles.priceBoxSubtitle, { color: theme.static.colorTextSecondary }]}>
+                                        <AppText variant="display" style={[styles.priceBoxSubtitle, { color: theme.static.colorTextSecondary }]}>
                                             {strings.common.fromPricePrefix} {video.streamFeeCurrencySymbol ?? ''}{video.streamFee}
-                                        </Text>
+                                        </AppText>
                                     </>
                                 ) : (
                                     <>
-                                        <Text style={[styles.priceBoxTitle, { color: isFreeEntry ? theme.static.colorSuccess : theme.static.colorAccent }]}>
+                                        <AppText variant="display" style={[styles.priceBoxTitle, { color: isFreeEntry ? theme.static.colorSuccess : theme.static.colorAccent }]}>
                                             {isFreeEntry ? strings.detail.freeEntry : `${strings.common.fromPricePrefix} ${video.streamFeeCurrencySymbol ?? ''}${video.streamFee}`}
-                                        </Text>
+                                        </AppText>
                                         {isFreeEntry ? (
-                                            <Text style={[styles.priceBoxSubtitle, { color: theme.static.colorTextSecondary }]}>
+                                            <AppText variant="display" style={[styles.priceBoxSubtitle, { color: theme.static.colorTextSecondary }]}>
                                                 {strings.detail.noPurchaseRequired}
-                                            </Text>
+                                            </AppText>
                                         ) : null}
                                     </>
                                 )}
@@ -645,9 +646,9 @@ export default function DetailScreen() {
                 ) : null}
 
                 {/* --- Footer --- */}
-                <Text style={[styles.footer, { color: theme.static.colorTextSecondary }]}>
+                <AppText style={[styles.footer, { color: theme.static.colorTextSecondary }]}>
                     © {new Date().getFullYear()} Connekyt · {strings.detail.footerTagline}
-                </Text>
+                </AppText>
             </ScrollView>
 
             {reserveOpen ? (
@@ -677,8 +678,8 @@ export default function DetailScreen() {
                 <View style={styles.successOverlay} pointerEvents="none">
                     <View style={[styles.successCard, { backgroundColor: theme.static.colorSurface, borderColor: theme.static.colorBorder }]}>
                         <i className="bi bi-check-circle-fill" style={{ fontSize: 48, color: theme.static.colorSuccess }} />
-                        <Text style={[styles.successTitle, { color: theme.static.colorTextPrimary }]}>{strings.detail.paymentSuccessTitle}</Text>
-                        <Text style={[styles.successBody, { color: theme.static.colorTextSecondary }]}>{strings.detail.paymentSuccessBody}</Text>
+                        <AppText variant="display" style={[styles.successTitle, { color: theme.static.colorTextPrimary }]}>{strings.detail.paymentSuccessTitle}</AppText>
+                        <AppText style={[styles.successBody, { color: theme.static.colorTextSecondary }]}>{strings.detail.paymentSuccessBody}</AppText>
                         <ActivityIndicator size="small" color={theme.static.colorAccent} />
                     </View>
                 </View>
@@ -711,7 +712,7 @@ function MetaItem({ icon, text, tone }: { icon: string; text: string; tone?: str
     return (
         <View style={styles.metaItem}>
             <i className={`bi ${icon}`} style={{ fontSize: 15, color: tone ?? theme.static.colorAccentLight }} />
-            <Text style={[styles.metaText, { color: tone ?? theme.static.colorTextSecondary }]}>{text}</Text>
+            <AppText style={[styles.metaText, { color: tone ?? theme.static.colorTextSecondary }]}>{text}</AppText>
         </View>
     );
 }
@@ -756,11 +757,11 @@ function ActionButton({
             ]}
         >
             <i className={`bi ${icon}`} style={{ fontSize: 17, color: isPrimary ? palette.white : theme.static.colorSuccess }} />
-            <Text style={[styles.actionButtonText, { color: palette.white }]}>{title}</Text>
+            <AppText variant="display" style={[styles.actionButtonText, { color: palette.white }]}>{title}</AppText>
             {price ? (
                 <>
                     <View style={styles.actionDivider} />
-                    <Text style={[styles.actionPrice, { color: palette.white }]}>{price}</Text>
+                    <AppText variant="display" style={[styles.actionPrice, { color: palette.white }]}>{price}</AppText>
                 </>
             ) : null}
         </TouchableOpacity>
@@ -806,7 +807,7 @@ function ReserveQrModal({ url, priceLabel, onClose }: { url: string; priceLabel?
 
 function SectionHeader({ label }: { label: string }) {
     const { theme } = useContext(ThemeContext);
-    return <Text style={[styles.sectionHeader, { color: theme.static.colorTextPrimary }]}>{label}</Text>;
+    return <AppText variant="display" style={[styles.sectionHeader, { color: theme.static.colorTextPrimary }]}>{label}</AppText>;
 }
 
 function SidebarInfoRow({ icon, label, value, tone }: { icon: string; label: string; value?: string; tone?: string }) {
@@ -816,8 +817,8 @@ function SidebarInfoRow({ icon, label, value, tone }: { icon: string; label: str
         <View style={styles.sidebarInfoRow}>
             <i className={`bi ${icon}`} style={{ fontSize: 15, color: theme.static.colorTextSecondary, width: 20 }} />
             <View style={{ flex: 1 }}>
-                <Text style={[styles.sidebarInfoLabel, { color: theme.static.colorTextSecondary }]}>{label}</Text>
-                <Text style={[styles.sidebarInfoValue, { color: tone ?? theme.static.colorTextPrimary }]}>{value}</Text>
+                <AppText style={[styles.sidebarInfoLabel, { color: theme.static.colorTextSecondary }]}>{label}</AppText>
+                <AppText variant="display" style={[styles.sidebarInfoValue, { color: tone ?? theme.static.colorTextPrimary }]}>{value}</AppText>
             </View>
         </View>
     );
@@ -835,10 +836,10 @@ function HostCard({ role, name, image, icon, color }: { role: string; name: stri
                 </View>
             )}
             <View style={{ flex: 1 }}>
-                <Text style={[styles.hostCardRole, { color: theme.static.colorTextSecondary }]}>{role.toUpperCase()}</Text>
-                <Text numberOfLines={1} style={[styles.hostCardName, { color: theme.static.colorTextPrimary }]}>
+                <AppText variant="display" style={[styles.hostCardRole, { color: theme.static.colorTextSecondary }]}>{role.toUpperCase()}</AppText>
+                <AppText variant="display" numberOfLines={1} style={[styles.hostCardName, { color: theme.static.colorTextPrimary }]}>
                     {name}
-                </Text>
+                </AppText>
             </View>
         </View>
     );

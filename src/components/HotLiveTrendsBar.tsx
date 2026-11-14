@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { AppText } from './AppText';
 import { useRouter } from 'next/router';
 import { ThemeContext, alpha, motion, palette, radii } from '../config';
 import { focusGlow, raisedButton } from './glass/glassStyle';
@@ -32,9 +33,9 @@ export function HotLiveTrendsBar({ liveVideos, liveCount }: Props) {
             <View style={styles.trendsRow}>
                 <View style={[raisedButton(theme.static, 'live'), styles.trendsPill]}>
                     <i className="bi bi-fire" style={{ fontSize: 14, color: palette.white }} />
-                    <Text style={styles.trendsPillText}>{strings.events.hotLiveTrends}</Text>
+                    <AppText variant="display" style={styles.trendsPillText}>{strings.events.hotLiveTrends}</AppText>
                     <View style={styles.trendsCountBadge}>
-                        <Text style={styles.trendsCountText}>{liveCount}</Text>
+                        <AppText variant="display" style={styles.trendsCountText}>{liveCount}</AppText>
                     </View>
                 </View>
                 <View style={styles.connectorLine} />
@@ -58,12 +59,12 @@ function TrendCircle({ video, onPress }: { video: TvVideo; onPress: () => void }
                     {video.imageUrl ? <Image source={{ uri: video.imageUrl }} style={styles.trendImage} resizeMode="cover" /> : null}
                 </View>
                 <View style={[styles.trendLiveBadge, { backgroundColor: theme.static.colorLive }]}>
-                    <Text style={styles.trendLiveBadgeText}>LIVE</Text>
+                    <AppText variant="display" style={styles.trendLiveBadgeText}>LIVE</AppText>
                 </View>
             </View>
-            <Text numberOfLines={1} style={[styles.trendLabel, { color: theme.static.colorTextPrimary }]}>
+            <AppText numberOfLines={1} style={[styles.trendLabel, { color: theme.static.colorTextPrimary }]}>
                 {video.title}
-            </Text>
+            </AppText>
         </TouchableOpacity>
     );
 }

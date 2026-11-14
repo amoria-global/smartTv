@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { AppText } from '../components/AppText';
 import { midnightGlass } from '../components/glass/glassStyle';
 import { useRouter } from 'next/router';
 import { QRCodeSVG } from 'qrcode.react';
@@ -61,10 +62,10 @@ export default function LegalScreen() {
                 <View style={[styles.sidebar, { borderRightColor: theme.static.colorBorder }]}>
                     <TouchableOpacity onPress={() => router.push('/settings')} style={styles.backRow}>
                         <i className="bi bi-arrow-left" style={{ fontSize: 18, color: theme.static.colorTextPrimary }} />
-                        <Text style={[styles.backText, { color: theme.static.colorTextPrimary }]}>{strings.legal.backToSettings}</Text>
+                        <AppText variant="display" style={[styles.backText, { color: theme.static.colorTextPrimary }]}>{strings.legal.backToSettings}</AppText>
                     </TouchableOpacity>
 
-                    <Text style={[styles.railHeading, { color: theme.static.colorTextSecondary }]}>{strings.settings.legalHeader}</Text>
+                    <AppText variant="display" style={[styles.railHeading, { color: theme.static.colorTextSecondary }]}>{strings.settings.legalHeader}</AppText>
 
                     <DocTab
                         icon="bi-shield-check"
@@ -87,28 +88,28 @@ export default function LegalScreen() {
                         <View style={styles.qrBox}>
                             <QRCodeSVG value={webUrl} size={116} bgColor={palette.qrPaper} fgColor={palette.qrInk} level="M" />
                         </View>
-                        <Text style={[styles.qrCaption, { color: theme.static.colorTextSecondary }]}>{strings.legal.scanCaption}</Text>
+                        <AppText style={[styles.qrCaption, { color: theme.static.colorTextSecondary }]}>{strings.legal.scanCaption}</AppText>
                     </View>
                 </View>
 
                 {/* Reader */}
                 <ScrollView style={styles.reader} contentContainerStyle={styles.readerInner} showsVerticalScrollIndicator={false}>
-                    <Text style={[styles.docTitle, { color: theme.static.colorTextPrimary }]}>{title}</Text>
-                    <Text style={[styles.docMeta, { color: theme.static.colorTextSecondary }]}>
+                    <AppText variant="display" style={[styles.docTitle, { color: theme.static.colorTextPrimary }]}>{title}</AppText>
+                    <AppText style={[styles.docMeta, { color: theme.static.colorTextSecondary }]}>
                         {strings.legal.lastUpdatedPrefix} {LEGAL_LAST_UPDATED} · {readingTime} {strings.legal.minRead}
-                    </Text>
+                    </AppText>
 
                     <View style={[styles.docCard, styles.glass]}>
                         {sections.map((s, i) => (
                             <View key={s.heading} style={i > 0 ? styles.sectionSpacing : undefined}>
-                                <Text style={[styles.sectionHeading, { color: theme.static.colorTextPrimary }]}>{s.heading}</Text>
-                                <Text style={[styles.sectionBody, { color: theme.static.colorTextSecondary }]}>{s.body}</Text>
+                                <AppText variant="display" style={[styles.sectionHeading, { color: theme.static.colorTextPrimary }]}>{s.heading}</AppText>
+                                <AppText style={[styles.sectionBody, { color: theme.static.colorTextSecondary }]}>{s.body}</AppText>
                             </View>
                         ))}
 
                         <View style={[styles.canonicalNote, { borderTopColor: theme.static.colorBorder }]}>
                             <i className="bi bi-info-circle" style={{ fontSize: 15, color: theme.static.colorPrimaryLight }} />
-                            <Text style={[styles.canonicalText, { color: theme.static.colorTextSecondary }]}>{strings.legal.canonicalNote}</Text>
+                            <AppText style={[styles.canonicalText, { color: theme.static.colorTextSecondary }]}>{strings.legal.canonicalNote}</AppText>
                         </View>
                     </View>
                 </ScrollView>
@@ -147,14 +148,15 @@ function DocTab({
                 className={`bi ${icon}`}
                 style={{ fontSize: 16, color: focused ? palette.white : active ? theme.static.colorPrimaryLight : theme.static.colorTextSecondary }}
             />
-            <Text
+            <AppText
+                variant="display"
                 style={[
                     styles.docTabText,
                     { color: focused ? palette.white : active ? theme.static.colorTextPrimary : theme.static.colorTextSecondary },
                 ]}
             >
                 {label}
-            </Text>
+            </AppText>
         </TouchableOpacity>
     );
 }

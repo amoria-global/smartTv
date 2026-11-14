@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { AppText } from '../components/AppText';
 import { midnightGlass, raisedButton, sceneBackground, glassWell } from '../components/glass/glassStyle';
 import { useRouter } from 'next/router';
 import { QRCodeSVG } from 'qrcode.react';
@@ -211,9 +212,9 @@ export default function LoginScreen() {
                         style={[styles.logo, { width: Math.round(40 * Math.max(0.75, scale)), height: Math.round(40 * Math.max(0.75, scale)) }]}
                         resizeMode="contain"
                     />
-                    <Text style={[styles.brandText, { color: theme.static.colorTextPrimary, fontSize: Math.round(22 * Math.max(0.75, scale)) }]}>
+                    <AppText variant="display" style={[styles.brandText, { color: theme.static.colorTextPrimary, fontSize: Math.round(22 * Math.max(0.75, scale)) }]}>
                         Connekyt
-                    </Text>
+                    </AppText>
                 </View>
                 <LanguageSwitcher />
             </View>
@@ -225,12 +226,12 @@ export default function LoginScreen() {
                 `qrBoxSize`, derived from the real viewport height) so the
                 whole screen always fits on one frame, on any resolution. */}
             <View style={styles.centerGroup}>
-            <Text style={[styles.heading, { color: theme.static.colorTextPrimary, fontSize: Math.round(44 * Math.max(0.58, scale)), marginBottom: gap(8) }]}>
+            <AppText variant="display" style={[styles.heading, { color: theme.static.colorTextPrimary, fontSize: Math.round(44 * Math.max(0.58, scale)), marginBottom: gap(8) }]}>
                 {strings.login.welcomeBack}
-            </Text>
-            <Text style={[styles.subheading, { color: theme.static.colorTextSecondary, marginBottom: gap(32) }]}>
+            </AppText>
+            <AppText style={[styles.subheading, { color: theme.static.colorTextSecondary, marginBottom: gap(32) }]}>
                 {strings.login.subheading}
-            </Text>
+            </AppText>
 
             <View style={[styles.tabRow, { marginBottom: gap(40) }]}>
                 <TabButton label={strings.login.tabQr} active={tab === 'qr'} onPress={() => setTab('qr')} first />
@@ -240,21 +241,21 @@ export default function LoginScreen() {
             {tab === 'qr' ? (
                 <View style={styles.columns}>
                     <View style={styles.leftCol}>
-                        <Text style={[styles.instructions, { color: theme.static.colorTextSecondary, marginBottom: gap(24) }]}>
+                        <AppText style={[styles.instructions, { color: theme.static.colorTextSecondary, marginBottom: gap(24) }]}>
                             {strings.login.qrInstructions}
-                        </Text>
+                        </AppText>
                         {strings.login.steps.map((step, i) => (
                             <View key={step} style={[styles.stepRow, { marginBottom: gap(18) }]}>
                                 <View style={[styles.stepBadge, { borderColor: theme.static.colorPrimaryLight, backgroundColor: alpha(palette.primaryLight, 0.14) }]}>
-                                    <Text style={[styles.stepNumber, { color: theme.static.colorPrimaryLight }]}>{i + 1}</Text>
+                                    <AppText variant="display" style={[styles.stepNumber, { color: theme.static.colorPrimaryLight }]}>{i + 1}</AppText>
                                 </View>
-                                <Text style={[styles.stepText, { color: theme.static.colorTextPrimary }]}>{step}</Text>
+                                <AppText style={[styles.stepText, { color: theme.static.colorTextPrimary }]}>{step}</AppText>
                             </View>
                         ))}
                         <TouchableOpacity onPress={() => setTab('remote')} style={[styles.switchLink, { marginTop: gap(24) }]}>
-                            <Text style={[styles.switchLinkText, { color: theme.static.colorPrimaryLight }]}>
+                            <AppText style={[styles.switchLinkText, { color: theme.static.colorPrimaryLight }]}>
                                 {strings.login.switchToRemote}
-                            </Text>
+                            </AppText>
                         </TouchableOpacity>
                     </View>
 
@@ -270,12 +271,12 @@ export default function LoginScreen() {
                                     // button is focusable because a remote is the only input
                                     // a television has.
                                     <View style={{ alignItems: 'center', paddingHorizontal: gap(16) }}>
-                                        <Text
+                                        <AppText
                                             accessibilityRole="alert"
                                             style={[styles.instructions, { color: palette.background, textAlign: 'center', marginBottom: gap(20) }]}
                                         >
                                             {strings.login.pairingRevoked}
-                                        </Text>
+                                        </AppText>
                                         <FocusableButton
                                             title={strings.login.tryAgainButton}
                                             onPress={startPairing}
@@ -305,9 +306,9 @@ export default function LoginScreen() {
                 <>
                 <View style={styles.columns}>
                     <View style={[styles.leftCol, styles.formCard, styles.glass, { padding: Math.round(32 * qrScale) }]}>
-                        <Text style={[styles.instructions, { color: theme.static.colorTextSecondary, marginBottom: gap(24) }]}>
+                        <AppText style={[styles.instructions, { color: theme.static.colorTextSecondary, marginBottom: gap(24) }]}>
                             {strings.login.remoteInstructions}
-                        </Text>
+                        </AppText>
                         <TextInput
                             value={email}
                             onChangeText={setEmail}
@@ -344,16 +345,16 @@ export default function LoginScreen() {
                                 onPress={() => setShowPassword((s) => !s)}
                                 style={styles.showPasswordButton}
                             >
-                                <Text style={[styles.showPasswordText, { color: theme.static.colorPrimaryLight }]}>
+                                <AppText variant="display" style={[styles.showPasswordText, { color: theme.static.colorPrimaryLight }]}>
                                     {showPassword ? strings.login.hide : strings.login.show}
-                                </Text>
+                                </AppText>
                             </TouchableOpacity>
                         </View>
                         <SignInButton onPress={onSignIn} loading={signingIn} label={strings.login.signInButton} />
                         <TouchableOpacity onPress={() => setTab('qr')} style={[styles.switchLink, { marginTop: gap(24) }]}>
-                            <Text style={[styles.switchLinkText, { color: theme.static.colorPrimaryLight }]}>
+                            <AppText style={[styles.switchLinkText, { color: theme.static.colorPrimaryLight }]}>
                                 {strings.login.switchToQr}
-                            </Text>
+                            </AppText>
                         </TouchableOpacity>
                     </View>
 
@@ -373,11 +374,11 @@ export default function LoginScreen() {
             )}
 
             <View style={[styles.footer, { marginTop: gap(28) }]}>
-                <Text style={[styles.footerText, { color: theme.static.colorTextSecondary }]}>
+                <AppText style={[styles.footerText, { color: theme.static.colorTextSecondary }]}>
                     {strings.login.developedByPrefix}
                     {'  '}
-                    <Text style={styles.footerBrand}>Amoria Global Tech</Text>
-                </Text>
+                    <AppText variant="display" style={styles.footerBrand}>Amoria Global Tech</AppText>
+                </AppText>
             </View>
             </View>
             </View>
@@ -403,10 +404,10 @@ function SignInErrorModal({ message, onDismiss }: { message: string; onDismiss: 
                 <View style={[styles.alertIconCircle, { backgroundColor: alpha(palette.error, 0.14) }]}>
                     <i className="bi bi-x-lg" style={{ fontSize: 26, color: theme.static.colorError }} />
                 </View>
-                <Text style={[styles.alertTitle, { color: theme.static.colorTextPrimary }]}>
+                <AppText variant="display" style={[styles.alertTitle, { color: theme.static.colorTextPrimary }]}>
                     {strings.login.signInErrorTitle}
-                </Text>
-                <Text style={[styles.alertMessage, { color: theme.static.colorTextSecondary }]}>{message}</Text>
+                </AppText>
+                <AppText style={[styles.alertMessage, { color: theme.static.colorTextSecondary }]}>{message}</AppText>
                 <TryAgainButton onPress={onDismiss} label={strings.login.tryAgainButton} />
             </View>
         </View>
@@ -423,7 +424,7 @@ function TryAgainButton({ onPress, label }: { onPress: () => void; label: string
             {...focusProps}
             style={[styles.alertButton, raisedButton(theme.static, 'primary', { focused })]}
         >
-            <Text style={styles.alertButtonText}>{label}</Text>
+            <AppText variant="display" style={styles.alertButtonText}>{label}</AppText>
         </TouchableOpacity>
     );
 }
@@ -441,7 +442,7 @@ function TabButton({ label, active, onPress, first }: { label: string; active: b
                 active ? raisedButton(theme.static, 'primary', { focused }) : focused ? raisedButton(theme.static, 'glass', { focused: true }) : null,
             ]}
         >
-            <Text style={[styles.tabText, { color: active ? palette.white : theme.static.colorTextSecondary }]}>{label}</Text>
+            <AppText variant="display" style={[styles.tabText, { color: active ? palette.white : theme.static.colorTextSecondary }]}>{label}</AppText>
         </TouchableOpacity>
     );
 }
@@ -456,7 +457,7 @@ function SignInButton({ onPress, loading, label }: { onPress: () => void; loadin
             {...focusProps}
             style={[styles.signInButton, raisedButton(theme.static, 'primary', { focused, disabled: loading })]}
         >
-            {loading ? <ActivityIndicator color={palette.white} /> : <Text style={styles.signInText}>{label}</Text>}
+            {loading ? <ActivityIndicator color={palette.white} /> : <AppText variant="display" style={styles.signInText}>{label}</AppText>}
         </TouchableOpacity>
     );
 }

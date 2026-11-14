@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
-import { StyleSheet, Text, View, ViewStyle } from 'react-native';
+import { StyleSheet, View, ViewStyle } from 'react-native';
+import { AppText } from './AppText';
 import { ThemeContext, radii } from '../config';
 import { glassSurface, glassWell } from './glass/glassStyle';
 import { useTranslation } from '../i18n';
@@ -22,7 +23,7 @@ export function CountdownFlipCard({ msRemaining, style }: { msRemaining: number;
         return (
             <View style={[glassSurface(theme.static, { radius: radii.card, raised: true }), styles.card, styles.anyMomentCard, style]}>
                 <i className="bi bi-hourglass-split" style={{ fontSize: 15, color: theme.static.colorAccent }} />
-                <Text style={[styles.headerText, { color: theme.static.colorAccentLight }]}>{strings.detail.startingAnyMoment}</Text>
+                <AppText variant="display" style={[styles.headerText, { color: theme.static.colorAccentLight }]}>{strings.detail.startingAnyMoment}</AppText>
             </View>
         );
     }
@@ -32,7 +33,7 @@ export function CountdownFlipCard({ msRemaining, style }: { msRemaining: number;
         <View style={[glassSurface(theme.static, { radius: radii.card, raised: true }), styles.card, style]}>
             <View style={styles.header}>
                 <i className="bi bi-hourglass-split" style={{ fontSize: 13, color: theme.static.colorAccent }} />
-                <Text style={[styles.headerText, { color: theme.static.colorAccentLight }]}>{strings.detail.startsIn}</Text>
+                <AppText variant="display" style={[styles.headerText, { color: theme.static.colorAccentLight }]}>{strings.detail.startsIn}</AppText>
             </View>
             <View style={styles.boxes}>
                 {cd.days > 0 ? <Box value={pad2(cd.days)} label={strings.detail.unitDays} /> : null}
@@ -48,8 +49,8 @@ function Box({ value, label }: { value: string; label: string }) {
     const { theme } = useContext(ThemeContext);
     return (
         <View style={[glassWell(theme.static, radii.tile), styles.box]}>
-            <Text style={[styles.value, { color: theme.static.colorTextPrimary }]}>{value}</Text>
-            <Text style={[styles.label, { color: theme.static.colorTextSecondary }]}>{label}</Text>
+            <AppText variant="display" style={[styles.value, { color: theme.static.colorTextPrimary }]}>{value}</AppText>
+            <AppText variant="display" style={[styles.label, { color: theme.static.colorTextSecondary }]}>{label}</AppText>
         </View>
     );
 }

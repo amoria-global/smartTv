@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { AppText } from './AppText';
 import { midnightGlass } from './glass/glassStyle';
 import { QRCodeSVG } from 'qrcode.react';
 import { ThemeContext, alpha, palette } from '../config';
@@ -64,12 +65,12 @@ export function QrHandoffCard({
                 {/* RIGHT — icon, title, price, steps, status */}
                 <View style={styles.right}>
                     <i className={`bi ${icon}`} style={{ fontSize: 30, color: theme.static.colorPrimaryLight, marginBottom: 8 }} />
-                    <Text style={[styles.title, { color: theme.static.colorTextPrimary }]}>{title}</Text>
-                    <Text style={[styles.subtitle, { color: theme.static.colorTextSecondary }]}>{subtitle}</Text>
+                    <AppText variant="display" style={[styles.title, { color: theme.static.colorTextPrimary }]}>{title}</AppText>
+                    <AppText style={[styles.subtitle, { color: theme.static.colorTextSecondary }]}>{subtitle}</AppText>
 
                     {priceLabel ? (
                         <View style={styles.pricePill}>
-                            <Text style={styles.priceText}>{priceLabel}</Text>
+                            <AppText variant="display" style={styles.priceText}>{priceLabel}</AppText>
                         </View>
                     ) : null}
 
@@ -78,7 +79,7 @@ export function QrHandoffCard({
                             {steps.map((s, i) => (
                                 <View key={i} style={styles.optionRow}>
                                     <i className={`bi ${s.icon}`} style={{ fontSize: 15, color: theme.static.colorAccent }} />
-                                    <Text style={[styles.optionText, { color: theme.static.colorTextSecondary }]}>{s.text}</Text>
+                                    <AppText style={[styles.optionText, { color: theme.static.colorTextSecondary }]}>{s.text}</AppText>
                                 </View>
                             ))}
                         </View>
@@ -87,7 +88,7 @@ export function QrHandoffCard({
                     {waitingText ? (
                         <View style={styles.waitingRow}>
                             <ActivityIndicator size="small" color={theme.static.colorAccent} />
-                            <Text style={[styles.waitingText, { color: theme.static.colorTextSecondary }]}>{waitingText}</Text>
+                            <AppText style={[styles.waitingText, { color: theme.static.colorTextSecondary }]}>{waitingText}</AppText>
                         </View>
                     ) : null}
                 </View>

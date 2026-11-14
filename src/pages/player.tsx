@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, Text, Image, ActivityIndicator, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, View, Image, ActivityIndicator, TouchableOpacity, TextInput } from 'react-native';
+// Every text in the player names the bundled Inter or Space Grotesk file, so Android TV does not fall back to Roboto.
+import { AppText as Text } from '../components/AppText';
 import { useRouter } from 'next/router';
 import Hls from 'hls.js';
 import { QRCodeSVG } from 'qrcode.react';
@@ -22,6 +24,7 @@ import {
     deactivateAnonymousViewerSession,
     checkStreamDeviceAccess,
     sendStreamHeartbeat,
+    openStreamHandoff,
 } from '../features/events/api';
 import { getTvDeviceId } from '../services/deviceId';
 import { paidPurchasesEnabled } from '../config/policy';
@@ -32,7 +35,7 @@ import { useBackHandler } from '../hooks/useBackHandler';
 import { OnScreenKeyboard } from '../components/OnScreenKeyboard';
 import { useStreamReactions, FloatingReactionsOverlay, ReactionBar, ViewerCountBadge, HideReactionsButton } from '../components/StreamReactions';
 import { ChatPanel } from '../components/StreamChatPanel';
-import { phoneHandoffUrl } from '../features/tv/handoff';
+import { phoneHandoffUrl, type GuestAccess } from '../features/tv/handoff';
 import { midnightGlass, raisedButton, glassWell } from '../components/glass/glassStyle';
 
 // Temporary way to eyeball the player chrome (watermark, controls, auto-hide)
@@ -819,7 +822,13 @@ export default function PlayerScreen() {
                             {reactionsActive ? (
                                 <HideReactionsButton hidden={reactionsHidden} onPress={() => setReactionsHidden((h) => !h)} />
                             ) : null}
-                            <ContinueOnPhoneButton onPress={() => setShowPhonePanel(true)} />
+                            <ContinueOnPhoneButton
+                                onPress={() => {
+                                    setShowPhonePanel(true);
+                                    // Signed in: let the phone take this account's stream over at once.
+                                    if (user && !payViewerId) void openStreamHandoff(video.id);
+                                }}
+                            />
                             <FullscreenButton isFullscreen={isFullscreen} onPress={toggleFullscreen} />
                         </View>
 
@@ -852,7 +861,11 @@ export default function PlayerScreen() {
                 ) : null}
 
                 {showPhonePanel ? (
-                    <ContinueOnPhonePanel eventId={video.id} onClose={() => setShowPhonePanel(false)} />
+                    <ContinueOnPhonePanel
+                        eventId={video.id}
+                        guest={payViewerId && payDeviceId ? { viewerId: payViewerId, deviceId: payDeviceId } : null}
+                        onClose={() => setShowPhonePanel(false)}
+                    />
                 ) : null}
 
                 {showChatPanel && video.streamSlug ? (
@@ -975,11 +988,11 @@ function ContinueOnPhoneButton({ onPress }: { onPress: () => void }) {
 }
 
 /** The QR for "Continue on phone". Sits over the video only while open; Back or the close button dismisses it. */
-function ContinueOnPhonePanel({ eventId, onClose }: { eventId: string; onClose: () => void }) {
+function ContinueOnPhonePanel({ eventId, guest, onClose }: { eventId: string; guest: GuestAccess | null; onClose: () => void }) {
     const { strings } = useTranslation();
     return (
         <QrHandoffCard
-            url={phoneHandoffUrl(eventId)}
+            url={phoneHandoffUrl(eventId, guest)}
             icon="bi-phone"
             title={strings.player.continueOnPhoneTitle}
             subtitle={strings.player.continueOnPhoneSubtitle}

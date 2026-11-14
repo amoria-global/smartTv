@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, View, Text, ScrollView, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, ScrollView, ActivityIndicator } from 'react-native';
+import { AppText } from '../components/AppText';
 import { useRouter } from 'next/router';
 import { ThemeContext, palette } from '../config';
 import { GlassPanel } from '../components/glass/GlassPanel';
@@ -54,16 +55,16 @@ export default function AIRecommendationsScreen() {
                 <GlassPanel raised style={styles.header}>
                     <View style={styles.eyebrow}>
                         <i className="bi bi-stars" style={{ fontSize: 16, color: theme.static.colorAccentLight }} />
-                        <Text style={[styles.title, { color: theme.static.colorTextPrimary }]}>{strings.aiRecommendations.title}</Text>
+                        <AppText variant="display" style={[styles.title, { color: theme.static.colorTextPrimary }]}>{strings.aiRecommendations.title}</AppText>
                     </View>
-                    <Text style={[styles.subtitle, { color: theme.static.colorTextSoft }]}>
+                    <AppText style={[styles.subtitle, { color: theme.static.colorTextSoft }]}>
                         {strings.aiRecommendations.subtitle}
-                    </Text>
+                    </AppText>
                 </GlassPanel>
 
                 {!hasAny ? (
                     <GlassPanel style={styles.empty}>
-                        <Text style={{ color: theme.static.colorTextSecondary, fontSize: 16 }}>{strings.aiRecommendations.empty}</Text>
+                        <AppText style={{ color: theme.static.colorTextSecondary, fontSize: 16 }}>{strings.aiRecommendations.empty}</AppText>
                     </GlassPanel>
                 ) : null}
 

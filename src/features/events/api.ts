@@ -279,6 +279,20 @@ export async function checkStreamDeviceAccess(eventId: string, deviceId: string)
  *  checkStreamDeviceAccess. Failing here means another device has taken
  *  over (after this one went quiet for 60s+), same kick-detection pattern
  *  as the anonymous flow's heartbeat. */
+/**
+ * Continue on phone, signed in: lets the viewer's next device (the phone that scans the QR) take this account's stream
+ * over at once instead of waiting 60 seconds. The TV keeps playing until then, and is told it is playing elsewhere on its
+ * next heartbeat. Best effort: if it fails, the phone simply waits for the TV to go quiet, as before.
+ */
+export async function openStreamHandoff(eventId: string): Promise<boolean> {
+    try {
+        const res = await api.post<{ action: number }>(`/public/streams/${encodeURIComponent(eventId)}/handoff`, {});
+        return res.action === 1;
+    } catch {
+        return false;
+    }
+}
+
 export async function sendStreamHeartbeat(eventId: string, deviceId: string): Promise<boolean> {
     try {
         const res = await api.post<{ action: number }>(`/public/streams/${encodeURIComponent(eventId)}/heartbeat`, { deviceId });

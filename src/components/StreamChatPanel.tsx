@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { AppText } from './AppText';
 import { midnightGlass } from './glass/glassStyle';
 import { QRCodeSVG } from 'qrcode.react';
 import { ThemeContext, alpha, palette } from '../config';
@@ -36,7 +37,7 @@ export function ChatPanel({ eventId, chatUrl, onClose }: { eventId: string; chat
     return (
         <View style={[styles.panel, midnightGlass as object]}>
             <View style={styles.header}>
-                <Text style={[styles.headerText, { color: theme.static.colorTextPrimary }]}>Live Chat</Text>
+                <AppText variant="display" style={[styles.headerText, { color: theme.static.colorTextPrimary }]}>Live Chat</AppText>
                 <TouchableOpacity onPress={onClose} style={styles.closeButton}>
                     <i className="bi bi-x-lg" style={{ fontSize: 14, color: palette.white }} />
                 </TouchableOpacity>
@@ -49,14 +50,14 @@ export function ChatPanel({ eventId, chatUrl, onClose }: { eventId: string; chat
                 onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
             >
                 {messages.length === 0 ? (
-                    <Text style={[styles.emptyText, { color: theme.static.colorTextSecondary }]}>
+                    <AppText style={[styles.emptyText, { color: theme.static.colorTextSecondary }]}>
                         No messages yet — be the first to say something.
-                    </Text>
+                    </AppText>
                 ) : (
                     messages.map((m) => (
                         <View key={m.id} style={styles.bubble}>
-                            <Text style={[styles.bubbleName, { color: theme.static.colorPrimaryLight }]}>{m.viewerUsername ?? 'Viewer'}</Text>
-                            <Text style={[styles.bubbleMessage, { color: theme.static.colorTextPrimary }]}>{m.message}</Text>
+                            <AppText variant="display" style={[styles.bubbleName, { color: theme.static.colorPrimaryLight }]}>{m.viewerUsername ?? 'Viewer'}</AppText>
+                            <AppText style={[styles.bubbleMessage, { color: theme.static.colorTextPrimary }]}>{m.message}</AppText>
                         </View>
                     ))
                 )}
@@ -66,9 +67,9 @@ export function ChatPanel({ eventId, chatUrl, onClose }: { eventId: string; chat
                 <View style={styles.replyQrBox}>
                     <QRCodeSVG value={chatUrl} size={72} bgColor={palette.qrPaper} fgColor={palette.background} level="M" />
                 </View>
-                <Text style={[styles.replyText, { color: theme.static.colorTextSecondary }]}>
+                <AppText style={[styles.replyText, { color: theme.static.colorTextSecondary }]}>
                     Scan to reply from your phone
-                </Text>
+                </AppText>
             </View>
         </View>
     );

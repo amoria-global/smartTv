@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { ActivityIndicator, Image, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, Linking, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { AppText } from '../components/AppText';
 import { midnightGlass } from '../components/glass/glassStyle';
 import { useRouter } from 'next/router';
 import { QRCodeSVG } from 'qrcode.react';
@@ -188,7 +189,7 @@ export default function SettingsScreen() {
                         <TouchableOpacity onPress={() => router.push('/home')} style={styles.backButton}>
                             <i className="bi bi-arrow-left" style={{ fontSize: 18, color: theme.static.colorTextPrimary }} />
                         </TouchableOpacity>
-                        <Text style={[styles.sidebarTitle, { color: theme.static.colorTextPrimary }]}>{strings.settings.title}</Text>
+                        <AppText variant="display" style={[styles.sidebarTitle, { color: theme.static.colorTextPrimary }]}>{strings.settings.title}</AppText>
                     </View>
 
                     <ScrollView showsVerticalScrollIndicator={false}>
@@ -219,12 +220,12 @@ export default function SettingsScreen() {
                                             />
                                         ) : (
                                             <View style={[styles.avatar, styles.avatarFallback, { backgroundColor: theme.static.colorBrand }]}>
-                                                <Text style={styles.avatarText}>{initial}</Text>
+                                                <AppText variant="display" style={styles.avatarText}>{initial}</AppText>
                                             </View>
                                         )}
                                         <View>
-                                            <Text style={[styles.name, { color: theme.static.colorTextPrimary }]}>{name}</Text>
-                                            <Text style={[styles.email, { color: theme.static.colorTextSecondary }]}>{user?.email ?? '—'}</Text>
+                                            <AppText variant="display" style={[styles.name, { color: theme.static.colorTextPrimary }]}>{name}</AppText>
+                                            <AppText style={[styles.email, { color: theme.static.colorTextSecondary }]}>{user?.email ?? '—'}</AppText>
                                         </View>
                                     </View>
 
@@ -240,9 +241,9 @@ export default function SettingsScreen() {
                                     </View>
 
                                     {lastLogin ? (
-                                        <Text style={[styles.lastLogin, { color: theme.static.colorTextSecondary }]}>
+                                        <AppText style={[styles.lastLogin, { color: theme.static.colorTextSecondary }]}>
                                             {strings.settings.lastLoginPrefix} {lastLogin}
-                                        </Text>
+                                        </AppText>
                                     ) : null}
                                 </View>
 
@@ -258,17 +259,17 @@ export default function SettingsScreen() {
                                             level="M"
                                         />
                                     </View>
-                                    <Text style={[styles.qrTitle, { color: theme.static.colorTextPrimary }]}>{strings.settings.manageAccount}</Text>
-                                    <Text style={[styles.qrCaption, { color: theme.static.colorTextSecondary }]}>
+                                    <AppText variant="display" style={[styles.qrTitle, { color: theme.static.colorTextPrimary }]}>{strings.settings.manageAccount}</AppText>
+                                    <AppText style={[styles.qrCaption, { color: theme.static.colorTextSecondary }]}>
                                         {strings.settings.qrCaption}
-                                    </Text>
+                                    </AppText>
                                 </View>
                             </View>
 
                             {/* --- Tip --- */}
                             <View style={[styles.tipRow, styles.glass]}>
                                 <i className="bi bi-info-circle" style={{ fontSize: 18, color: theme.static.colorPrimaryLight }} />
-                                <Text style={[styles.tipText, { color: theme.static.colorTextSecondary }]}>{strings.settings.tip}</Text>
+                                <AppText style={[styles.tipText, { color: theme.static.colorTextSecondary }]}>{strings.settings.tip}</AppText>
                             </View>
                         </>
                     )}
@@ -288,15 +289,15 @@ export default function SettingsScreen() {
                         <>
                             <SectionHeader label={strings.settings.devicesSection} />
                             <View style={[styles.section, styles.glass]}>
-                                <Text style={[styles.info, { color: theme.static.colorTextSecondary }]}>
+                                <AppText style={[styles.info, { color: theme.static.colorTextSecondary }]}>
                                     {strings.settings.devicesDesc}
-                                </Text>
+                                </AppText>
                                 {devicesLoading ? (
                                     <ActivityIndicator color={theme.static.colorPrimaryLight} style={{ marginTop: 16 }} />
                                 ) : !devices?.length ? (
-                                    <Text style={[styles.info, { color: theme.static.colorTextSecondary, marginTop: 8 }]}>
+                                    <AppText style={[styles.info, { color: theme.static.colorTextSecondary, marginTop: 8 }]}>
                                         {strings.settings.noDevices}
-                                    </Text>
+                                    </AppText>
                                 ) : (
                                     devices.map((d) => (
                                         <View key={d.id} style={styles.deviceRow}>
@@ -304,12 +305,12 @@ export default function SettingsScreen() {
                                                 <i className="bi bi-tv" style={{ fontSize: 18, color: theme.static.colorTextPrimary }} />
                                             </View>
                                             <View style={{ flex: 1 }}>
-                                                <Text style={[styles.deviceLabel, { color: theme.static.colorTextPrimary }]}>
+                                                <AppText variant="display" style={[styles.deviceLabel, { color: theme.static.colorTextPrimary }]}>
                                                     {d.deviceLabel}
-                                                </Text>
-                                                <Text style={[styles.deviceMeta, { color: theme.static.colorTextSecondary }]}>
+                                                </AppText>
+                                                <AppText style={[styles.deviceMeta, { color: theme.static.colorTextSecondary }]}>
                                                     {strings.settings.pairedPrefix} {d.pairedAt}
-                                                </Text>
+                                                </AppText>
                                             </View>
                                             <FocusableButton
                                                 title={strings.settings.disconnect}
@@ -335,7 +336,7 @@ export default function SettingsScreen() {
 
                             <SectionHeader label={strings.settings.audioSectionHeader} />
                             <View style={[styles.section, styles.glass]}>
-                                <Text style={[styles.info, { color: theme.static.colorTextSecondary }]}>{strings.settings.audioNote}</Text>
+                                <AppText style={[styles.info, { color: theme.static.colorTextSecondary }]}>{strings.settings.audioNote}</AppText>
                             </View>
                         </>
                     )}
@@ -344,7 +345,7 @@ export default function SettingsScreen() {
                         <>
                             <SectionHeader label={strings.settings.privacyHeader} />
                             <View style={[styles.section, styles.glass]}>
-                                <Text style={[styles.info, { color: theme.static.colorTextSecondary }]}>{strings.settings.privacyIntro}</Text>
+                                <AppText style={[styles.info, { color: theme.static.colorTextSecondary }]}>{strings.settings.privacyIntro}</AppText>
                                 <View style={styles.signOutGroup}>
                                     <ActionRow icon="bi-shield-check" label={strings.settings.privacyPolicyLink} tone={theme.static.colorTextPrimary} onPress={() => router.push('/legal?doc=privacy')} />
                                     <ActionRow icon="bi-file-earmark-text" label={strings.settings.termsLink} tone={theme.static.colorTextPrimary} onPress={() => router.push('/legal?doc=terms')} />
@@ -357,7 +358,7 @@ export default function SettingsScreen() {
                         <>
                             <SectionHeader label={strings.settings.helpHeader} />
                             <View style={[styles.section, styles.glass]}>
-                                <Text style={[styles.info, { color: theme.static.colorTextSecondary }]}>{strings.settings.helpIntro}</Text>
+                                <AppText style={[styles.info, { color: theme.static.colorTextSecondary }]}>{strings.settings.helpIntro}</AppText>
                                 <View style={styles.signOutGroup}>
                                     <ActionRow icon="bi-question-circle" label={strings.settings.faqLink} tone={theme.static.colorTextPrimary} onPress={() => Linking.openURL(FAQ_URL)} />
                                     <ActionRow icon="bi-headset" label={strings.settings.contactLink} tone={theme.static.colorTextPrimary} onPress={() => Linking.openURL(CONTACT_URL)} />
@@ -375,7 +376,7 @@ export default function SettingsScreen() {
                                     <View style={styles.qrBox}>
                                         <QRCodeSVG value={CONTACT_URL} size={128} bgColor={palette.qrPaper} fgColor={palette.qrInk} level="M" />
                                     </View>
-                                    <Text style={[styles.qrTitle, { color: theme.static.colorTextPrimary }]}>{strings.settings.scanForSupport}</Text>
+                                    <AppText variant="display" style={[styles.qrTitle, { color: theme.static.colorTextPrimary }]}>{strings.settings.scanForSupport}</AppText>
                                 </View>
                             </View>
                         </>
@@ -491,15 +492,15 @@ function PlaybackPanel() {
                     onToggle={toggleAutoplay}
                 />
             </View>
-            <Text style={[styles.deviceOnlyNote, { color: theme.static.colorTextSecondary, marginBottom: 32 }]}>
+            <AppText style={[styles.deviceOnlyNote, { color: theme.static.colorTextSecondary, marginBottom: 32 }]}>
                 {strings.settings.deviceOnlyNote}
-            </Text>
+            </AppText>
 
             <SectionHeader label={strings.settings.streamingQuality} />
             <View style={[styles.section, styles.glass]}>
-                <Text style={[styles.info, { color: theme.static.colorTextSecondary, marginBottom: 16 }]}>
+                <AppText style={[styles.info, { color: theme.static.colorTextSecondary, marginBottom: 16 }]}>
                     {strings.settings.streamingQualityDesc}
-                </Text>
+                </AppText>
                 {QUALITY_OPTIONS.map((opt) => (
                     <SelectRow
                         key={opt.value}
@@ -510,9 +511,9 @@ function PlaybackPanel() {
                     />
                 ))}
             </View>
-            <Text style={[styles.deviceOnlyNote, { color: theme.static.colorTextSecondary, marginBottom: 32 }]}>
+            <AppText style={[styles.deviceOnlyNote, { color: theme.static.colorTextSecondary, marginBottom: 32 }]}>
                 {strings.settings.deviceOnlyNote}
-            </Text>
+            </AppText>
 
             <SectionHeader label={strings.settings.controlsHeader} />
             <View style={[styles.section, styles.glass]}>
@@ -537,8 +538,8 @@ function SelectRow({ title, description, active, onPress }: { title: string; des
             style={[styles.toggleRow, focused && { backgroundColor: alpha(palette.white, 0.06) }]}
         >
             <View style={{ flex: 1 }}>
-                <Text style={[styles.toggleTitle, { color: theme.static.colorTextPrimary }]}>{title}</Text>
-                <Text style={[styles.toggleDescription, { color: theme.static.colorTextSecondary }]}>{description}</Text>
+                <AppText style={[styles.toggleTitle, { color: theme.static.colorTextPrimary }]}>{title}</AppText>
+                <AppText style={[styles.toggleDescription, { color: theme.static.colorTextSecondary }]}>{description}</AppText>
             </View>
             {active ? <i className="bi bi-check-lg" style={{ fontSize: 18, color: theme.static.colorPrimaryLight }} /> : null}
         </TouchableOpacity>
@@ -578,11 +579,11 @@ function LockScreen({ onUnlock }: { onUnlock: () => void }) {
         <View style={styles.lockWrap}>
             <View style={[styles.lockCard, styles.glass]}>
                 <i className="bi bi-shield-lock" style={{ fontSize: 32, color: theme.static.colorPrimaryLight, marginBottom: 12 }} />
-                <Text style={[styles.lockTitle, { color: theme.static.colorTextPrimary }]}>{strings.settings.lockTitle}</Text>
-                <Text style={[styles.lockSubtitle, { color: theme.static.colorTextSecondary }]}>{strings.settings.lockSubtitle}</Text>
+                <AppText variant="display" style={[styles.lockTitle, { color: theme.static.colorTextPrimary }]}>{strings.settings.lockTitle}</AppText>
+                <AppText style={[styles.lockSubtitle, { color: theme.static.colorTextSecondary }]}>{strings.settings.lockSubtitle}</AppText>
 
-                <Text style={[styles.pinDots, { color: theme.static.colorTextPrimary }]}>{'•'.repeat(pin.length) || ' '}</Text>
-                {error ? <Text style={[styles.pinError, { color: theme.static.colorError }]}>{error}</Text> : null}
+                <AppText style={[styles.pinDots, { color: theme.static.colorTextPrimary }]}>{'•'.repeat(pin.length) || ' '}</AppText>
+                {error ? <AppText style={[styles.pinError, { color: theme.static.colorError }]}>{error}</AppText> : null}
 
                 <PinPad
                     disabled={verifying}
@@ -680,9 +681,9 @@ function ParentalControlsPanel({ enabled, onChanged }: { enabled: boolean; onCha
         <>
             <SectionHeader label={strings.settings.parentalHeader} />
             <View style={[styles.section, styles.glass]}>
-                <Text style={[styles.info, { color: theme.static.colorTextSecondary }]}>
+                <AppText style={[styles.info, { color: theme.static.colorTextSecondary }]}>
                     {enabled ? strings.settings.parentalEnabledDesc : strings.settings.parentalDisabledDesc}
-                </Text>
+                </AppText>
 
                 {!editing ? (
                     <View style={styles.signOutGroup}>
@@ -724,7 +725,7 @@ function ParentalControlsPanel({ enabled, onChanged }: { enabled: boolean; onCha
                             onFocus={() => setActiveField('confirm')}
                         />
 
-                        {error ? <Text style={[styles.pinError, { color: theme.static.colorError }]}>{error}</Text> : null}
+                        {error ? <AppText style={[styles.pinError, { color: theme.static.colorError }]}>{error}</AppText> : null}
 
                         <View style={{ marginTop: 16 }}>
                             <PinPad disabled={saving} onDigit={onDigit} onBackspace={onBackspace} />
@@ -763,8 +764,8 @@ function PinField({ label, value, active, onFocus }: { label: string; value: str
             onPress={onFocus}
             style={[styles.pinField, { borderColor: active ? theme.static.colorFocusRing : theme.static.colorBorder }]}
         >
-            <Text style={[styles.pinFieldLabel, { color: theme.static.colorTextSecondary }]}>{label}</Text>
-            <Text style={[styles.pinFieldDots, { color: theme.static.colorTextPrimary }]}>{'•'.repeat(value.length) || '—'}</Text>
+            <AppText style={[styles.pinFieldLabel, { color: theme.static.colorTextSecondary }]}>{label}</AppText>
+            <AppText style={[styles.pinFieldDots, { color: theme.static.colorTextPrimary }]}>{'•'.repeat(value.length) || '—'}</AppText>
         </TouchableOpacity>
     );
 }
@@ -799,7 +800,7 @@ function PinKey({ label, onPress, disabled }: { label: string; onPress: () => vo
                 focused && { backgroundColor: theme.static.colorBrand, borderColor: theme.static.colorFocusRing },
             ]}
         >
-            <Text style={[styles.pinKeyText, { color: theme.static.colorTextPrimary }]}>{label}</Text>
+            <AppText variant="display" style={[styles.pinKeyText, { color: theme.static.colorTextPrimary }]}>{label}</AppText>
         </TouchableOpacity>
     );
 }
@@ -839,13 +840,13 @@ function CategoryLockPanel() {
         <>
             <SectionHeader label={strings.settings.categoryLockHeader} />
             <View style={[styles.section, styles.glass]}>
-                <Text style={[styles.info, { color: theme.static.colorTextSecondary, marginBottom: 16 }]}>
+                <AppText style={[styles.info, { color: theme.static.colorTextSecondary, marginBottom: 16 }]}>
                     {strings.settings.categoryLockDesc}
-                </Text>
+                </AppText>
                 {allCategories === null ? (
                     <ActivityIndicator color={theme.static.colorPrimaryLight} />
                 ) : allCategories.length === 0 ? (
-                    <Text style={[styles.info, { color: theme.static.colorTextSecondary }]}>{strings.settings.noCategoriesYet}</Text>
+                    <AppText style={[styles.info, { color: theme.static.colorTextSecondary }]}>{strings.settings.noCategoriesYet}</AppText>
                 ) : (
                     allCategories.map((cat) => (
                         <SelectRow
@@ -871,9 +872,9 @@ function LanguagePanel() {
         <>
             <SectionHeader label={strings.settings.languageHeader} />
             <View style={[styles.section, styles.glass]}>
-                <Text style={[styles.info, { color: theme.static.colorTextSecondary, marginBottom: 16 }]}>
+                <AppText style={[styles.info, { color: theme.static.colorTextSecondary, marginBottom: 16 }]}>
                     {strings.settings.languageDesc}
-                </Text>
+                </AppText>
                 {LOCALES.map((l) => (
                     <LanguageRow key={l.code} label={l.label} active={locale === l.code} onPress={() => setLocale(l.code)} />
                 ))}
@@ -892,7 +893,7 @@ function LanguageRow({ label, active, onPress }: { label: string; active: boolea
             style={[styles.toggleRow, focused && { backgroundColor: alpha(palette.white, 0.06) }]}
         >
             <View style={{ flex: 1 }}>
-                <Text style={[styles.toggleTitle, { color: theme.static.colorTextPrimary }]}>{label}</Text>
+                <AppText style={[styles.toggleTitle, { color: theme.static.colorTextPrimary }]}>{label}</AppText>
             </View>
             {active ? <i className="bi bi-check-lg" style={{ fontSize: 18, color: theme.static.colorPrimaryLight }} /> : null}
         </TouchableOpacity>
@@ -928,14 +929,15 @@ function SidebarTab({
                 className={`bi ${icon}`}
                 style={{ fontSize: 17, color: focused ? palette.white : active ? theme.static.colorPrimaryLight : theme.static.colorTextSecondary }}
             />
-            <Text
+            <AppText
+                variant="display"
                 style={[
                     styles.sidebarTabText,
                     { color: focused ? palette.white : active ? theme.static.colorTextPrimary : theme.static.colorTextSecondary },
                 ]}
             >
                 {label}
-            </Text>
+            </AppText>
         </TouchableOpacity>
     );
 }
@@ -946,8 +948,8 @@ function Stat({ label, value, icon, tone }: { label: string; value: string; icon
         <View style={styles.stat}>
             <i className={`bi ${icon}`} style={{ fontSize: 15, color: tone ?? theme.static.colorTextSecondary }} />
             <View>
-                <Text style={[styles.statLabel, { color: theme.static.colorTextSecondary }]}>{label}</Text>
-                <Text style={[styles.statValue, { color: tone ?? theme.static.colorTextPrimary }]}>{value}</Text>
+                <AppText style={[styles.statLabel, { color: theme.static.colorTextSecondary }]}>{label}</AppText>
+                <AppText variant="display" style={[styles.statValue, { color: tone ?? theme.static.colorTextPrimary }]}>{value}</AppText>
             </View>
         </View>
     );
@@ -955,7 +957,7 @@ function Stat({ label, value, icon, tone }: { label: string; value: string; icon
 
 function SectionHeader({ label }: { label: string }) {
     const { theme } = useContext(ThemeContext);
-    return <Text style={[styles.sectionHeader, { color: theme.static.colorTextPrimary }]}>{label}</Text>;
+    return <AppText variant="display" style={[styles.sectionHeader, { color: theme.static.colorTextPrimary }]}>{label}</AppText>;
 }
 
 function ActionRow({
@@ -986,7 +988,7 @@ function ActionRow({
             ]}
         >
             <i className={`bi ${icon}`} style={{ fontSize: 16, color: tone }} />
-            <Text style={[styles.actionRowText, { color: tone }]}>{label}</Text>
+            <AppText variant="display" style={[styles.actionRowText, { color: tone }]}>{label}</AppText>
             {loading ? <ActivityIndicator color={tone} style={{ marginLeft: 8 }} /> : null}
         </TouchableOpacity>
     );
@@ -1020,8 +1022,8 @@ function ToggleRow({
                 <i className={`bi ${icon}`} style={{ fontSize: 18, color: theme.static.colorTextPrimary }} />
             </View>
             <View style={{ flex: 1 }}>
-                <Text style={[styles.toggleTitle, { color: theme.static.colorTextPrimary }]}>{title}</Text>
-                <Text style={[styles.toggleDescription, { color: theme.static.colorTextSecondary }]}>{description}</Text>
+                <AppText style={[styles.toggleTitle, { color: theme.static.colorTextPrimary }]}>{title}</AppText>
+                <AppText style={[styles.toggleDescription, { color: theme.static.colorTextSecondary }]}>{description}</AppText>
             </View>
             {loading ? (
                 <ActivityIndicator color={theme.static.colorPrimaryLight} />
@@ -1049,12 +1051,12 @@ function InfoRow({ icon, title, description, badge }: { icon: string; title: str
                 <i className={`bi ${icon}`} style={{ fontSize: 18, color: theme.static.colorTextPrimary }} />
             </View>
             <View style={{ flex: 1 }}>
-                <Text style={[styles.toggleTitle, { color: theme.static.colorTextPrimary }]}>{title}</Text>
-                {description ? <Text style={[styles.toggleDescription, { color: theme.static.colorTextSecondary }]}>{description}</Text> : null}
+                <AppText style={[styles.toggleTitle, { color: theme.static.colorTextPrimary }]}>{title}</AppText>
+                {description ? <AppText style={[styles.toggleDescription, { color: theme.static.colorTextSecondary }]}>{description}</AppText> : null}
             </View>
             {badge ? (
                 <View style={styles.infoBadge}>
-                    <Text style={[styles.infoBadgeText, { color: theme.static.colorTextSecondary }]}>{badge}</Text>
+                    <AppText variant="display" style={[styles.infoBadgeText, { color: theme.static.colorTextSecondary }]}>{badge}</AppText>
                 </View>
             ) : null}
         </View>
