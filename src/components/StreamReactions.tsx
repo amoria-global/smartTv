@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { midnightGlass } from './glass/glassStyle';
-import { ThemeContext } from '../config';
+import { ThemeContext, alpha, palette } from '../config';
 import { useFocusNav } from '../hooks/useFocusNav';
 import { fetchRecentReactions, fetchViewerCount, sendReaction } from '../features/events/api';
 import { getTvDeviceId } from '../services/deviceId';
@@ -139,7 +139,7 @@ function ReactionButton({ emoji, onPress }: { emoji: string; onPress: () => void
         <TouchableOpacity
             onPress={onPress}
             {...focusProps}
-            style={[styles.reactionButton, focused && { backgroundColor: 'rgba(255,255,255,0.18)', transform: [{ scale: 1.12 }] }]}
+            style={[styles.reactionButton, focused && { backgroundColor: alpha(palette.white, 0.18), transform: [{ scale: 1.12 }] }]}
         >
             <Text style={styles.reactionButtonEmoji}>{emoji}</Text>
         </TouchableOpacity>
@@ -169,7 +169,7 @@ export function HideReactionsButton({ hidden, onPress }: { hidden: boolean; onPr
             {...focusProps}
             style={[styles.hideButton, focused && { backgroundColor: theme.static.colorFocusRing }]}
         >
-            <i className={`bi ${hidden ? 'bi-eye-slash' : 'bi-eye'}`} style={{ fontSize: 16, color: '#fff' }} />
+            <i className={`bi ${hidden ? 'bi-eye-slash' : 'bi-eye'}`} style={{ fontSize: 16, color: palette.white }} />
         </TouchableOpacity>
     );
 }
@@ -183,9 +183,9 @@ const styles = StyleSheet.create({
         width: 44,
         height: 44,
         borderRadius: 9999,
-        backgroundColor: 'rgba(22,36,60,0.66)',
+        backgroundColor: alpha(palette.card, 0.66),
         borderWidth: 1,
-        borderColor: 'rgba(170,195,240,0.18)',
+        borderColor: alpha(palette.glassEdge, 0.18),
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -206,9 +206,9 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 9999,
-        backgroundColor: 'rgba(22,36,60,0.7)',
+        backgroundColor: alpha(palette.card, 0.7),
         borderWidth: 1,
-        borderColor: 'rgba(170,195,240,0.18)',
+        borderColor: alpha(palette.glassEdge, 0.18),
         alignItems: 'center',
         justifyContent: 'center',
     },

@@ -47,6 +47,10 @@ export function glassSurface(t: GlassTokens, opts: { radius?: number; raised?: b
         boxShadow: opts.raised
             ? `inset 0 1px 0 ${t.glassHighlight}, 0 14px 32px rgba(0,0,0,0.38)`
             : `inset 0 1px 0 ${t.glassHighlight}, 0 8px 22px rgba(0,0,0,0.28)`,
+        // Focus lifts a raised surface (see focusGlow); ease it on the phone's curve.
+        ...(opts.raised
+            ? { transitionProperty: 'transform, box-shadow', transitionDuration: `${motion.base}ms`, transitionTimingFunction: motion.css }
+            : {}),
     };
 }
 

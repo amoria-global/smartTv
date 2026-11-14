@@ -20,18 +20,31 @@
     }
 }
 .connekyt-tip-enter {
-    animation: connekytTipIn 0.45s ease-out both;
+    animation: connekytTipIn var(--cx-motion-slow) var(--cx-ease) both;
 }
 
 /*
- * Global brand scrollbar. The TV app is dark-themed, so the browser's
- * default scrollbar renders as a chunky light-grey/white bar. Slim it down
- * and tint the thumb with the Connekyt accent (#F20C8F) so it reads as part
- * of the brand instead of an OS default. Track stays transparent.
+ * Midnight Glass tokens for CSS, mirrored from src/config/tokens.ts (which
+ * mirrors the phone app). Keep the two in step.
+ */
+:root {
+    --cx-accent-rgb: 238, 14, 143;
+    --cx-glass-edge-rgb: 170, 195, 240;
+    --cx-motion-fast: 180ms;
+    --cx-motion-base: 220ms;
+    --cx-motion-slow: 260ms;
+    --cx-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/*
+ * Global scrollbar. The browser's default renders as a chunky light bar on
+ * the dark ground, so slim it and give the thumb the glass edge colour, the
+ * same stroke every glass panel uses, with the accent on hover. Track stays
+ * transparent.
  */
 * {
     scrollbar-width: thin;                        /* Firefox */
-    scrollbar-color: rgba(242, 12, 143, 0.55) transparent;
+    scrollbar-color: rgba(var(--cx-glass-edge-rgb), 0.32) transparent;
 }
 ::-webkit-scrollbar {                              /* Chromium / WebKit / most TVs */
     width: 8px;
@@ -41,9 +54,9 @@
     background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-    background: rgba(242, 12, 143, 0.55);
+    background: rgba(var(--cx-glass-edge-rgb), 0.32);
     border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: rgba(242, 12, 143, 0.8);
+    background: rgba(var(--cx-accent-rgb), 0.7);
 }

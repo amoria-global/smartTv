@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, View, Text, ScrollView, ActivityIndicator } from 'react-native';
 import { useRouter } from 'next/router';
-import { ThemeContext } from '../config';
+import { ThemeContext, palette } from '../config';
+import { GlassPanel } from '../components/glass/GlassPanel';
 import { ScreenWrapper } from '../components/ScreenWrapper';
 import { Navbar } from '../components/Navbar';
 import { Row } from '../components/Row';
@@ -38,7 +39,7 @@ export default function AIRecommendationsScreen() {
             <ScreenWrapper noPadding>
                 <Navbar />
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <ActivityIndicator size="large" color="#F20C8F" />
+                    <ActivityIndicator size="large" color={palette.accent} />
                 </View>
             </ScreenWrapper>
         );
@@ -50,17 +51,20 @@ export default function AIRecommendationsScreen() {
         <ScreenWrapper noPadding>
             <Navbar />
             <ScrollView style={styles.mainContent}>
-                <View style={styles.header}>
-                    <Text style={[styles.title, { color: theme.static.colorBrand }]}>{strings.aiRecommendations.title}</Text>
-                    <Text style={[styles.subtitle, { color: theme.static.colorTextSecondary }]}>
+                <GlassPanel raised style={styles.header}>
+                    <View style={styles.eyebrow}>
+                        <i className="bi bi-stars" style={{ fontSize: 16, color: theme.static.colorAccentLight }} />
+                        <Text style={[styles.title, { color: theme.static.colorTextPrimary }]}>{strings.aiRecommendations.title}</Text>
+                    </View>
+                    <Text style={[styles.subtitle, { color: theme.static.colorTextSoft }]}>
                         {strings.aiRecommendations.subtitle}
                     </Text>
-                </View>
+                </GlassPanel>
 
                 {!hasAny ? (
-                    <Text style={[styles.empty, { color: theme.static.colorTextSecondary }]}>
-                        {strings.aiRecommendations.empty}
-                    </Text>
+                    <GlassPanel style={styles.empty}>
+                        <Text style={{ color: theme.static.colorTextSecondary, fontSize: 16 }}>{strings.aiRecommendations.empty}</Text>
+                    </GlassPanel>
                 ) : null}
 
                 {becauseYouWatched.length ? (
@@ -99,16 +103,17 @@ const styles = StyleSheet.create({
         paddingTop: 48,
     },
     header: {
-        paddingHorizontal: 48,
+        marginHorizontal: 48,
         marginBottom: 32,
+        alignSelf: 'flex-start',
     },
+    eyebrow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 8 },
     title: {
         fontSize: 36,
         fontWeight: 'bold',
-        marginBottom: 8,
     },
     subtitle: {
         fontSize: 18,
     },
-    empty: { paddingHorizontal: 48, fontSize: 16 },
+    empty: { marginHorizontal: 48, alignSelf: 'flex-start' },
 });

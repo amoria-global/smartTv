@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'next/router';
-import { ThemeContext } from '../config';
+import { ThemeContext, alpha, motion, palette, radii } from '../config';
+import { focusGlow, raisedButton } from './glass/glassStyle';
 import { useFocusNav } from '../hooks/useFocusNav';
 import { TvVideo } from '../api/catalog';
 import { useTranslation } from '../i18n';
@@ -20,6 +21,7 @@ type Props = {
  * just the trends strip.
  */
 export function HotLiveTrendsBar({ liveVideos, liveCount }: Props) {
+    const { theme } = useContext(ThemeContext);
     const { strings } = useTranslation();
     const router = useRouter();
 
@@ -28,8 +30,8 @@ export function HotLiveTrendsBar({ liveVideos, liveCount }: Props) {
     return (
         <View style={styles.trendsSection}>
             <View style={styles.trendsRow}>
-                <View style={styles.trendsPill}>
-                    <i className="bi bi-fire" style={{ fontSize: 14, color: '#fff' }} />
+                <View style={[raisedButton(theme.static, 'live'), styles.trendsPill]}>
+                    <i className="bi bi-fire" style={{ fontSize: 14, color: palette.white }} />
                     <Text style={styles.trendsPillText}>{strings.events.hotLiveTrends}</Text>
                     <View style={styles.trendsCountBadge}>
                         <Text style={styles.trendsCountText}>{liveCount}</Text>
@@ -51,11 +53,11 @@ function TrendCircle({ video, onPress }: { video: TvVideo; onPress: () => void }
     const { focused, focusProps } = useFocusNav();
     return (
         <TouchableOpacity onPress={onPress} {...focusProps} style={styles.trendItem}>
-            <View style={[styles.trendRingOuter, focused && { transform: [{ scale: 1.08 }] }]}>
+            <View style={[styles.trendRingOuter, focusGlow(theme.static, focused, true)]}>
                 <View style={[styles.trendRingInner, { backgroundColor: theme.static.colorBgPrimary }]}>
                     {video.imageUrl ? <Image source={{ uri: video.imageUrl }} style={styles.trendImage} resizeMode="cover" /> : null}
                 </View>
-                <View style={[styles.trendLiveBadge, { backgroundColor: theme.static.colorError }]}>
+                <View style={[styles.trendLiveBadge, { backgroundColor: theme.static.colorLive }]}>
                     <Text style={styles.trendLiveBadgeText}>LIVE</Text>
                 </View>
             </View>
@@ -76,13 +78,11 @@ const styles = StyleSheet.create({
         gap: 8,
         paddingVertical: 10,
         paddingHorizontal: 18,
-        borderRadius: 999,
-        backgroundImage: 'linear-gradient(90deg, #FF2D55, #FF0033)',
         zIndex: 1,
     } as object,
-    trendsPillText: { color: '#fff', fontSize: 13, fontWeight: '800', textTransform: 'uppercase', letterSpacing: 0.5 },
-    trendsCountBadge: { backgroundColor: 'rgba(255,255,255,0.3)', borderRadius: 999, minWidth: 20, height: 20, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 5 },
-    trendsCountText: { color: '#fff', fontSize: 11, fontWeight: '800' },
+    trendsPillText: { color: palette.white, fontSize: 13, fontWeight: '800', textTransform: 'uppercase', letterSpacing: 0.5 },
+    trendsCountBadge: { backgroundColor: alpha(palette.white, 0.3), borderRadius: radii.pill, minWidth: 20, height: 20, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 5 },
+    trendsCountText: { color: palette.white, fontSize: 11, fontWeight: '800' },
     // Short gradient flourish trailing the pill into the first circle — a
     // fixed width (not flex:1, which used to stretch across all leftover
     // row space and shove the circle strip to the far edge whenever there
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
         height: 2,
         marginLeft: -12,
         marginRight: -20,
-        backgroundImage: 'linear-gradient(90deg, #FF0033, rgba(255,0,51,0))',
+        backgroundImage: `linear-gradient(90deg, ${palette.live}, ${alpha(palette.live, 0)})`,
     } as object,
     trendsScroll: { alignItems: 'center', gap: 20, paddingLeft: 32, paddingRight: 24 },
     trendItem: { alignItems: 'center', width: 88, zIndex: 1 },
@@ -101,7 +101,11 @@ const styles = StyleSheet.create({
         height: 76,
         borderRadius: 38,
         padding: 3,
-        backgroundImage: 'linear-gradient(135deg, #FF2D55, #FF0033)',
+        backgroundColor: palette.live,
+        backgroundImage: `linear-gradient(135deg, ${palette.liveHot}, ${palette.live})`,
+        transitionProperty: 'transform, box-shadow',
+        transitionDuration: `${motion.fast}ms`,
+        transitionTimingFunction: motion.css,
         alignItems: 'center',
         justifyContent: 'center',
         marginBottom: 8,
@@ -115,7 +119,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
     },
     trendImage: { width: '100%', height: '100%' },
-    trendLiveBadge: { position: 'absolute', bottom: -6, alignSelf: 'center', paddingVertical: 2, paddingHorizontal: 8, borderRadius: 999 },
-    trendLiveBadgeText: { color: '#fff', fontSize: 9, fontWeight: '800' },
+    trendLiveBadge: { position: 'absolute', bottom: -6, alignSelf: 'center', paddingVertical: 2, paddingHorizontal: 8, borderRadius: radii.pill },
+    trendLiveBadgeText: { color: palette.white, fontSize: 9, fontWeight: '800' },
     trendLabel: { fontSize: 12, fontWeight: '600', textAlign: 'center' },
 });

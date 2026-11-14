@@ -3,7 +3,7 @@ import { Image, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-
 import { raisedButton, sceneBackground } from '../components/glass/glassStyle';
 import { useFocusNav } from '../hooks/useFocusNav';
 import { useRouter } from 'next/router';
-import { ThemeContext, ICON_LOGO } from '../config';
+import { ThemeContext, ICON_LOGO, alpha, palette } from '../config';
 import { storage, StorageKeys } from '../services/storage';
 import { useTranslation } from '../i18n';
 
@@ -148,9 +148,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 28,
         paddingVertical: 14,
         borderRadius: 26,
-        backgroundColor: 'rgba(22, 36, 60, 0.55)',
+        backgroundColor: alpha(palette.card, 0.55),
         borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.10)',
+        borderColor: alpha(palette.white, 0.1),
         backdropFilter: 'blur(24px)',
         WebkitBackdropFilter: 'blur(24px)',
     } as object,
@@ -158,35 +158,35 @@ const styles = StyleSheet.create({
     logo: { width: 28, height: 28 },
     brandText: { fontSize: 18, fontWeight: '800' },
     signInButton: {
-        backgroundColor: '#fff',
+        backgroundColor: palette.white,
         paddingVertical: 8,
         paddingHorizontal: 20,
         borderRadius: 999,
     },
-    signInText: { color: '#083A85', fontSize: 14, fontWeight: '800' },
+    signInText: { color: palette.navy, fontSize: 14, fontWeight: '800' },
     content: { alignItems: 'center', maxWidth: 720 },
     iconBadge: {
         width: 80,
         height: 80,
         borderRadius: 40,
-        backgroundColor: 'rgba(255,255,255,0.10)',
+        backgroundColor: alpha(palette.white, 0.1),
         borderWidth: 1,
-        borderColor: 'rgba(255,255,255,0.16)',
+        borderColor: alpha(palette.white, 0.16),
         alignItems: 'center',
         justifyContent: 'center',
         marginBottom: 28,
     },
     title: {
-        color: '#fff',
+        color: palette.white,
         fontSize: 48,
         fontWeight: '800',
         textAlign: 'center',
         lineHeight: 56,
         marginBottom: 18,
-        textShadow: '0 2px 12px rgba(0,0,0,0.35)',
+        textShadow: `0 2px 12px ${alpha(palette.black, 0.35)}`,
     } as object,
     body: {
-        color: 'rgba(255,255,255,0.9)',
+        color: palette.textSoft,
         fontSize: 18,
         textAlign: 'center',
         lineHeight: 26,
@@ -194,15 +194,15 @@ const styles = StyleSheet.create({
     },
     footer: { position: 'absolute', bottom: 48, alignItems: 'center' },
     dots: { flexDirection: 'row', gap: 8, marginBottom: 28 },
-    dot: { width: 8, height: 8, borderRadius: 4, backgroundColor: 'rgba(255,255,255,0.35)' },
+    dot: { width: 8, height: 8, borderRadius: 4, backgroundColor: alpha(palette.white, 0.35) },
     cta: {
         paddingVertical: 16,
         paddingHorizontal: 48,
         borderRadius: 9999,
         marginBottom: 24,
     },
-    ctaText: { color: '#fff', fontSize: 16, fontWeight: '800' },
+    ctaText: { color: palette.white, fontSize: 16, fontWeight: '800' },
     legalRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-    legalText: { color: 'rgba(255,255,255,0.55)', fontSize: 13, fontWeight: '600' },
-    legalDot: { color: 'rgba(255,255,255,0.35)', fontSize: 13 },
+    legalText: { color: palette.textMuted, fontSize: 13, fontWeight: '600' },
+    legalDot: { color: alpha(palette.white, 0.35), fontSize: 13 },
 });

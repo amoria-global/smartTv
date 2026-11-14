@@ -54,7 +54,7 @@ export const fonts = isWebEngine
       }
     : { ...fontFamilies.native };
 
-export { palette, radii, spacing, motion, alpha };
+export { palette, gradientTokens, radii, spacing, motion, alpha };
 
 /** Midnight Glass motion curve for Animated on native. */
 export const motionEasing = Easing.bezier(...motion.bezier);

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { StyleSheet, Text, TouchableOpacity, ViewStyle, TextStyle } from 'react-native';
-import { ThemeContext } from '../config';
+import { ThemeContext, palette } from '../config';
 import { useFocusNav } from '../hooks/useFocusNav';
 import { raisedButton, RaisedTone } from './glass/glassStyle';
 
@@ -28,7 +28,13 @@ export function FocusableButton({ title, onPress, hasTVPreferredFocus, disabled,
             {...focusProps}
             style={[styles.button, raisedButton(theme.static, tone, { focused, disabled }), style]}
         >
-            <Text style={[styles.text, { color: tone === 'glass' ? theme.static.colorTextPrimary : '#FFFFFF' }, textStyle]}>
+            <Text
+                style={[
+                    styles.text,
+                    { fontFamily: theme.static.displayFontFamily, color: tone === 'glass' ? theme.static.colorTextPrimary : palette.white },
+                    textStyle,
+                ]}
+            >
                 {title}
             </Text>
         </TouchableOpacity>

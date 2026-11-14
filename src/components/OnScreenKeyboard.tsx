@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { raisedButton } from './glass/glassStyle';
-import { ThemeContext } from '../config';
+import { ThemeContext, palette } from '../config';
 import { useFocusNav } from '../hooks/useFocusNav';
 import { useTranslation } from '../i18n';
 
@@ -96,7 +96,7 @@ function Key({
                 raisedButton(theme.static, isAccent || active ? 'primary' : 'glass', { focused }),
             ]}
         >
-            <Text style={[styles.keyText, { color: isAccent || active ? '#fff' : theme.static.colorTextPrimary }]}>
+            <Text style={[styles.keyText, { color: isAccent || active ? palette.white : theme.static.colorTextPrimary }]}>
                 {label}
             </Text>
         </TouchableOpacity>

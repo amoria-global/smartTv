@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { midnightGlass } from './glass/glassStyle';
 import { QRCodeSVG } from 'qrcode.react';
-import { ThemeContext } from '../config';
+import { ThemeContext, alpha, palette } from '../config';
 import { useFocusNav } from '../hooks/useFocusNav';
 import { fetchChatMessages, StreamChatMessage } from '../features/events/api';
 
@@ -38,7 +38,7 @@ export function ChatPanel({ eventId, chatUrl, onClose }: { eventId: string; chat
             <View style={styles.header}>
                 <Text style={[styles.headerText, { color: theme.static.colorTextPrimary }]}>Live Chat</Text>
                 <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                    <i className="bi bi-x-lg" style={{ fontSize: 14, color: '#fff' }} />
+                    <i className="bi bi-x-lg" style={{ fontSize: 14, color: palette.white }} />
                 </TouchableOpacity>
             </View>
 
@@ -64,7 +64,7 @@ export function ChatPanel({ eventId, chatUrl, onClose }: { eventId: string; chat
 
             <View style={[styles.replyRow, { borderColor: theme.static.colorBorder }]}>
                 <View style={styles.replyQrBox}>
-                    <QRCodeSVG value={chatUrl} size={72} bgColor="#FFFFFF" fgColor="#0A1220" level="M" />
+                    <QRCodeSVG value={chatUrl} size={72} bgColor={palette.qrPaper} fgColor={palette.background} level="M" />
                 </View>
                 <Text style={[styles.replyText, { color: theme.static.colorTextSecondary }]}>
                     Scan to reply from your phone
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
         width: 28,
         height: 28,
         borderRadius: 9999,
-        backgroundColor: 'rgba(255,255,255,0.12)',
+        backgroundColor: alpha(palette.white, 0.12),
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
         width: 72,
         height: 72,
         borderRadius: 8,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: palette.white,
         alignItems: 'center',
         justifyContent: 'center',
     },

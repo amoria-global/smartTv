@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { midnightGlass } from './glass/glassStyle';
 import { QRCodeSVG } from 'qrcode.react';
-import { ThemeContext } from '../config';
+import { ThemeContext, alpha, palette } from '../config';
 import { useFocusNav } from '../hooks/useFocusNav';
 
 export type QrStep = { icon: string; text: string };
@@ -52,13 +52,13 @@ export function QrHandoffCard({
                         {...focusProps}
                         style={[styles.close, focused && { backgroundColor: theme.static.colorFocusRing }]}
                     >
-                        <i className="bi bi-x-lg" style={{ fontSize: 16, color: '#fff' }} />
+                        <i className="bi bi-x-lg" style={{ fontSize: 16, color: palette.white }} />
                     </TouchableOpacity>
                 ) : null}
 
                 {/* LEFT — the QR the phone scans */}
                 <View style={styles.qrBox}>
-                    <QRCodeSVG value={url} size={qrSize} bgColor="#FFFFFF" fgColor="#0B0B10" level="M" />
+                    <QRCodeSVG value={url} size={qrSize} bgColor={palette.qrPaper} fgColor={palette.qrInk} level="M" />
                 </View>
 
                 {/* RIGHT — icon, title, price, steps, status */}
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
         ...StyleSheet.absoluteFillObject,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'rgba(0,0,0,0.65)',
+        backgroundColor: alpha(palette.black, 0.65),
     } as object,
     card: {
         flexDirection: 'row',
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
         width: 32,
         height: 32,
         borderRadius: 16,
-        backgroundColor: 'rgba(255,255,255,0.12)',
+        backgroundColor: alpha(palette.white, 0.12),
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 1,
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: palette.white,
     },
     right: { flex: 1, alignItems: 'flex-start' },
     title: { fontSize: 28, fontWeight: '800', marginBottom: 8, letterSpacing: -0.4 },
@@ -142,10 +142,10 @@ const styles = StyleSheet.create({
         paddingVertical: 6,
         paddingHorizontal: 14,
         borderRadius: 999,
-        backgroundColor: 'rgba(242,12,143,0.14)',
+        backgroundColor: alpha(palette.accent, 0.14),
         marginBottom: 20,
     },
-    priceText: { color: '#FF6FBF', fontSize: 16, fontWeight: '800' },
+    priceText: { color: palette.accentLight, fontSize: 16, fontWeight: '800' },
     options: { alignSelf: 'stretch', gap: 12, marginBottom: 4 },
     optionRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
     optionText: { fontSize: 13.5, fontWeight: '600' },

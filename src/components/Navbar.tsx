@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'next/router';
-import { ThemeContext, ICON_LOGO } from '../config';
+import { ThemeContext, ICON_LOGO, alpha, palette } from '../config';
 import { useFocusNav } from '../hooks/useFocusNav';
 import { useBackHandler } from '../hooks/useBackHandler';
 import { useAuth } from '../store/auth';
@@ -71,7 +71,7 @@ export function Navbar() {
         key === 'ALL' ? strings.events.tabAll : key === 'LIVE' ? strings.events.tabLive : key === 'UPCOMING' ? strings.events.tabUpcoming : strings.events.tabEnded;
 
     return (
-        <View style={[styles.bar, { backgroundColor: 'rgba(10, 18, 32, 0.62)', borderBottomColor: theme.static.glassStroke, boxShadow: `inset 0 -1px 0 ${theme.static.glassStroke}, 0 10px 30px rgba(0,0,0,0.35)` } as object]}>
+        <View style={[styles.bar, { backgroundColor: alpha(palette.background, 0.62), borderBottomColor: theme.static.glassStroke, boxShadow: `inset 0 -1px 0 ${theme.static.glassStroke}, 0 10px 30px ${alpha(palette.black, 0.35)}` } as object]}>
             <View style={styles.left}>
                 <View style={styles.brandRow}>
                     <Image source={ICON_LOGO} style={styles.logo} resizeMode="contain" />
@@ -168,7 +168,7 @@ function NavLink({
 }) {
     const { theme } = useContext(ThemeContext);
     const { focused, focusProps } = useFocusNav();
-    const textColor = isActive ? '#fff' : focused ? theme.static.colorTextPrimary : theme.static.colorTextSecondary;
+    const textColor = isActive ? palette.white : focused ? theme.static.colorTextPrimary : theme.static.colorTextSecondary;
     return (
         <TouchableOpacity
             onPress={onPress}
@@ -181,7 +181,7 @@ function NavLink({
             {icon ? <i className={`bi ${icon}`} style={{ fontSize: 14, color: textColor }} /> : null}
             <Text style={[styles.navLinkText, { color: textColor }]}>{label}</Text>
             {typeof count === 'number' && count > 0 ? (
-                <View style={[styles.navLinkCount, { backgroundColor: isActive ? 'rgba(255,255,255,0.25)' : theme.static.colorAccent }]}>
+                <View style={[styles.navLinkCount, { backgroundColor: isActive ? alpha(palette.white, 0.25) : theme.static.colorAccent }]}>
                     <Text style={styles.navLinkCountText}>{count}</Text>
                 </View>
             ) : null}
@@ -219,15 +219,15 @@ function ProfileMenuItem({
 }) {
     const { theme } = useContext(ThemeContext);
     const { focused, focusProps } = useFocusNav();
-    const color = destructive ? theme.static.colorError : focused ? '#fff' : theme.static.colorTextPrimary;
+    const color = destructive ? theme.static.colorError : focused ? palette.white : theme.static.colorTextPrimary;
     return (
         <TouchableOpacity
             onPress={onPress}
             {...focusProps}
             style={[styles.profileMenuItem, focused && { backgroundColor: theme.static.colorBrand }]}
         >
-            <i className={`bi ${icon}`} style={{ fontSize: 15, color: focused ? '#fff' : color }} />
-            <Text style={[styles.profileMenuItemText, { color: focused ? '#fff' : color }]}>{label}</Text>
+            <i className={`bi ${icon}`} style={{ fontSize: 15, color: focused ? palette.white : color }} />
+            <Text style={[styles.profileMenuItemText, { color: focused ? palette.white : color }]}>{label}</Text>
         </TouchableOpacity>
     );
 }
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
     navLink: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 10, paddingHorizontal: 18, borderRadius: 999 },
     navLinkText: { fontSize: 15, fontWeight: '700' },
     navLinkCount: { borderRadius: 999, minWidth: 20, height: 20, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 5 },
-    navLinkCountText: { color: '#fff', fontSize: 11, fontWeight: '800' },
+    navLinkCountText: { color: palette.white, fontSize: 11, fontWeight: '800' },
     // Tighter than before (was gap:16, 40px icons) — the more room this
     // cluster gives up, the more headroom the center nav pill has before
     // French/Kinyarwanda's longer labels start crowding it again.
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
     avatarButton: {},
     avatar: { width: 36, height: 36, borderRadius: 18 },
     avatarFallback: { alignItems: 'center', justifyContent: 'center' },
-    avatarText: { color: '#fff', fontSize: 15, fontWeight: '800' },
+    avatarText: { color: palette.white, fontSize: 15, fontWeight: '800' },
     // Same dropdown-under-trigger pattern as LanguageSwitcher.tsx's own
     // langMenu (position:absolute, right-aligned, zIndex above page
     // content) — kept visually consistent since both live in this same bar.

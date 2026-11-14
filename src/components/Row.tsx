@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { ThemeContext } from '../config';
+import { ThemeContext, radii } from '../config';
+import { glassSurface } from './glass/glassStyle';
 import { FocusableCard } from './FocusableCard';
 import { UiEventStatus } from '../api/catalog';
 import { useTranslation } from '../i18n';
@@ -65,7 +66,12 @@ export function Row({ title, items, onSelect, rowFocusIndex, cardsPerRow = 4 }: 
 
     return (
         <View style={styles.wrap}>
-            <Text style={[styles.title, { color: theme.static.colorTextPrimary }]}>{title}</Text>
+            <View style={styles.header}>
+                <Text style={[styles.title, { color: theme.static.colorTextPrimary }]}>{title}</Text>
+                <View style={[glassSurface(theme.static, { radius: radii.pill }), styles.countChip]}>
+                    <Text style={[styles.countText, { color: theme.static.colorTextSoft }]}>{items.length}</Text>
+                </View>
+            </View>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scroll}>
                 {items.map((item, i) => (
                     <FocusableCard
@@ -94,6 +100,9 @@ export function Row({ title, items, onSelect, rowFocusIndex, cardsPerRow = 4 }: 
 
 const styles = StyleSheet.create({
     wrap: { marginBottom: 28 },
-    title: { fontSize: 18, fontWeight: '700', marginBottom: 14, paddingHorizontal: 48 },
+    header: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 14, paddingHorizontal: 48 },
+    title: { fontSize: 18, fontWeight: '700' },
+    countChip: { paddingVertical: 2, paddingHorizontal: 10 },
+    countText: { fontSize: 12, fontWeight: '600' },
     scroll: { paddingHorizontal: 48 },
 });

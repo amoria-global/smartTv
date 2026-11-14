@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, ActivityIndicator, ScrollView, Touchable
 import { midnightGlass } from '../components/glass/glassStyle';
 import { useRouter } from 'next/router';
 import { QRCodeSVG } from 'qrcode.react';
-import { ThemeContext } from '../config';
+import { ThemeContext, alpha, palette } from '../config';
 import { ScreenWrapper } from '../components/ScreenWrapper';
 import { Navbar } from '../components/Navbar';
 import { Row } from '../components/Row';
@@ -274,7 +274,7 @@ export default function DetailScreen() {
             <ScreenWrapper noPadding>
                 <Navbar />
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <ActivityIndicator size="large" color="#F20C8F" />
+                    <ActivityIndicator size="large" color={palette.accent} />
                 </View>
             </ScreenWrapper>
         );
@@ -414,7 +414,7 @@ export default function DetailScreen() {
 
                     {/* Top-left back */}
                     <TouchableOpacity onPress={() => router.back()} style={styles.backCircle}>
-                        <i className="bi bi-chevron-left" style={{ fontSize: 18, color: '#fff' }} />
+                        <i className="bi bi-chevron-left" style={{ fontSize: 18, color: palette.white }} />
                     </TouchableOpacity>
 
                     {/* Top-right: share + save */}
@@ -422,7 +422,7 @@ export default function DetailScreen() {
                         <TopCircleButton icon="bi-share" onPress={() => setShareOpen(true)} />
                         <TopCircleButton
                             icon={bookmarked ? 'bi-bookmark-fill' : 'bi-bookmark'}
-                            tint={bookmarked ? theme.static.colorAccent : '#fff'}
+                            tint={bookmarked ? theme.static.colorAccent : palette.white}
                             onPress={handleToggleBookmark}
                         />
                     </View>
@@ -439,7 +439,7 @@ export default function DetailScreen() {
                         <View style={styles.pillRow}>
                             {statusLabel ? (
                                 <View style={[styles.statusPill, { backgroundColor: statusColor }]}>
-                                    {isLive ? <View style={styles.liveDot} /> : <i className="bi bi-broadcast" style={{ fontSize: 13, color: '#fff' }} />}
+                                    {isLive ? <View style={styles.liveDot} /> : <i className="bi bi-broadcast" style={{ fontSize: 13, color: palette.white }} />}
                                     <Text style={styles.statusPillText}>{statusLabel}</Text>
                                 </View>
                             ) : null}
@@ -588,8 +588,8 @@ export default function DetailScreen() {
                                 style={[
                                     styles.priceBox,
                                     (isFreeEntry || hasPaidAccess)
-                                        ? { backgroundColor: 'rgba(52, 211, 153, 0.12)', borderColor: theme.static.colorSuccess }
-                                        : { backgroundColor: 'rgba(242, 12, 143, 0.12)', borderColor: theme.static.colorAccent },
+                                        ? { backgroundColor: alpha(palette.success, 0.12), borderColor: theme.static.colorSuccess }
+                                        : { backgroundColor: alpha(palette.accent, 0.12), borderColor: theme.static.colorAccent },
                                 ]}
                             >
                                 {hasPaidAccess && !isFreeEntry ? (
@@ -700,7 +700,7 @@ function TopCircleButton({ icon, onPress, tint }: { icon: string; onPress: () =>
                 focused && { backgroundColor: theme.static.colorFocusRing, transform: [{ scale: 1.08 }] },
             ]}
         >
-            <i className={`bi ${icon}`} style={{ fontSize: 17, color: focused ? '#fff' : tint ?? '#fff' }} />
+            <i className={`bi ${icon}`} style={{ fontSize: 17, color: focused ? palette.white : tint ?? palette.white }} />
         </TouchableOpacity>
     );
 }
@@ -748,19 +748,19 @@ function ActionButton({
                 styles.actionButton,
                 isPrimary
                     ? styles.actionPrimary
-                    : { backgroundColor: 'rgba(22,36,60,0.66)', borderColor: theme.static.colorBorder },
+                    : { backgroundColor: alpha(palette.card, 0.66), borderColor: theme.static.colorBorder },
                 focused && (isPrimary
-                    ? { borderColor: '#fff', transform: [{ scale: 1.05 }] }
-                    : { borderColor: theme.static.colorFocusRing, transform: [{ scale: 1.05 }], backgroundColor: 'rgba(22,36,60,0.92)' }),
+                    ? { borderColor: palette.white, transform: [{ scale: 1.05 }] }
+                    : { borderColor: theme.static.colorFocusRing, transform: [{ scale: 1.05 }], backgroundColor: alpha(palette.card, 0.92) }),
                 disabled && { opacity: 0.55 },
             ]}
         >
-            <i className={`bi ${icon}`} style={{ fontSize: 17, color: isPrimary ? '#fff' : theme.static.colorSuccess }} />
-            <Text style={[styles.actionButtonText, { color: '#fff' }]}>{title}</Text>
+            <i className={`bi ${icon}`} style={{ fontSize: 17, color: isPrimary ? palette.white : theme.static.colorSuccess }} />
+            <Text style={[styles.actionButtonText, { color: palette.white }]}>{title}</Text>
             {price ? (
                 <>
                     <View style={styles.actionDivider} />
-                    <Text style={[styles.actionPrice, { color: '#fff' }]}>{price}</Text>
+                    <Text style={[styles.actionPrice, { color: palette.white }]}>{price}</Text>
                 </>
             ) : null}
         </TouchableOpacity>
@@ -831,7 +831,7 @@ function HostCard({ role, name, image, icon, color }: { role: string; name: stri
                 <Image source={{ uri: image }} style={styles.hostCardAvatar} />
             ) : (
                 <View style={[styles.hostCardAvatar, styles.hostCardAvatarFallback, { backgroundColor: color }]}>
-                    <i className={`bi ${icon}`} style={{ fontSize: 16, color: '#fff' }} />
+                    <i className={`bi ${icon}`} style={{ fontSize: 16, color: palette.white }} />
                 </View>
             )}
             <View style={{ flex: 1 }}>
@@ -850,7 +850,7 @@ const styles = StyleSheet.create({
         ...StyleSheet.absoluteFillObject,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'rgba(0,0,0,0.72)',
+        backgroundColor: alpha(palette.black, 0.72),
         zIndex: 60,
     } as object,
     successCard: {
@@ -876,7 +876,7 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 0,
         height: 360,
-        background: 'linear-gradient(to top, rgba(11,11,16,0.96) 0%, rgba(11,11,16,0.7) 40%, rgba(11,11,16,0) 100%)',
+        background: `linear-gradient(to top, ${alpha(palette.background, 0.96)} 0%, ${alpha(palette.background, 0.7)} 40%, ${alpha(palette.background, 0)} 100%)`,
     } as object,
     backCircle: {
         position: 'absolute',
@@ -885,9 +885,9 @@ const styles = StyleSheet.create({
         width: 44,
         height: 44,
         borderRadius: 22,
-        backgroundColor: 'rgba(22,36,60,0.66)',
+        backgroundColor: alpha(palette.card, 0.66),
         borderWidth: 1,
-        borderColor: 'rgba(255,255,255,0.14)',
+        borderColor: alpha(palette.white, 0.14),
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 5,
@@ -897,9 +897,9 @@ const styles = StyleSheet.create({
         width: 44,
         height: 44,
         borderRadius: 22,
-        backgroundColor: 'rgba(22,36,60,0.66)',
+        backgroundColor: alpha(palette.card, 0.66),
         borderWidth: 1,
-        borderColor: 'rgba(255,255,255,0.14)',
+        borderColor: alpha(palette.white, 0.14),
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -917,10 +917,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         borderRadius: 999,
     },
-    liveDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: '#fff' },
-    statusPillText: { color: '#fff', fontSize: 13, fontWeight: '800', textTransform: 'uppercase', letterSpacing: 0.5 },
-    categoryPill: { paddingVertical: 7, paddingHorizontal: 15, borderRadius: 999, backgroundColor: 'rgba(22,36,60,0.7)' },
-    categoryPillText: { color: '#fff', fontSize: 12, fontWeight: '800', letterSpacing: 0.4 },
+    liveDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: palette.white },
+    statusPillText: { color: palette.white, fontSize: 13, fontWeight: '800', textTransform: 'uppercase', letterSpacing: 0.5 },
+    categoryPill: { paddingVertical: 7, paddingHorizontal: 15, borderRadius: 999, backgroundColor: alpha(palette.card, 0.7) },
+    categoryPillText: { color: palette.white, fontSize: 12, fontWeight: '800', letterSpacing: 0.4 },
     heroTitle: { fontSize: 52, fontWeight: '800', marginBottom: 10, maxWidth: 1000, letterSpacing: -0.5 },
     heroSubtitle: { fontSize: 19, marginBottom: 18 },
 
@@ -943,12 +943,12 @@ const styles = StyleSheet.create({
     // gradient the Home promo card uses; RN-web needs `backgroundImage`, not
     // `background`, for it to actually paint.
     actionPrimary: {
-        backgroundImage: 'linear-gradient(180deg, #5B8CFF 0%, #3E6FD8 55%, #2F59B8 100%)',
-        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.38), inset 0 -2px 0 rgba(0,0,0,0.22), 0 12px 26px rgba(0,0,0,0.4)',
-        borderColor: 'rgba(255,255,255,0.16)',
+        backgroundImage: `linear-gradient(180deg, ${palette.primaryLight} 0%, ${palette.primary} 55%, ${palette.primaryDark} 100%)`,
+        boxShadow: `inset 0 1px 0 ${alpha(palette.white, 0.38)}, inset 0 -2px 0 ${alpha(palette.black, 0.22)}, 0 12px 26px ${alpha(palette.black, 0.4)}`,
+        borderColor: alpha(palette.white, 0.16),
     } as object,
     actionButtonText: { fontSize: 17, fontWeight: '700' },
-    actionDivider: { width: 1, height: 22, backgroundColor: 'rgba(255,255,255,0.34)', marginHorizontal: 2 },
+    actionDivider: { width: 1, height: 22, backgroundColor: alpha(palette.white, 0.34), marginHorizontal: 2 },
     actionPrice: { fontSize: 17, fontWeight: '800' },
 
     rsvpError: { fontSize: 13, marginTop: 12, maxWidth: 560 },
@@ -966,7 +966,7 @@ const styles = StyleSheet.create({
     sectionHeader: { fontSize: 14, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 12, opacity: 0.8 },
     description: { fontSize: 15, lineHeight: 24 },
     tagRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 16 },
-    tagPill: { backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 999, paddingVertical: 5, paddingHorizontal: 12 },
+    tagPill: { backgroundColor: alpha(palette.white, 0.08), borderRadius: 999, paddingVertical: 5, paddingHorizontal: 12 },
     tagText: { fontSize: 12, fontWeight: '600' },
     replayNote: { fontSize: 13, marginTop: 16, fontStyle: 'italic' },
 

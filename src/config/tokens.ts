@@ -75,6 +75,12 @@ export const palette = {
     glassStroke: 'rgba(170,195,240,0.14)',
     glassHighlight: 'rgba(255,255,255,0.16)',
     glassWell: 'rgba(4,9,18,0.55)',
+    /** The glass stroke's base colour, for edges brighter or fainter than glassStroke. */
+    glassEdge: '#AAC3F0',
+
+    /** QR codes: near-black ink on white paper, the most reliable scan from across a room. */
+    qrInk: '#0B0B10',
+    qrPaper: '#FFFFFF',
 } as const;
 
 /** The phone's dark gradients (gradientsFor('dark')). Stops run top to bottom. */
