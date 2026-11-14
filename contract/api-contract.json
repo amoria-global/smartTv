@@ -82,15 +82,6 @@
     "pathVariables" : [ "id" ]
   }, {
     "method" : "GET",
-    "path" : "/admin/archives",
-    "controller" : "AdminArchiveController#index"
-  }, {
-    "method" : "GET",
-    "path" : "/admin/archives/delete/{id}",
-    "controller" : "AdminArchiveController#delete",
-    "pathVariables" : [ "id" ]
-  }, {
-    "method" : "GET",
     "path" : "/admin/bonuses",
     "controller" : "AdminBonusPageController#index"
   }, {
@@ -258,8 +249,16 @@
     "controller" : "AdminContentApprovalPageController#index"
   }, {
     "method" : "GET",
+    "path" : "/admin/content-disputes",
+    "controller" : "AdminContentDisputePageController#index"
+  }, {
+    "method" : "GET",
     "path" : "/admin/customers/clients",
     "controller" : "CustomerAdminController#clients"
+  }, {
+    "method" : "GET",
+    "path" : "/admin/customers/collaborators",
+    "controller" : "CustomerAdminController#collaborators"
   }, {
     "method" : "GET",
     "path" : "/admin/customers/coordinators",
@@ -451,6 +450,10 @@
     "method" : "GET",
     "path" : "/admin/kyc",
     "controller" : "AdminKycPageController#index"
+  }, {
+    "method" : "GET",
+    "path" : "/admin/locked-albums",
+    "controller" : "AdminLockedAlbumsController#index"
   }, {
     "method" : "GET",
     "path" : "/admin/notifications",
@@ -992,10 +995,6 @@
     "controller" : "AdminWithdrawalController#index"
   }, {
     "method" : "GET",
-    "path" : "/api/admin/archives/all",
-    "controller" : "AdminArchiveApiController#getArchives"
-  }, {
-    "method" : "GET",
     "path" : "/api/admin/bookings/all",
     "controller" : "AdminBookingApiController#getBookings",
     "params" : [ {
@@ -1484,6 +1483,11 @@
     "controller" : "AdminChatApiController#getViolations"
   }, {
     "method" : "GET",
+    "path" : "/api/admin/chats/violations/{id}/messages",
+    "controller" : "AdminChatApiController#getViolationMessages",
+    "pathVariables" : [ "id" ]
+  }, {
+    "method" : "GET",
     "path" : "/api/admin/contact-messages/all",
     "controller" : "AdminContactMessageApiController#getContactMessages"
   }, {
@@ -1599,6 +1603,11 @@
       "type" : "ApproveRequest",
       "properties" : [ "adminNotes", "targetAlbumId" ]
     },
+    "pathVariables" : [ "id" ]
+  }, {
+    "method" : "GET",
+    "path" : "/api/admin/content-disputes/{id}/claimant-albums",
+    "controller" : "AdminContentDisputeApiController#claimantAlbums",
     "pathVariables" : [ "id" ]
   }, {
     "method" : "POST",
@@ -2867,6 +2876,20 @@
     "pathVariables" : [ "id" ]
   }, {
     "method" : "POST",
+    "path" : "/api/remote/auth/2fa/email/send",
+    "controller" : "AuthController#sendTwoFactorEmail",
+    "body" : {
+      "type" : "Map"
+    }
+  }, {
+    "method" : "POST",
+    "path" : "/api/remote/auth/2fa/email/verify",
+    "controller" : "AuthController#verifyTwoFactorEmail",
+    "body" : {
+      "type" : "Map"
+    }
+  }, {
+    "method" : "POST",
     "path" : "/api/remote/auth/apple",
     "controller" : "AppleAuthController#appleAuth",
     "body" : {
@@ -2930,6 +2953,20 @@
     "body" : {
       "type" : "LoginReq",
       "properties" : [ "email", "password" ]
+    }
+  }, {
+    "method" : "POST",
+    "path" : "/api/remote/auth/login-code/send",
+    "controller" : "AuthController#sendLoginCode",
+    "body" : {
+      "type" : "Map"
+    }
+  }, {
+    "method" : "POST",
+    "path" : "/api/remote/auth/login-code/verify",
+    "controller" : "AuthController#verifyLoginCode",
+    "body" : {
+      "type" : "Map"
     }
   }, {
     "method" : "POST",
@@ -3024,6 +3061,20 @@
       "type" : "Map"
     }
   }, {
+    "method" : "POST",
+    "path" : "/api/remote/auth/workspace-setup",
+    "controller" : "AuthController#workspaceSetup",
+    "body" : {
+      "type" : "Map"
+    }
+  }, {
+    "method" : "POST",
+    "path" : "/api/remote/auth/workspace-setup/preview",
+    "controller" : "AuthController#workspaceSetupPreview",
+    "body" : {
+      "type" : "Map"
+    }
+  }, {
     "method" : "GET",
     "path" : "/api/remote/bookings",
     "controller" : "BookingController#getMyBookings"
@@ -3040,6 +3091,11 @@
       "type" : "HashMap"
     },
     "pathVariables" : [ "bookingId" ]
+  }, {
+    "method" : "GET",
+    "path" : "/api/remote/chat/albums/{albumId}/card",
+    "controller" : "ChatController#getAlbumCard",
+    "pathVariables" : [ "albumId" ]
   }, {
     "method" : "GET",
     "path" : "/api/remote/chat/conversations",
@@ -3100,6 +3156,14 @@
     } ],
     "consumes" : [ "multipart/form-data" ]
   }, {
+    "method" : "POST",
+    "path" : "/api/remote/chat/send-albums",
+    "controller" : "ChatController#sendAlbums",
+    "body" : {
+      "type" : "SendAlbumsRequest",
+      "properties" : [ "albumIds", "note", "recipientId" ]
+    }
+  }, {
     "method" : "GET",
     "path" : "/api/remote/chat/unread-count",
     "controller" : "ChatController#getUnreadMessageCount"
@@ -3124,6 +3188,22 @@
     "path" : "/api/remote/client/surveys/{eventId}/completed",
     "controller" : "ClientSurveyController#isSurveyCompleted",
     "pathVariables" : [ "eventId" ]
+  }, {
+    "method" : "POST",
+    "path" : "/api/remote/collaborator/invitations/{id}/accept",
+    "controller" : "CollaboratorWorkspaceController#accept",
+    "body" : {
+      "type" : "Map"
+    },
+    "pathVariables" : [ "id" ]
+  }, {
+    "method" : "GET",
+    "path" : "/api/remote/collaborator/me",
+    "controller" : "CollaboratorWorkspaceController#me"
+  }, {
+    "method" : "GET",
+    "path" : "/api/remote/collaborator/workspaces",
+    "controller" : "CollaboratorWorkspaceController#picker"
   }, {
     "method" : "GET",
     "path" : "/api/remote/coordinator/analytics",
@@ -3150,53 +3230,6 @@
       "name" : "to",
       "required" : false
     } ]
-  }, {
-    "method" : "GET",
-    "path" : "/api/remote/coordinator/archives",
-    "controller" : "CoordinatorController#getArchives",
-    "params" : [ {
-      "name" : "page",
-      "required" : false
-    }, {
-      "name" : "size",
-      "required" : false
-    } ]
-  }, {
-    "method" : "POST",
-    "path" : "/api/remote/coordinator/archives",
-    "controller" : "CoordinatorController#createArchive",
-    "params" : [ {
-      "name" : "title",
-      "required" : true
-    }, {
-      "name" : "description",
-      "required" : false
-    }, {
-      "name" : "archiveType",
-      "required" : false
-    }, {
-      "name" : "eventId",
-      "required" : false
-    } ],
-    "parts" : [ {
-      "name" : "file",
-      "required" : false,
-      "file" : true
-    } ],
-    "consumes" : [ "multipart/form-data" ]
-  }, {
-    "method" : "DELETE",
-    "path" : "/api/remote/coordinator/archives/{archiveId}",
-    "controller" : "CoordinatorController#deleteArchive",
-    "pathVariables" : [ "archiveId" ]
-  }, {
-    "method" : "PUT",
-    "path" : "/api/remote/coordinator/archives/{archiveId}",
-    "controller" : "CoordinatorController#updateArchive",
-    "body" : {
-      "type" : "Map"
-    },
-    "pathVariables" : [ "archiveId" ]
   }, {
     "method" : "GET",
     "path" : "/api/remote/coordinator/balance",
@@ -3254,7 +3287,7 @@
     "controller" : "CoordinatorController#bookEvent",
     "body" : {
       "type" : "EventBookingRequestDTO",
-      "properties" : [ "allowWishInvites", "attendanceMode", "description", "endTime", "escrowPercentage", "eventCategoryId", "eventDate", "eventId", "eventOrganizer", "eventTags", "eventType", "eventVisibility", "groupDiscountPercentage", "hasLiveStream", "location", "maxGuests", "minimumPhotos", "notes", "packageId", "photographerId", "price", "serviceType", "startTime", "streamFee", "streamFeeCurrencyId", "studioPhotoCount", "studioVideoCount", "title" ]
+      "properties" : [ "allowWishInvites", "attendanceMode", "description", "endTime", "escrowPercentage", "eventCategoryId", "eventDate", "eventId", "eventOrganizer", "eventTags", "eventType", "eventVisibility", "geoRules", "groupDiscountPercentage", "hasLiveStream", "location", "maxGuests", "minimumPhotos", "notes", "packageId", "photographerId", "price", "serviceType", "startTime", "streamFee", "streamFeeCurrencyId", "studioPhotoCount", "studioVideoCount", "title" ]
     }
   }, {
     "method" : "GET",
@@ -3272,7 +3305,7 @@
     "controller" : "CoordinatorController#updateEvent",
     "body" : {
       "type" : "EventUpdateRequestDTO",
-      "properties" : [ "allowWishInvites", "attendanceMode", "description", "endTime", "eventCategoryId", "eventDate", "eventOrganizer", "eventTags", "eventType", "eventVisibility", "groupDiscountPercentage", "hasLiveStream", "location", "maxGuests", "minimumPhotos", "photographerId", "price", "startTime", "streamFee", "streamFeeCurrencyId", "title" ]
+      "properties" : [ "allowWishInvites", "attendanceMode", "description", "endTime", "eventCategoryId", "eventDate", "eventOrganizer", "eventTags", "eventType", "eventVisibility", "geoRules", "groupDiscountPercentage", "hasLiveStream", "location", "maxGuests", "minimumPhotos", "photographerId", "price", "startTime", "streamFee", "streamFeeCurrencyId", "title" ]
     },
     "pathVariables" : [ "id" ]
   }, {
@@ -3618,7 +3651,7 @@
     "controller" : "CoordinatorController#rebookPhotographer",
     "body" : {
       "type" : "EventBookingRequestDTO",
-      "properties" : [ "allowWishInvites", "attendanceMode", "description", "endTime", "escrowPercentage", "eventCategoryId", "eventDate", "eventId", "eventOrganizer", "eventTags", "eventType", "eventVisibility", "groupDiscountPercentage", "hasLiveStream", "location", "maxGuests", "minimumPhotos", "notes", "packageId", "photographerId", "price", "serviceType", "startTime", "streamFee", "streamFeeCurrencyId", "studioPhotoCount", "studioVideoCount", "title" ]
+      "properties" : [ "allowWishInvites", "attendanceMode", "description", "endTime", "escrowPercentage", "eventCategoryId", "eventDate", "eventId", "eventOrganizer", "eventTags", "eventType", "eventVisibility", "geoRules", "groupDiscountPercentage", "hasLiveStream", "location", "maxGuests", "minimumPhotos", "notes", "packageId", "photographerId", "price", "serviceType", "startTime", "streamFee", "streamFeeCurrencyId", "studioPhotoCount", "studioVideoCount", "title" ]
     }
   }, {
     "method" : "GET",
@@ -3775,6 +3808,31 @@
       "type" : "Map"
     }
   }, {
+    "method" : "POST",
+    "path" : "/api/remote/customer/2fa/email/disable",
+    "controller" : "CustomerTwoFactorController#disable",
+    "body" : {
+      "type" : "Map"
+    }
+  }, {
+    "method" : "POST",
+    "path" : "/api/remote/customer/2fa/email/enable",
+    "controller" : "CustomerTwoFactorController#enable",
+    "body" : {
+      "type" : "Map"
+    }
+  }, {
+    "method" : "POST",
+    "path" : "/api/remote/customer/2fa/email/send",
+    "controller" : "CustomerTwoFactorController#send",
+    "body" : {
+      "type" : "Map"
+    }
+  }, {
+    "method" : "GET",
+    "path" : "/api/remote/customer/2fa/status",
+    "controller" : "CustomerTwoFactorController#status"
+  }, {
     "method" : "GET",
     "path" : "/api/remote/customer/albums",
     "controller" : "ClientAlbumController#getAlbums"
@@ -3794,7 +3852,7 @@
     "controller" : "ClientAlbumController#updateAlbum",
     "body" : {
       "type" : "EventUpdateRequestDTO",
-      "properties" : [ "allowWishInvites", "attendanceMode", "description", "endTime", "eventCategoryId", "eventDate", "eventOrganizer", "eventTags", "eventType", "eventVisibility", "groupDiscountPercentage", "hasLiveStream", "location", "maxGuests", "minimumPhotos", "photographerId", "price", "startTime", "streamFee", "streamFeeCurrencyId", "title" ]
+      "properties" : [ "allowWishInvites", "attendanceMode", "description", "endTime", "eventCategoryId", "eventDate", "eventOrganizer", "eventTags", "eventType", "eventVisibility", "geoRules", "groupDiscountPercentage", "hasLiveStream", "location", "maxGuests", "minimumPhotos", "photographerId", "price", "startTime", "streamFee", "streamFeeCurrencyId", "title" ]
     },
     "pathVariables" : [ "albumId" ]
   }, {
@@ -3872,14 +3930,6 @@
       "required" : false
     } ]
   }, {
-    "method" : "PUT",
-    "path" : "/api/remote/customer/archives/{archiveId}",
-    "controller" : "CustomerArchiveController#updateArchive",
-    "body" : {
-      "type" : "Map"
-    },
-    "pathVariables" : [ "archiveId" ]
-  }, {
     "method" : "GET",
     "path" : "/api/remote/customer/events",
     "controller" : "EventRemoteController#getCustomerEvents",
@@ -3905,7 +3955,7 @@
     "controller" : "EventRemoteController#bookPhotographer",
     "body" : {
       "type" : "EventBookingRequestDTO",
-      "properties" : [ "allowWishInvites", "attendanceMode", "description", "endTime", "escrowPercentage", "eventCategoryId", "eventDate", "eventId", "eventOrganizer", "eventTags", "eventType", "eventVisibility", "groupDiscountPercentage", "hasLiveStream", "location", "maxGuests", "minimumPhotos", "notes", "packageId", "photographerId", "price", "serviceType", "startTime", "streamFee", "streamFeeCurrencyId", "studioPhotoCount", "studioVideoCount", "title" ]
+      "properties" : [ "allowWishInvites", "attendanceMode", "description", "endTime", "escrowPercentage", "eventCategoryId", "eventDate", "eventId", "eventOrganizer", "eventTags", "eventType", "eventVisibility", "geoRules", "groupDiscountPercentage", "hasLiveStream", "location", "maxGuests", "minimumPhotos", "notes", "packageId", "photographerId", "price", "serviceType", "startTime", "streamFee", "streamFeeCurrencyId", "studioPhotoCount", "studioVideoCount", "title" ]
     }
   }, {
     "method" : "GET",
@@ -4062,7 +4112,7 @@
     "controller" : "EventRemoteController#rebookPhotographer",
     "body" : {
       "type" : "EventBookingRequestDTO",
-      "properties" : [ "allowWishInvites", "attendanceMode", "description", "endTime", "escrowPercentage", "eventCategoryId", "eventDate", "eventId", "eventOrganizer", "eventTags", "eventType", "eventVisibility", "groupDiscountPercentage", "hasLiveStream", "location", "maxGuests", "minimumPhotos", "notes", "packageId", "photographerId", "price", "serviceType", "startTime", "streamFee", "streamFeeCurrencyId", "studioPhotoCount", "studioVideoCount", "title" ]
+      "properties" : [ "allowWishInvites", "attendanceMode", "description", "endTime", "escrowPercentage", "eventCategoryId", "eventDate", "eventId", "eventOrganizer", "eventTags", "eventType", "eventVisibility", "geoRules", "groupDiscountPercentage", "hasLiveStream", "location", "maxGuests", "minimumPhotos", "notes", "packageId", "photographerId", "price", "serviceType", "startTime", "streamFee", "streamFeeCurrencyId", "studioPhotoCount", "studioVideoCount", "title" ]
     }
   }, {
     "method" : "POST",
@@ -4110,7 +4160,7 @@
     "controller" : "EventRemoteController#updateEvent",
     "body" : {
       "type" : "EventUpdateRequestDTO",
-      "properties" : [ "allowWishInvites", "attendanceMode", "description", "endTime", "eventCategoryId", "eventDate", "eventOrganizer", "eventTags", "eventType", "eventVisibility", "groupDiscountPercentage", "hasLiveStream", "location", "maxGuests", "minimumPhotos", "photographerId", "price", "startTime", "streamFee", "streamFeeCurrencyId", "title" ]
+      "properties" : [ "allowWishInvites", "attendanceMode", "description", "endTime", "eventCategoryId", "eventDate", "eventOrganizer", "eventTags", "eventType", "eventVisibility", "geoRules", "groupDiscountPercentage", "hasLiveStream", "location", "maxGuests", "minimumPhotos", "photographerId", "price", "startTime", "streamFee", "streamFeeCurrencyId", "title" ]
     },
     "pathVariables" : [ "eventId" ]
   }, {
@@ -4746,7 +4796,7 @@
     "controller" : "CustomerRebookController#rebookPhotographer",
     "body" : {
       "type" : "EventBookingRequestDTO",
-      "properties" : [ "allowWishInvites", "attendanceMode", "description", "endTime", "escrowPercentage", "eventCategoryId", "eventDate", "eventId", "eventOrganizer", "eventTags", "eventType", "eventVisibility", "groupDiscountPercentage", "hasLiveStream", "location", "maxGuests", "minimumPhotos", "notes", "packageId", "photographerId", "price", "serviceType", "startTime", "streamFee", "streamFeeCurrencyId", "studioPhotoCount", "studioVideoCount", "title" ]
+      "properties" : [ "allowWishInvites", "attendanceMode", "description", "endTime", "escrowPercentage", "eventCategoryId", "eventDate", "eventId", "eventOrganizer", "eventTags", "eventType", "eventVisibility", "geoRules", "groupDiscountPercentage", "hasLiveStream", "location", "maxGuests", "minimumPhotos", "notes", "packageId", "photographerId", "price", "serviceType", "startTime", "streamFee", "streamFeeCurrencyId", "studioPhotoCount", "studioVideoCount", "title" ]
     }
   }, {
     "method" : "GET",
@@ -4912,6 +4962,14 @@
       "required" : false
     } ]
   }, {
+    "method" : "POST",
+    "path" : "/api/remote/direct-booking/map",
+    "controller" : "DirectBookingMapController#postNearbyPhotographersMap",
+    "body" : {
+      "type" : "MapSearchBody",
+      "properties" : [ "eventDate", "lat", "lng", "radiusKm", "search", "specialty" ]
+    }
+  }, {
     "method" : "GET",
     "path" : "/api/remote/donations",
     "controller" : "DonationController#getMyDonations",
@@ -4974,7 +5032,7 @@
     "controller" : "EventRemoteController#bookPhotographer",
     "body" : {
       "type" : "EventBookingRequestDTO",
-      "properties" : [ "allowWishInvites", "attendanceMode", "description", "endTime", "escrowPercentage", "eventCategoryId", "eventDate", "eventId", "eventOrganizer", "eventTags", "eventType", "eventVisibility", "groupDiscountPercentage", "hasLiveStream", "location", "maxGuests", "minimumPhotos", "notes", "packageId", "photographerId", "price", "serviceType", "startTime", "streamFee", "streamFeeCurrencyId", "studioPhotoCount", "studioVideoCount", "title" ]
+      "properties" : [ "allowWishInvites", "attendanceMode", "description", "endTime", "escrowPercentage", "eventCategoryId", "eventDate", "eventId", "eventOrganizer", "eventTags", "eventType", "eventVisibility", "geoRules", "groupDiscountPercentage", "hasLiveStream", "location", "maxGuests", "minimumPhotos", "notes", "packageId", "photographerId", "price", "serviceType", "startTime", "streamFee", "streamFeeCurrencyId", "studioPhotoCount", "studioVideoCount", "title" ]
     }
   }, {
     "method" : "GET",
@@ -5060,7 +5118,7 @@
     "controller" : "HybridBookingController#getMatchPreview",
     "body" : {
       "type" : "MatchPreviewRequestDTO",
-      "properties" : [ "allowWishInvites", "city", "clientType", "coverageMode", "currency", "digitalDeliveryDays", "editedPhotos", "editingStyle", "endTime", "eventDate", "eventId", "hasLiveStream", "instantUpdates", "latitude", "locationCoverage", "longVideosDuration", "longVideosQty", "longitude", "maxBudget", "minBudget", "photoAlbumPrints", "photoAlbumSize", "photoAlbumsQty", "photoBookPages", "photoBookSize", "photoBooksQty", "photographerSpecialty", "photographerType", "printCollectionMethod", "printProductionTime", "printProposedDate", "shortVideosDuration", "shortVideosQty", "specialty", "startTime", "usageRights", "wallPortraitFrame", "wallPortraitSize", "wallPortraitsQty" ]
+      "properties" : [ "allowWishInvites", "city", "clientType", "coverageMode", "currency", "digitalDeliveryDays", "editedPhotos", "editingStyle", "endTime", "eventDate", "eventId", "hasLiveStream", "instantUpdates", "latitude", "locationCoverage", "longVideosDuration", "longVideosQty", "longitude", "maxBudget", "minBudget", "photoAlbumPrints", "photoAlbumSize", "photoAlbumsQty", "photoBookPages", "photoBookPhotos", "photoBookSize", "photoBooksQty", "photographerSpecialty", "photographerType", "printCollectionMethod", "printProductionTime", "printProposedDate", "shortVideosDuration", "shortVideosQty", "specialty", "startTime", "usageRights", "wallPortraitFrame", "wallPortraitSize", "wallPortraitsQty" ]
     }
   }, {
     "method" : "PATCH",
@@ -5156,7 +5214,7 @@
     "controller" : "EventRemoteController#rebookPhotographer",
     "body" : {
       "type" : "EventBookingRequestDTO",
-      "properties" : [ "allowWishInvites", "attendanceMode", "description", "endTime", "escrowPercentage", "eventCategoryId", "eventDate", "eventId", "eventOrganizer", "eventTags", "eventType", "eventVisibility", "groupDiscountPercentage", "hasLiveStream", "location", "maxGuests", "minimumPhotos", "notes", "packageId", "photographerId", "price", "serviceType", "startTime", "streamFee", "streamFeeCurrencyId", "studioPhotoCount", "studioVideoCount", "title" ]
+      "properties" : [ "allowWishInvites", "attendanceMode", "description", "endTime", "escrowPercentage", "eventCategoryId", "eventDate", "eventId", "eventOrganizer", "eventTags", "eventType", "eventVisibility", "geoRules", "groupDiscountPercentage", "hasLiveStream", "location", "maxGuests", "minimumPhotos", "notes", "packageId", "photographerId", "price", "serviceType", "startTime", "streamFee", "streamFeeCurrencyId", "studioPhotoCount", "studioVideoCount", "title" ]
     }
   }, {
     "method" : "POST",
@@ -5204,7 +5262,7 @@
     "controller" : "EventRemoteController#updateEvent",
     "body" : {
       "type" : "EventUpdateRequestDTO",
-      "properties" : [ "allowWishInvites", "attendanceMode", "description", "endTime", "eventCategoryId", "eventDate", "eventOrganizer", "eventTags", "eventType", "eventVisibility", "groupDiscountPercentage", "hasLiveStream", "location", "maxGuests", "minimumPhotos", "photographerId", "price", "startTime", "streamFee", "streamFeeCurrencyId", "title" ]
+      "properties" : [ "allowWishInvites", "attendanceMode", "description", "endTime", "eventCategoryId", "eventDate", "eventOrganizer", "eventTags", "eventType", "eventVisibility", "geoRules", "groupDiscountPercentage", "hasLiveStream", "location", "maxGuests", "minimumPhotos", "photographerId", "price", "startTime", "streamFee", "streamFeeCurrencyId", "title" ]
     },
     "pathVariables" : [ "eventId" ]
   }, {
@@ -5480,7 +5538,7 @@
     "controller" : "HybridBookingController#getMatchPreview",
     "body" : {
       "type" : "MatchPreviewRequestDTO",
-      "properties" : [ "allowWishInvites", "city", "clientType", "coverageMode", "currency", "digitalDeliveryDays", "editedPhotos", "editingStyle", "endTime", "eventDate", "eventId", "hasLiveStream", "instantUpdates", "latitude", "locationCoverage", "longVideosDuration", "longVideosQty", "longitude", "maxBudget", "minBudget", "photoAlbumPrints", "photoAlbumSize", "photoAlbumsQty", "photoBookPages", "photoBookSize", "photoBooksQty", "photographerSpecialty", "photographerType", "printCollectionMethod", "printProductionTime", "printProposedDate", "shortVideosDuration", "shortVideosQty", "specialty", "startTime", "usageRights", "wallPortraitFrame", "wallPortraitSize", "wallPortraitsQty" ]
+      "properties" : [ "allowWishInvites", "city", "clientType", "coverageMode", "currency", "digitalDeliveryDays", "editedPhotos", "editingStyle", "endTime", "eventDate", "eventId", "hasLiveStream", "instantUpdates", "latitude", "locationCoverage", "longVideosDuration", "longVideosQty", "longitude", "maxBudget", "minBudget", "photoAlbumPrints", "photoAlbumSize", "photoAlbumsQty", "photoBookPages", "photoBookPhotos", "photoBookSize", "photoBooksQty", "photographerSpecialty", "photographerType", "printCollectionMethod", "printProductionTime", "printProposedDate", "shortVideosDuration", "shortVideosQty", "specialty", "startTime", "usageRights", "wallPortraitFrame", "wallPortraitSize", "wallPortraitsQty" ]
     }
   }, {
     "method" : "POST",
@@ -6054,6 +6112,19 @@
     "pathVariables" : [ "albumId" ]
   }, {
     "method" : "POST",
+    "path" : "/api/remote/photographer/albums/{albumId}/restore-payment",
+    "controller" : "PhotographerAlbumController#restorePayment",
+    "body" : {
+      "type" : "Map"
+    },
+    "pathVariables" : [ "albumId" ]
+  }, {
+    "method" : "GET",
+    "path" : "/api/remote/photographer/albums/{albumId}/restore-quote",
+    "controller" : "PhotographerAlbumController#restoreQuote",
+    "pathVariables" : [ "albumId" ]
+  }, {
+    "method" : "POST",
     "path" : "/api/remote/photographer/albums/{albumId}/send",
     "controller" : "PhotographerAlbumController#sendAlbumToClient",
     "body" : {
@@ -6361,7 +6432,7 @@
     "controller" : "PhotographerHostedEventController#create",
     "body" : {
       "type" : "HostedEventRequestDTO",
-      "properties" : [ "allowWishInvites", "description", "endTime", "eventCategoryId", "eventDate", "eventType", "location", "maxGuests", "publish", "startTime", "streamFee", "streamFeeCurrencyId", "title" ]
+      "properties" : [ "allowWishInvites", "description", "endTime", "eventCategoryId", "eventDate", "eventType", "geoRules", "location", "maxGuests", "publish", "startTime", "streamFee", "streamFeeCurrencyId", "title" ]
     }
   }, {
     "method" : "GET",
@@ -6462,6 +6533,35 @@
     "body" : {
       "type" : "PhotographerPackageRequestDTO",
       "properties" : [ "currencyId", "deliveryDays", "description", "durationHours", "extraPhotoPrice", "extraVideoPrice", "features", "hasLiveStream", "includedPhotos", "includedVideos", "isActive", "packageName", "photobookPhotos", "price", "priceUnit", "serviceType" ]
+    }
+  }, {
+    "method" : "POST",
+    "path" : "/api/remote/photographer/packages/ai-extract",
+    "controller" : "PhotographerPackageController#extractPackagesWithAi",
+    "params" : [ {
+      "name" : "rawText",
+      "required" : false
+    }, {
+      "name" : "defaultServiceType",
+      "required" : false
+    } ],
+    "parts" : [ {
+      "name" : "files",
+      "required" : false,
+      "file" : true
+    }, {
+      "name" : "file",
+      "required" : false,
+      "file" : true
+    } ],
+    "consumes" : [ "multipart/form-data", "application/json" ]
+  }, {
+    "method" : "POST",
+    "path" : "/api/remote/photographer/packages/bulk-publish",
+    "controller" : "PhotographerPackageController#bulkPublishPackages",
+    "body" : {
+      "type" : "BulkPublishPackagesRequestDTO",
+      "properties" : [ "deletePackageIds", "enforceTierPolicy", "mode", "packages", "sessionType" ]
     }
   }, {
     "method" : "GET",
@@ -6610,6 +6710,22 @@
     "method" : "GET",
     "path" : "/api/remote/photographer/profile-summary",
     "controller" : "PhotographerRemoteController#getPhotographerProfileSummary"
+  }, {
+    "method" : "DELETE",
+    "path" : "/api/remote/photographer/service-area",
+    "controller" : "ServiceAreaController#remove"
+  }, {
+    "method" : "GET",
+    "path" : "/api/remote/photographer/service-area",
+    "controller" : "ServiceAreaController#get"
+  }, {
+    "method" : "PUT",
+    "path" : "/api/remote/photographer/service-area",
+    "controller" : "ServiceAreaController#set",
+    "body" : {
+      "type" : "SetServiceAreaRequest",
+      "properties" : [ "placeId" ]
+    }
   }, {
     "method" : "DELETE",
     "path" : "/api/remote/photographer/studio-rate",
@@ -6862,6 +6978,10 @@
       "required" : false
     } ]
   }, {
+    "method" : "GET",
+    "path" : "/api/remote/photographer/workspaces/activity",
+    "controller" : "WorkspaceInvitationController#activity"
+  }, {
     "method" : "POST",
     "path" : "/api/remote/photographer/workspaces/invitations",
     "controller" : "WorkspaceInvitationController#invite",
@@ -7051,6 +7171,14 @@
     "method" : "POST",
     "path" : "/api/remote/public/anonymous-viewer/{eventId}/gift",
     "controller" : "AnonymousViewerController#initiateGift",
+    "body" : {
+      "type" : "Map"
+    },
+    "pathVariables" : [ "eventId" ]
+  }, {
+    "method" : "POST",
+    "path" : "/api/remote/public/anonymous-viewer/{eventId}/hand-to-tv",
+    "controller" : "AnonymousViewerController#handToTv",
     "body" : {
       "type" : "Map"
     },
@@ -7519,6 +7647,10 @@
     "controller" : "PublicRemoteController#getFooterContent"
   }, {
     "method" : "GET",
+    "path" : "/api/remote/public/geo/locations",
+    "controller" : "PublicGeoLocationsController#locations"
+  }, {
+    "method" : "GET",
     "path" : "/api/remote/public/gift-catalog",
     "controller" : "PublicRemoteController#getGiftCatalog"
   }, {
@@ -7567,6 +7699,14 @@
       "type" : "Map"
     },
     "pathVariables" : [ "token" ]
+  }, {
+    "method" : "GET",
+    "path" : "/api/remote/public/payments/limits",
+    "controller" : "PaymentLimitsController#minimum",
+    "params" : [ {
+      "name" : "currency",
+      "required" : true
+    } ]
   }, {
     "method" : "GET",
     "path" : "/api/remote/public/payments/options",
@@ -7677,6 +7817,14 @@
       "required" : false
     } ]
   }, {
+    "method" : "POST",
+    "path" : "/api/remote/public/photographers/map",
+    "controller" : "DirectBookingMapController#postNearbyPhotographersMap",
+    "body" : {
+      "type" : "MapSearchBody",
+      "properties" : [ "eventDate", "lat", "lng", "radiusKm", "search", "specialty" ]
+    }
+  }, {
     "method" : "GET",
     "path" : "/api/remote/public/photographers/{id}",
     "controller" : "PublicRemoteController#getPhotographerById",
@@ -7719,6 +7867,38 @@
       "type" : "Map"
     },
     "pathVariables" : [ "photoId" ]
+  }, {
+    "method" : "GET",
+    "path" : "/api/remote/public/places/area",
+    "controller" : "PlacesProxyController#area",
+    "params" : [ {
+      "name" : "placeId",
+      "required" : true
+    } ]
+  }, {
+    "method" : "GET",
+    "path" : "/api/remote/public/places/areas",
+    "controller" : "PlacesProxyController#areas",
+    "params" : [ {
+      "name" : "input",
+      "required" : true
+    } ]
+  }, {
+    "method" : "GET",
+    "path" : "/api/remote/public/places/autocomplete",
+    "controller" : "PlacesProxyController#autocomplete",
+    "params" : [ {
+      "name" : "input",
+      "required" : true
+    } ]
+  }, {
+    "method" : "GET",
+    "path" : "/api/remote/public/places/geocode",
+    "controller" : "PlacesProxyController#geocode",
+    "params" : [ {
+      "name" : "address",
+      "required" : true
+    } ]
   }, {
     "method" : "GET",
     "path" : "/api/remote/public/platform/config",
@@ -7818,6 +7998,11 @@
     "path" : "/api/remote/public/streams/{eventId}/group-code/{inviteCode}",
     "controller" : "PublicRemoteController#getGroupCodeStatus",
     "pathVariables" : [ "eventId", "inviteCode" ]
+  }, {
+    "method" : "POST",
+    "path" : "/api/remote/public/streams/{eventId}/handoff",
+    "controller" : "PublicRemoteController#streamHandoff",
+    "pathVariables" : [ "eventId" ]
   }, {
     "method" : "POST",
     "path" : "/api/remote/public/streams/{eventId}/heartbeat",
