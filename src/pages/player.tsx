@@ -32,6 +32,7 @@ import { useBackHandler } from '../hooks/useBackHandler';
 import { OnScreenKeyboard } from '../components/OnScreenKeyboard';
 import { useStreamReactions, FloatingReactionsOverlay, ReactionBar, ViewerCountBadge, HideReactionsButton } from '../components/StreamReactions';
 import { ChatPanel } from '../components/StreamChatPanel';
+import { phoneHandoffUrl } from '../features/tv/handoff';
 import { midnightGlass, raisedButton, glassWell } from '../components/glass/glassStyle';
 
 // Temporary way to eyeball the player chrome (watermark, controls, auto-hide)
@@ -96,6 +97,8 @@ export default function PlayerScreen() {
     const [showGiftPanel, setShowGiftPanel] = useState(false);
     const [showChatPanel, setShowChatPanel] = useState(false);
     const [showDonatePanel, setShowDonatePanel] = useState(false);
+    // "Continue on phone": a QR the viewer scans to carry on watching this event on their phone.
+    const [showPhonePanel, setShowPhonePanel] = useState(false);
     const user = useAuth((s) => s.user);
     // Free invite-only streams show a "Join Stream" gate (matching knockout's
     // web behavior) instead of auto-playing — the WHEP URL is technically
@@ -121,9 +124,10 @@ export default function PlayerScreen() {
             if (showGiftPanel) setShowGiftPanel(false);
             else if (showChatPanel) setShowChatPanel(false);
             else if (showDonatePanel) setShowDonatePanel(false);
+            else if (showPhonePanel) setShowPhonePanel(false);
             else if (inviteGateOpen) setInviteGateOpen(false);
         },
-        showGiftPanel || showChatPanel || showDonatePanel || inviteGateOpen,
+        showGiftPanel || showChatPanel || showDonatePanel || showPhonePanel || inviteGateOpen,
     );
     const [payDeviceId, setPayDeviceId] = useState<string | null>(null);
     // Only ever learned via resolveViewerIdByFingerprint (see the effect
@@ -778,7 +782,7 @@ export default function PlayerScreen() {
                         // invisible behind whatever overlay is open: a real
                         // remote-nav trap where the very first "next" press lands
                         // on a control nobody can see.
-                        tabIndex={inviteGateOpen || payGateOpen || showGiftPanel || showChatPanel || showDonatePanel ? -1 : 0}
+                        tabIndex={inviteGateOpen || payGateOpen || showGiftPanel || showChatPanel || showDonatePanel || showPhonePanel ? -1 : 0}
                         autoPlay
                         // Browsers only allow autoplay when muted (a user gesture is
                         // required for audible autoplay) — unmuted autoPlay silently
@@ -815,6 +819,7 @@ export default function PlayerScreen() {
                             {reactionsActive ? (
                                 <HideReactionsButton hidden={reactionsHidden} onPress={() => setReactionsHidden((h) => !h)} />
                             ) : null}
+                            <ContinueOnPhoneButton onPress={() => setShowPhonePanel(true)} />
                             <FullscreenButton isFullscreen={isFullscreen} onPress={toggleFullscreen} />
                         </View>
 
@@ -844,6 +849,10 @@ export default function PlayerScreen() {
 
                 {showDonatePanel ? (
                     <DonateQrPanel onClose={() => setShowDonatePanel(false)} />
+                ) : null}
+
+                {showPhonePanel ? (
+                    <ContinueOnPhonePanel eventId={video.id} onClose={() => setShowPhonePanel(false)} />
                 ) : null}
 
                 {showChatPanel && video.streamSlug ? (
@@ -943,6 +952,44 @@ function FullscreenButton({ isFullscreen, onPress }: { isFullscreen: boolean; on
         >
             <i className={`bi ${isFullscreen ? 'bi-fullscreen-exit' : 'bi-arrows-fullscreen'}`} style={{ fontSize: 16, color: palette.white }} />
         </TouchableOpacity>
+    );
+}
+
+/** Small glass pill in the top bar: hands the stream back to the viewer's phone (see ContinueOnPhonePanel). */
+function ContinueOnPhoneButton({ onPress }: { onPress: () => void }) {
+    const { theme } = useContext(ThemeContext);
+    const { strings } = useTranslation();
+    const { focused, focusProps } = useFocusNav();
+    return (
+        <TouchableOpacity
+            onPress={onPress}
+            accessibilityRole="button"
+            accessibilityLabel={strings.player.continueOnPhone}
+            {...focusProps}
+            style={[styles.phoneButton, raisedButton(theme.static, focused ? 'primary' : 'glass', { focused })]}
+        >
+            <i className="bi bi-phone" style={{ fontSize: 15, color: palette.white }} />
+            <Text style={styles.phoneButtonText}>{strings.player.continueOnPhone}</Text>
+        </TouchableOpacity>
+    );
+}
+
+/** The QR for "Continue on phone". Sits over the video only while open; Back or the close button dismisses it. */
+function ContinueOnPhonePanel({ eventId, onClose }: { eventId: string; onClose: () => void }) {
+    const { strings } = useTranslation();
+    return (
+        <QrHandoffCard
+            url={phoneHandoffUrl(eventId)}
+            icon="bi-phone"
+            title={strings.player.continueOnPhoneTitle}
+            subtitle={strings.player.continueOnPhoneSubtitle}
+            steps={[
+                { icon: 'bi-camera', text: strings.player.scanStepCamera },
+                { icon: 'bi-play-circle', text: strings.player.continueOnPhoneStep },
+            ]}
+            onClose={onClose}
+            overlayZIndex={3}
+        />
     );
 }
 
@@ -1384,6 +1431,8 @@ const styles = StyleSheet.create({
         borderRadius: 999,
     },
     giftButtonText: { color: palette.white, fontSize: 14, fontWeight: '700' },
+    phoneButton: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 9, paddingHorizontal: 16 },
+    phoneButtonText: { color: palette.white, fontSize: 13, fontWeight: '700' },
     giftOverlay: {
         ...StyleSheet.absoluteFillObject,
         alignItems: 'center',

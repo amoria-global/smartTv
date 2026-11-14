@@ -231,6 +231,10 @@ const rw: Strings = {
         giftTitle: 'Ohereza impano',
         giftSubtitle: 'Sikana ukoresheje telefoni yawe kugira ngo wohereze impano kuri iyi tangazwa — uzarangiriza ubwishyu aho.',
         giftStepPay: 'Hitamo impano maze wishyure mu buryo bwizewe',
+        continueOnPhone: 'Komereza kuri telefoni',
+        continueOnPhoneTitle: 'Komereza kuri telefoni yawe',
+        continueOnPhoneSubtitle: 'Sikana kugira ngo ukomeze kureba kuri telefoni yawe',
+        continueOnPhoneStep: 'Igikorwa gifungukira muri porogaramu cyangwa ku rubuga rwa Connekyt',
     },
     aiRecommendations: {
         title: 'Connekyt AI',

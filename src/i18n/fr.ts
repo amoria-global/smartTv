@@ -231,6 +231,10 @@ const fr: Strings = {
         giftTitle: 'Envoyer un cadeau',
         giftSubtitle: 'Scannez avec votre téléphone pour envoyer un cadeau pour ce direct — vous finaliserez le paiement là-bas.',
         giftStepPay: 'Choisissez un cadeau et payez en toute sécurité',
+        continueOnPhone: 'Continuer sur le téléphone',
+        continueOnPhoneTitle: 'Continuer sur votre téléphone',
+        continueOnPhoneSubtitle: 'Scannez pour continuer à regarder sur votre téléphone',
+        continueOnPhoneStep: 'L’événement s’ouvre dans l’app ou sur le site Connekyt',
     },
     aiRecommendations: {
         title: 'Connekyt IA',
