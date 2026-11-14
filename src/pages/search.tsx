@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, StyleSheet, View, TextInput, ScrollView, TouchableOpacity } from 'react-native';
+import { AppText } from '../components/AppText';
 import { midnightGlass } from '../components/glass/glassStyle';
 import { useRouter } from 'next/router';
 import { ThemeContext, alpha, palette } from '../config';
@@ -158,7 +159,7 @@ export default function SearchScreen() {
         <ScreenWrapper noPadding>
             <Navbar />
             <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.mainContent}>
-                <Text style={[styles.title, { color: theme.static.colorTextPrimary }]}>{strings.search.title}</Text>
+                <AppText variant="display" style={[styles.title, { color: theme.static.colorTextPrimary }]}>{strings.search.title}</AppText>
 
                 <View style={styles.columns}>
                     <View style={{ width: LEFT_COL_WIDTH }}>
@@ -219,9 +220,9 @@ export default function SearchScreen() {
                                 <View style={[styles.emptyIconCircle, { backgroundColor: theme.static.colorSurfaceMuted }]}>
                                     <i className="bi bi-search" style={{ fontSize: 30, color: theme.static.colorPrimaryLight }} />
                                 </View>
-                                <Text style={[styles.emptyText, { color: theme.static.colorTextSecondary }]}>
+                                <AppText style={[styles.emptyText, { color: theme.static.colorTextSecondary }]}>
                                     {strings.search.idleHint}
-                                </Text>
+                                </AppText>
                             </View>
                         ) : loading ? (
                             <View style={styles.center}>
@@ -232,15 +233,15 @@ export default function SearchScreen() {
                                 <View style={[styles.emptyIconCircle, { backgroundColor: theme.static.colorSurfaceMuted }]}>
                                     <i className="bi bi-emoji-frown" style={{ fontSize: 30, color: theme.static.colorPrimaryLight }} />
                                 </View>
-                                <Text style={[styles.emptyText, { color: theme.static.colorTextSecondary }]}>
+                                <AppText style={[styles.emptyText, { color: theme.static.colorTextSecondary }]}>
                                     {strings.search.noResultsPrefix} "{query}"
-                                </Text>
+                                </AppText>
                             </View>
                         ) : (
                             <>
-                                <Text style={[styles.resultsCount, { color: theme.static.colorTextSecondary }]}>
+                                <AppText style={[styles.resultsCount, { color: theme.static.colorTextSecondary }]}>
                                     {totalElements} {strings.search.resultsForQuery} "{query}"
-                                </Text>
+                                </AppText>
 
                                 <View style={styles.grid}>
                                     {videos.map((v, i) => (
@@ -274,9 +275,9 @@ export default function SearchScreen() {
                                             onPress={() => setPage((p) => Math.max(0, p - 1))}
                                         />
                                         <View style={[styles.pageDivider, { backgroundColor: theme.static.colorBorder }]} />
-                                        <Text style={[styles.pageLabel, { color: theme.static.colorTextSecondary }]}>
+                                        <AppText variant="display" style={[styles.pageLabel, { color: theme.static.colorTextSecondary }]}>
                                             {strings.events.page} {page + 1} {strings.events.of} {totalPages}
-                                        </Text>
+                                        </AppText>
                                         <View style={[styles.pageDivider, { backgroundColor: theme.static.colorBorder }]} />
                                         <PageButton
                                             label={strings.events.next}
@@ -306,9 +307,9 @@ function SuggestionRow({ title, onPress }: { title: string; onPress: () => void 
             style={[styles.suggestionRow, focused && { backgroundColor: theme.static.colorFocusRing }]}
         >
             <i className="bi bi-search" style={{ fontSize: 13, color: focused ? palette.white : theme.static.colorTextSecondary }} />
-            <Text numberOfLines={1} style={[styles.suggestionText, { color: focused ? palette.white : theme.static.colorTextPrimary }]}>
+            <AppText numberOfLines={1} style={[styles.suggestionText, { color: focused ? palette.white : theme.static.colorTextPrimary }]}>
                 {title}
-            </Text>
+            </AppText>
         </TouchableOpacity>
     );
 }
@@ -340,7 +341,7 @@ function PageButton({
             ]}
         >
             {!iconRight ? <i className={`bi ${icon}`} style={{ fontSize: 14, color: theme.static.colorTextPrimary }} /> : null}
-            <Text style={[styles.pageButtonText, { color: theme.static.colorTextPrimary }]}>{label}</Text>
+            <AppText variant="display" style={[styles.pageButtonText, { color: theme.static.colorTextPrimary }]}>{label}</AppText>
             {iconRight ? <i className={`bi ${icon}`} style={{ fontSize: 14, color: theme.static.colorTextPrimary }} /> : null}
         </TouchableOpacity>
     );

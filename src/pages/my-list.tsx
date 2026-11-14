@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { AppText } from '../components/AppText';
 import { useRouter } from 'next/router';
 import { ThemeContext, radii } from '../config';
 import { GlassPanel } from '../components/glass/GlassPanel';
@@ -72,7 +73,7 @@ export default function MyListScreen() {
         <ScreenWrapper noPadding>
             <Navbar />
             <View style={styles.content}>
-                <Text style={[styles.title, { color: theme.static.colorTextPrimary }]}>{strings.myList.title}</Text>
+                <AppText variant="display" style={[styles.title, { color: theme.static.colorTextPrimary }]}>{strings.myList.title}</AppText>
 
                 {loading ? (
                     <View style={styles.center}>
@@ -84,7 +85,7 @@ export default function MyListScreen() {
                             <View style={[styles.emptyIconCircle, glassWell(theme.static, radii.pill)]}>
                                 <i className="bi bi-bookmark-heart" style={{ fontSize: 30, color: theme.static.colorPrimaryLight }} />
                             </View>
-                            <Text style={[styles.body, { color: theme.static.colorTextSoft }]}>{strings.myList.body}</Text>
+                            <AppText style={[styles.body, { color: theme.static.colorTextSoft }]}>{strings.myList.body}</AppText>
                         </GlassPanel>
                     </View>
                 ) : (

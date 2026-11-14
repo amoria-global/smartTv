@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { AppText } from './AppText';
 import { ThemeContext, alpha, palette, radii } from '../config';
 import { useFocusNav } from '../hooks/useFocusNav';
 import { useTranslation } from '../i18n';
@@ -133,16 +134,16 @@ export function FocusableCard({
             ) : (
                 <View style={[styles.imagePlaceholder, { backgroundColor: theme.static.colorSurfaceMuted }]}>
                     <i className="bi bi-image" style={{ fontSize: 44, color: theme.static.colorTextSecondary }} />
-                    <Text style={[styles.imagePlaceholderText, { color: theme.static.colorTextSecondary }]}>
+                    <AppText style={[styles.imagePlaceholderText, { color: theme.static.colorTextSecondary }]}>
                         {strings.common.noImage}
-                    </Text>
+                    </AppText>
                 </View>
             )}
 
             {dateBadge ? (
                 <View style={styles.dateBadge}>
-                    <Text style={styles.dateBadgeMonth}>{dateBadge.month}</Text>
-                    <Text style={styles.dateBadgeDay}>{dateBadge.day}</Text>
+                    <AppText variant="display" style={styles.dateBadgeMonth}>{dateBadge.month}</AppText>
+                    <AppText variant="display" style={styles.dateBadgeDay}>{dateBadge.day}</AppText>
                 </View>
             ) : null}
 
@@ -150,7 +151,7 @@ export function FocusableCard({
                 {badge ? (
                     <View style={[styles.statusPill, { backgroundColor: badge.live ? theme.static.colorLive : badge.color }, badge.live ? ({ boxShadow: `0 0 14px ${theme.static.colorLiveGlow}` } as object) : null]}>
                         {badge.live ? <View style={styles.liveDot} /> : null}
-                        <Text style={styles.statusPillText}>{badge.label}</Text>
+                        <AppText variant="display" style={styles.statusPillText}>{badge.label}</AppText>
                     </View>
                 ) : null}
                 <TouchableOpacity onPress={onToggleBookmark} style={styles.bookmarkButton}>
@@ -162,24 +163,24 @@ export function FocusableCard({
                 {countdownLabel ? (
                     <View style={styles.countdownChip}>
                         <i className="bi bi-hourglass-split" style={{ fontSize: 10, color: palette.white }} />
-                        <Text style={styles.countdownChipText}>
+                        <AppText variant="display" style={styles.countdownChipText}>
                             {strings.detail.startsIn} {countdownLabel}
-                        </Text>
+                        </AppText>
                     </View>
                 ) : null}
 
                 {location ? (
                     <View style={styles.locationRow}>
                         <i className="bi bi-geo-alt-fill" style={{ fontSize: 11, color: palette.textMuted }} />
-                        <Text numberOfLines={1} style={styles.locationText}>
+                        <AppText numberOfLines={1} style={styles.locationText}>
                             {location}
-                        </Text>
+                        </AppText>
                     </View>
                 ) : null}
 
-                <Text numberOfLines={2} style={styles.title}>
+                <AppText variant="display" numberOfLines={2} style={styles.title}>
                     {title}
-                </Text>
+                </AppText>
 
                 <View style={styles.bottomRow}>
                     {hostName ? (
@@ -187,16 +188,16 @@ export function FocusableCard({
                             <View style={styles.hostAvatar}>
                                 <i className="bi bi-person-fill" style={{ fontSize: 10, color: palette.white }} />
                             </View>
-                            <Text numberOfLines={1} style={styles.hostName}>
+                            <AppText numberOfLines={1} style={styles.hostName}>
                                 {hostName}
-                            </Text>
+                            </AppText>
                         </View>
                     ) : (
                         <View />
                     )}
                     <View style={[styles.priceChip, { backgroundColor: theme.static.colorAccent }]}>
                         <i className="bi bi-tag-fill" style={{ fontSize: 10, color: palette.white }} />
-                        <Text style={styles.priceText}>{priceLabel}</Text>
+                        <AppText variant="display" style={styles.priceText}>{priceLabel}</AppText>
                     </View>
                 </View>
             </View>

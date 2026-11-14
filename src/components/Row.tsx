@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { AppText } from './AppText';
 import { ThemeContext, radii } from '../config';
 import { glassSurface } from './glass/glassStyle';
 import { FocusableCard } from './FocusableCard';
@@ -67,9 +68,9 @@ export function Row({ title, items, onSelect, rowFocusIndex, cardsPerRow = 4 }: 
     return (
         <View style={styles.wrap}>
             <View style={styles.header}>
-                <Text style={[styles.title, { color: theme.static.colorTextPrimary }]}>{title}</Text>
+                <AppText variant="display" style={[styles.title, { color: theme.static.colorTextPrimary }]}>{title}</AppText>
                 <View style={[glassSurface(theme.static, { radius: radii.pill }), styles.countChip]}>
-                    <Text style={[styles.countText, { color: theme.static.colorTextSoft }]}>{items.length}</Text>
+                    <AppText style={[styles.countText, { color: theme.static.colorTextSoft }]}>{items.length}</AppText>
                 </View>
             </View>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scroll}>

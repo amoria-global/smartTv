@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { AppText } from './AppText';
 import { midnightGlass } from './glass/glassStyle';
 import { ThemeContext, alpha, palette } from '../config';
 import { useFocusNav } from '../hooks/useFocusNav';
@@ -29,9 +30,9 @@ export function LanguageSwitcher() {
                 style={[styles.langTrigger, focused && { backgroundColor: theme.static.colorFocusRing }]}
             >
                 <i className="bi bi-globe2" style={{ fontSize: 15, color: focused ? palette.white : theme.static.colorTextPrimary }} />
-                <Text style={[styles.langTriggerText, { color: focused ? palette.white : theme.static.colorTextPrimary }]}>
+                <AppText variant="display" style={[styles.langTriggerText, { color: focused ? palette.white : theme.static.colorTextPrimary }]}>
                     {current.short}
-                </Text>
+                </AppText>
             </TouchableOpacity>
 
             {open && (
@@ -81,22 +82,23 @@ function LanguageOption({
             <View style={styles.langOptionLeft}>
                 <i className="bi bi-globe2" style={{ fontSize: 16, color: focused ? palette.white : theme.static.colorTextSecondary }} />
                 <View>
-                    <Text
+                    <AppText
+                        variant="display"
                         style={[
                             styles.langOptionShort,
                             { color: focused ? palette.white : active ? theme.static.colorTextPrimary : theme.static.colorTextSecondary },
                         ]}
                     >
                         {short}
-                    </Text>
-                    <Text
+                    </AppText>
+                    <AppText
                         style={[
                             styles.langOptionText,
                             { color: focused ? alpha(palette.white, 0.75) : theme.static.colorTextSecondary },
                         ]}
                     >
                         {label}
-                    </Text>
+                    </AppText>
                 </View>
             </View>
             {active ? <i className="bi bi-check-lg" style={{ fontSize: 16, color: theme.static.colorAccent }} /> : null}

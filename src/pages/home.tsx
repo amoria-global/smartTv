@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { AppText } from '../components/AppText';
 import { midnightGlass } from '../components/glass/glassStyle';
 import { useRouter } from 'next/router';
 import { QRCodeSVG } from 'qrcode.react';
@@ -215,7 +216,7 @@ export default function HomeScreen() {
             {exitPrompt ? (
                 <View style={styles.exitToast} pointerEvents="none">
                     <i className="bi bi-box-arrow-right" style={{ fontSize: 16, color: palette.white }} />
-                    <Text style={styles.exitToastText}>{strings.home.exitPrompt}</Text>
+                    <AppText variant="display" style={styles.exitToastText}>{strings.home.exitPrompt}</AppText>
                 </View>
             ) : null}
         </ScreenWrapper>
@@ -263,9 +264,9 @@ function VideoHeroTile({ src, fit, title }: { src: string; fit: 'contain' | 'cov
                 style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: fit }}
             />
             <View style={styles.heroScrim} />
-            <Text numberOfLines={2} style={styles.heroTitle}>{title}</Text>
+            <AppText variant="display" numberOfLines={2} style={styles.heroTitle}>{title}</AppText>
             <View style={styles.heroBrandBadge}>
-                <Text style={styles.heroBrandText}>CONNEKYT</Text>
+                <AppText variant="display" style={styles.heroBrandText}>CONNEKYT</AppText>
             </View>
         </View>
     );
@@ -279,9 +280,9 @@ function ImageHeroTile({ src, title }: { src: string; title: string }) {
         <View style={styles.heroTile}>
             <Image source={{ uri: src }} style={StyleSheet.absoluteFillObject} resizeMode="cover" />
             <View style={styles.heroScrim} />
-            <Text numberOfLines={2} style={styles.heroTitle}>{title}</Text>
+            <AppText variant="display" numberOfLines={2} style={styles.heroTitle}>{title}</AppText>
             <View style={styles.heroBrandBadge}>
-                <Text style={styles.heroBrandText}>CONNEKYT</Text>
+                <AppText variant="display" style={styles.heroBrandText}>CONNEKYT</AppText>
             </View>
         </View>
     );
@@ -319,7 +320,7 @@ function GenreTile({
             <View style={styles.genreIconBadge}>
                 <i className={`bi ${icon}`} style={{ fontSize: 15, color: palette.white }} />
             </View>
-            <Text style={styles.genreTileText}>{label}</Text>
+            <AppText variant="display" style={styles.genreTileText}>{label}</AppText>
         </TouchableOpacity>
     );
 }
@@ -335,24 +336,24 @@ function PromoBanner() {
             <View style={styles.promoLeft}>
                 <View style={styles.promoLiveBadge}>
                     <View style={styles.promoLiveDot} />
-                    <Text style={styles.promoLiveText}>{strings.home.promoLive}</Text>
+                    <AppText variant="display" style={styles.promoLiveText}>{strings.home.promoLive}</AppText>
                 </View>
-                <Text style={styles.promoBrand}>Connekyt</Text>
+                <AppText variant="display" style={styles.promoBrand}>Connekyt</AppText>
                 <View style={styles.promoUnderline} />
-                <Text style={styles.promoTagline}>{strings.home.promoTagline1}</Text>
-                <Text style={styles.promoTagline}>
-                    {strings.home.promoTagline2} <Text style={styles.promoTaglineHighlight}>{strings.home.promoTaglineHighlight}</Text>
-                </Text>
-                <Text style={styles.promoSubtitle}>{strings.home.promoSubtitle}</Text>
+                <AppText variant="display" style={styles.promoTagline}>{strings.home.promoTagline1}</AppText>
+                <AppText variant="display" style={styles.promoTagline}>
+                    {strings.home.promoTagline2} <AppText style={styles.promoTaglineHighlight}>{strings.home.promoTaglineHighlight}</AppText>
+                </AppText>
+                <AppText style={styles.promoSubtitle}>{strings.home.promoSubtitle}</AppText>
 
                 <View style={styles.promoChipRow}>
                     <View style={styles.promoChip}>
                         <i className="bi bi-person-bounding-box" style={{ fontSize: 11, color: palette.textSoft }} />
-                        <Text style={styles.promoChipText}>{strings.home.promoChipSearch}</Text>
+                        <AppText style={styles.promoChipText}>{strings.home.promoChipSearch}</AppText>
                     </View>
                     <View style={styles.promoChip}>
                         <i className="bi bi-shield-lock-fill" style={{ fontSize: 11, color: palette.textSoft }} />
-                        <Text style={styles.promoChipText}>{strings.home.promoChipPayments}</Text>
+                        <AppText style={styles.promoChipText}>{strings.home.promoChipPayments}</AppText>
                     </View>
                 </View>
             </View>
@@ -396,8 +397,8 @@ function FeatureGrid() {
                 <View style={[styles.featureCard, styles.featureCardWide, styles.featureCardAccent]}>
                     <View style={styles.featureCardBody}>
                         <FeatureEyebrow label={strings.home.featureLiveEyebrow} />
-                        <Text style={styles.featureHeading}>{strings.home.featureLiveTitle}</Text>
-                        <Text style={styles.featureBody}>{strings.home.featureLiveBody}</Text>
+                        <AppText variant="display" style={styles.featureHeading}>{strings.home.featureLiveTitle}</AppText>
+                        <AppText style={styles.featureBody}>{strings.home.featureLiveBody}</AppText>
                     </View>
                     <i className="bi bi-broadcast-pin" style={{ fontSize: 44, color: alpha(palette.white, 0.18) }} />
                 </View>
@@ -406,15 +407,15 @@ function FeatureGrid() {
                     <View style={[styles.featureCard, styles.featureCardHalf, styles.featureCardAccent]}>
                         <View style={styles.featureCardBody}>
                             <FeatureEyebrow label={strings.home.featurePricingEyebrow} />
-                            <Text style={styles.featureHeading}>{strings.home.featurePricingTitle}</Text>
-                            <Text style={styles.featureBody}>{strings.home.featurePricingBody}</Text>
+                            <AppText variant="display" style={styles.featureHeading}>{strings.home.featurePricingTitle}</AppText>
+                            <AppText style={styles.featureBody}>{strings.home.featurePricingBody}</AppText>
                         </View>
                     </View>
                     <View style={[styles.featureCard, styles.featureCardHalf, styles.featureCardAccent]}>
                         <View style={styles.featureCardBody}>
                             <FeatureEyebrow label={strings.home.featurePaymentEyebrow} />
-                            <Text style={styles.featureHeading}>{strings.home.featurePaymentTitle}</Text>
-                            <Text style={styles.featureBody}>{strings.home.featurePaymentBody}</Text>
+                            <AppText variant="display" style={styles.featureHeading}>{strings.home.featurePaymentTitle}</AppText>
+                            <AppText style={styles.featureBody}>{strings.home.featurePaymentBody}</AppText>
                         </View>
                     </View>
                 </View>
@@ -435,8 +436,8 @@ function FamilyFeatureCard() {
             <View style={styles.photoFeatureScrim} />
             <View style={styles.photoFeatureBody}>
                 <FeatureEyebrow label={strings.home.familyEyebrow} />
-                <Text style={styles.featureHeading}>{strings.home.familyTitle}</Text>
-                <Text style={styles.featureBody}>{strings.home.familyBody}</Text>
+                <AppText variant="display" style={styles.featureHeading}>{strings.home.familyTitle}</AppText>
+                <AppText style={styles.featureBody}>{strings.home.familyBody}</AppText>
             </View>
         </View>
     );
@@ -446,7 +447,7 @@ function FeatureEyebrow({ label }: { label: string }) {
     return (
         <View style={styles.featureEyebrowRow}>
             <View style={styles.featureEyebrowDash} />
-            <Text style={styles.featureEyebrowText}>{label}</Text>
+            <AppText variant="display" style={styles.featureEyebrowText}>{label}</AppText>
         </View>
     );
 }
@@ -463,7 +464,7 @@ function PhotoFeatureGrid() {
     const { strings } = useTranslation();
     return (
         <View style={styles.mosaicWrap}>
-            <Text style={styles.mosaicHeading}>{strings.home.showcaseSectionTitle}</Text>
+            <AppText variant="display" style={styles.mosaicHeading}>{strings.home.showcaseSectionTitle}</AppText>
             <View style={styles.photoGrid}>
                 <View style={styles.photoGridLeftCol}>
                     <PhotoFeatureCard image={FAMILY_IMAGE_SRC} cardStyle={[styles.photoCard, styles.photoCardWide]} />
@@ -527,8 +528,8 @@ function PhotoFeatureCard({
                     <View style={styles.photoFeatureScrim} />
                     <View style={styles.photoFeatureBody}>
                         {eyebrow ? <FeatureEyebrow label={eyebrow} /> : null}
-                        {title ? <Text style={styles.featureHeading}>{title}</Text> : null}
-                        {body ? <Text style={styles.featureBody}>{body}</Text> : null}
+                        {title ? <AppText variant="display" style={styles.featureHeading}>{title}</AppText> : null}
+                        {body ? <AppText style={styles.featureBody}>{body}</AppText> : null}
                     </View>
                 </>
             ) : null}
@@ -567,7 +568,7 @@ function TipsCard() {
             <View style={styles.tipsHeader}>
                 <View style={styles.featureEyebrowRow}>
                     <View style={styles.featureEyebrowDash} />
-                    <Text style={styles.featureEyebrowText}>{strings.home.tipsEyebrow}</Text>
+                    <AppText variant="display" style={styles.featureEyebrowText}>{strings.home.tipsEyebrow}</AppText>
                 </View>
                 <View style={styles.tipsDots}>
                     {tips.map((_, i) => (
@@ -585,8 +586,8 @@ function TipsCard() {
                     <View style={styles.tipsIconBadge}>
                         <i className={`bi ${tip.icon}`} style={{ fontSize: 15, color: palette.white }} />
                     </View>
-                    <Text style={styles.featureHeading}>{tip.title}</Text>
-                    <Text style={styles.featureBody}>{tip.body}</Text>
+                    <AppText variant="display" style={styles.featureHeading}>{tip.title}</AppText>
+                    <AppText style={styles.featureBody}>{tip.body}</AppText>
                 </View>
             </div>
         </View>
@@ -605,18 +606,18 @@ function PageFooter() {
     return (
         <View style={styles.pageFooterWrap}>
             <View style={styles.pageFooter}>
-                <Text style={styles.pageFooterCredit}>
+                <AppText style={styles.pageFooterCredit}>
                     {strings.login.developedByPrefix}
                     {'  '}
-                    <Text style={styles.pageFooterBrand}>Amoria Global Tech</Text>
-                </Text>
+                    <AppText variant="display" style={styles.pageFooterBrand}>Amoria Global Tech</AppText>
+                </AppText>
 
                 <View style={styles.pageFooterDivider} />
                 <View style={styles.pageFooterChip}>
                     <View style={styles.pageFooterChipIcon}>
                         <i className="bi bi-telephone-fill" style={{ fontSize: 11, color: palette.white }} />
                     </View>
-                    <Text style={styles.pageFooterChipValue}>{SUPPORT_PHONE}</Text>
+                    <AppText variant="display" style={styles.pageFooterChipValue}>{SUPPORT_PHONE}</AppText>
                 </View>
 
                 <View style={styles.pageFooterDivider} />
@@ -624,7 +625,7 @@ function PageFooter() {
                     <View style={styles.pageFooterChipIcon}>
                         <i className="bi bi-envelope-fill" style={{ fontSize: 11, color: palette.white }} />
                     </View>
-                    <Text style={styles.pageFooterChipValue}>{SUPPORT_EMAIL}</Text>
+                    <AppText variant="display" style={styles.pageFooterChipValue}>{SUPPORT_EMAIL}</AppText>
                 </View>
             </View>
         </View>
@@ -650,9 +651,9 @@ function ServiceQrModal({ icon, title, body, url, onClose }: { icon: string; tit
                 <View style={[styles.modalIconCircle, { backgroundColor: alpha(palette.accent, 0.14) }]}>
                     <i className={`bi ${icon}`} style={{ fontSize: 28, color: theme.static.colorAccent }} />
                 </View>
-                <Text style={[styles.modalTitle, { color: theme.static.colorTextPrimary }]}>{title}</Text>
-                <Text style={[styles.modalBody, { color: theme.static.colorTextSecondary }]}>{body}</Text>
-                <Text style={[styles.modalCaption, { color: theme.static.colorTextSecondary }]}>{strings.home.qrCaption}</Text>
+                <AppText variant="display" style={[styles.modalTitle, { color: theme.static.colorTextPrimary }]}>{title}</AppText>
+                <AppText style={[styles.modalBody, { color: theme.static.colorTextSecondary }]}>{body}</AppText>
+                <AppText style={[styles.modalCaption, { color: theme.static.colorTextSecondary }]}>{strings.home.qrCaption}</AppText>
 
                 <View style={styles.modalQrBox}>
                     <QRCodeSVG value={url} size={200} bgColor={palette.qrPaper} fgColor={palette.qrInk} level="M" />

@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
-import { Image, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Linking, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { AppText } from '../components/AppText';
 import { raisedButton, sceneBackground } from '../components/glass/glassStyle';
 import { useFocusNav } from '../hooks/useFocusNav';
 import { useRouter } from 'next/router';
@@ -72,8 +73,8 @@ export default function OnboardingScreen() {
                 <View style={styles.iconBadge}>
                     <i className={`bi ${slide.icon}`} style={{ fontSize: 40, color: theme.static.colorPrimaryLight }} />
                 </View>
-                <Text style={styles.title}>{slide.title}</Text>
-                <Text style={styles.body}>{slide.body}</Text>
+                <AppText variant="display" style={styles.title}>{slide.title}</AppText>
+                <AppText style={styles.body}>{slide.body}</AppText>
             </View>
 
             <View style={styles.footer}>
@@ -90,16 +91,16 @@ export default function OnboardingScreen() {
                 </View>
 
                 <CtaButton onPress={next}>
-                    <Text style={styles.ctaText}>{strings.onboarding.getStarted}</Text>
+                    <AppText variant="display" style={styles.ctaText}>{strings.onboarding.getStarted}</AppText>
                 </CtaButton>
 
                 <View style={styles.legalRow}>
                     <TouchableOpacity onPress={() => Linking.openURL(PRIVACY_URL)}>
-                        <Text style={styles.legalText}>{strings.onboarding.privacy}</Text>
+                        <AppText style={styles.legalText}>{strings.onboarding.privacy}</AppText>
                     </TouchableOpacity>
-                    <Text style={styles.legalDot}>·</Text>
+                    <AppText style={styles.legalDot}>·</AppText>
                     <TouchableOpacity onPress={() => Linking.openURL(TERMS_URL)}>
-                        <Text style={styles.legalText}>{strings.onboarding.terms}</Text>
+                        <AppText style={styles.legalText}>{strings.onboarding.terms}</AppText>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -118,10 +119,10 @@ function TopBar({ onSignIn }: { onSignIn: () => void }) {
         <View style={styles.topBar}>
             <View style={styles.brandRow}>
                 <Image source={ICON_LOGO} style={styles.logo} resizeMode="contain" />
-                <Text style={[styles.brandText, { color: theme.static.colorTextPrimary }]}>Connekyt</Text>
+                <AppText variant="display" style={[styles.brandText, { color: theme.static.colorTextPrimary }]}>Connekyt</AppText>
             </View>
             <TouchableOpacity onPress={onSignIn} style={styles.signInButton}>
-                <Text style={styles.signInText}>{strings.onboarding.signIn}</Text>
+                <AppText variant="display" style={styles.signInText}>{strings.onboarding.signIn}</AppText>
             </TouchableOpacity>
         </View>
     );

@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
+import { AppText } from '../components/AppText';
 import { sceneBackground } from '../components/glass/glassStyle';
 import { useRouter } from 'next/router';
 import { ThemeContext, alpha, palette } from '../config';
@@ -43,10 +44,10 @@ export default function ProfilesScreen() {
             </View>
 
             <View style={styles.content}>
-                <Text style={[styles.title, { color: theme.static.colorTextPrimary }]}>{strings.profiles.whosWatching}</Text>
-                <Text style={[styles.subtitle, { color: theme.static.colorTextSecondary }]}>
+                <AppText variant="display" style={[styles.title, { color: theme.static.colorTextPrimary }]}>{strings.profiles.whosWatching}</AppText>
+                <AppText style={[styles.subtitle, { color: theme.static.colorTextSecondary }]}>
                     {strings.profiles.subtitle}
-                </Text>
+                </AppText>
 
                 <View style={styles.row}>
                     <TouchableOpacity
@@ -70,29 +71,30 @@ export default function ProfilesScreen() {
                                 ]}
                             >
                                 {initial ? (
-                                    <Text style={styles.avatarText}>{initial}</Text>
+                                    <AppText variant="display" style={styles.avatarText}>{initial}</AppText>
                                 ) : (
                                     <i className="bi bi-person-fill" style={{ fontSize: 56, color: palette.white }} />
                                 )}
                             </View>
                         )}
-                        <Text
+                        <AppText
+                            variant="display"
                             style={[
                                 styles.name,
                                 { color: focused ? theme.static.colorTextPrimary : theme.static.colorTextSecondary },
                             ]}
                         >
                             {name}
-                        </Text>
+                        </AppText>
                     </TouchableOpacity>
 
                     <AddProfileTile onPress={() => setAddNote(true)} />
                 </View>
 
                 {addNote ? (
-                    <Text style={[styles.addNote, { color: theme.static.colorTextSecondary }]}>
+                    <AppText style={[styles.addNote, { color: theme.static.colorTextSecondary }]}>
                         {strings.profiles.addNote}
-                    </Text>
+                    </AppText>
                 ) : null}
 
                 <TouchableOpacity onPress={() => router.push('/settings')} style={styles.manageLink}>
@@ -101,9 +103,9 @@ export default function ProfilesScreen() {
                         palette as just navy + this pink. Using the accent
                         color here matches every other interactive element in
                         the app (Sign In button, focus rings, Shift key). */}
-                    <Text style={[styles.manageLinkText, { color: theme.static.colorPrimaryLight }]}>
+                    <AppText variant="display" style={[styles.manageLinkText, { color: theme.static.colorPrimaryLight }]}>
                         {strings.profiles.manageProfiles}
-                    </Text>
+                    </AppText>
                 </TouchableOpacity>
             </View>
         </View>
@@ -123,13 +125,13 @@ function AddProfileTile({ onPress }: { onPress: () => void }) {
                     { borderColor: focused ? theme.static.colorFocusRing : theme.static.colorBorder },
                 ]}
             >
-                <Text style={[styles.addPlus, { color: focused ? theme.static.colorFocusRing : theme.static.colorTextSecondary }]}>
+                <AppText variant="display" style={[styles.addPlus, { color: focused ? theme.static.colorFocusRing : theme.static.colorTextSecondary }]}>
                     +
-                </Text>
+                </AppText>
             </View>
-            <Text style={[styles.name, { color: focused ? theme.static.colorTextPrimary : theme.static.colorTextSecondary }]}>
+            <AppText variant="display" style={[styles.name, { color: focused ? theme.static.colorTextPrimary : theme.static.colorTextSecondary }]}>
                 {strings.profiles.addProfile}
-            </Text>
+            </AppText>
         </TouchableOpacity>
     );
 }

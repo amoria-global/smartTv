@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { AppText } from './AppText';
 import { useRouter } from 'next/router';
 import { ThemeContext, ICON_LOGO, alpha, palette } from '../config';
 import { useFocusNav } from '../hooks/useFocusNav';
@@ -75,7 +76,7 @@ export function Navbar() {
             <View style={styles.left}>
                 <View style={styles.brandRow}>
                     <Image source={ICON_LOGO} style={styles.logo} resizeMode="contain" />
-                    <Text style={[styles.brandText, { color: theme.static.colorTextPrimary }]}>Connekyt</Text>
+                    <AppText variant="display" style={[styles.brandText, { color: theme.static.colorTextPrimary }]}>Connekyt</AppText>
                 </View>
             </View>
 
@@ -113,7 +114,7 @@ export function Navbar() {
                             />
                         ) : (
                             <View style={[styles.avatar, styles.avatarFallback, { backgroundColor: theme.static.colorBrand }]}>
-                                <Text style={styles.avatarText}>{initial}</Text>
+                                <AppText variant="display" style={styles.avatarText}>{initial}</AppText>
                             </View>
                         )}
                     </TouchableOpacity>
@@ -179,10 +180,10 @@ function NavLink({
             ]}
         >
             {icon ? <i className={`bi ${icon}`} style={{ fontSize: 14, color: textColor }} /> : null}
-            <Text style={[styles.navLinkText, { color: textColor }]}>{label}</Text>
+            <AppText variant="display" style={[styles.navLinkText, { color: textColor }]}>{label}</AppText>
             {typeof count === 'number' && count > 0 ? (
                 <View style={[styles.navLinkCount, { backgroundColor: isActive ? alpha(palette.white, 0.25) : theme.static.colorAccent }]}>
-                    <Text style={styles.navLinkCountText}>{count}</Text>
+                    <AppText variant="display" style={styles.navLinkCountText}>{count}</AppText>
                 </View>
             ) : null}
         </TouchableOpacity>
@@ -227,7 +228,7 @@ function ProfileMenuItem({
             style={[styles.profileMenuItem, focused && { backgroundColor: theme.static.colorBrand }]}
         >
             <i className={`bi ${icon}`} style={{ fontSize: 15, color: focused ? palette.white : color }} />
-            <Text style={[styles.profileMenuItemText, { color: focused ? palette.white : color }]}>{label}</Text>
+            <AppText style={[styles.profileMenuItemText, { color: focused ? palette.white : color }]}>{label}</AppText>
         </TouchableOpacity>
     );
 }

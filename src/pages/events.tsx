@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { AppText } from '../components/AppText';
 import { useRouter } from 'next/router';
 import { ThemeContext, radii } from '../config';
 import { GlassPanel } from '../components/glass/GlassPanel';
@@ -150,7 +151,7 @@ export default function EventsScreen() {
         <ScreenWrapper noPadding>
             <Navbar />
             <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.content}>
-                <Text style={[styles.title, { color: theme.static.colorTextPrimary }]}>{pageTitle}</Text>
+                <AppText variant="display" style={[styles.title, { color: theme.static.colorTextPrimary }]}>{pageTitle}</AppText>
 
                 <HotLiveTrendsBar liveVideos={liveVideos} liveCount={liveCount} />
 
@@ -162,7 +163,7 @@ export default function EventsScreen() {
                     <View style={styles.center}>
                         <GlassPanel style={styles.emptyPanel}>
                             <i className="bi bi-calendar-event" style={{ fontSize: 28, color: theme.static.colorPrimaryLight }} />
-                            <Text style={{ color: theme.static.colorTextSoft, fontSize: 16, marginTop: 12 }}>{strings.events.empty}</Text>
+                            <AppText style={{ color: theme.static.colorTextSoft, fontSize: 16, marginTop: 12 }}>{strings.events.empty}</AppText>
                         </GlassPanel>
                     </View>
                 ) : (
@@ -199,9 +200,9 @@ export default function EventsScreen() {
                             onPress={() => setPage((p) => Math.max(0, p - 1))}
                         />
                         <View style={[styles.pageDivider, { backgroundColor: theme.static.colorBorder }]} />
-                        <Text style={[styles.pageLabel, { color: theme.static.colorTextSecondary }]}>
+                        <AppText variant="display" style={[styles.pageLabel, { color: theme.static.colorTextSecondary }]}>
                             {strings.events.page} {page + 1} {strings.events.of} {totalPages}
-                        </Text>
+                        </AppText>
                         <View style={[styles.pageDivider, { backgroundColor: theme.static.colorBorder }]} />
                         <PageButton
                             label={strings.events.next}
@@ -244,7 +245,7 @@ function PageButton({
             ]}
         >
             {!iconRight ? <i className={`bi ${icon}`} style={{ fontSize: 14, color: theme.static.colorTextPrimary }} /> : null}
-            <Text style={[styles.pageButtonText, { color: theme.static.colorTextPrimary }]}>{label}</Text>
+            <AppText variant="display" style={[styles.pageButtonText, { color: theme.static.colorTextPrimary }]}>{label}</AppText>
             {iconRight ? <i className={`bi ${icon}`} style={{ fontSize: 14, color: theme.static.colorTextPrimary }} /> : null}
         </TouchableOpacity>
     );

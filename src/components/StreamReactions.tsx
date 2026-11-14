@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { AppText } from './AppText';
 import { midnightGlass } from './glass/glassStyle';
 import { ThemeContext, alpha, palette } from '../config';
 import { useFocusNav } from '../hooks/useFocusNav';
@@ -105,7 +106,7 @@ function FloatingReaction({ emoji, left }: { emoji: string; left: number }) {
     }, []);
 
     return (
-        <Text
+        <AppText
             style={[
                 styles.floatingEmoji,
                 { left: `${left}%` },
@@ -117,7 +118,7 @@ function FloatingReaction({ emoji, left }: { emoji: string; left: number }) {
             ]}
         >
             {emoji}
-        </Text>
+        </AppText>
     );
 }
 
@@ -141,7 +142,7 @@ function ReactionButton({ emoji, onPress }: { emoji: string; onPress: () => void
             {...focusProps}
             style={[styles.reactionButton, focused && { backgroundColor: alpha(palette.white, 0.18), transform: [{ scale: 1.12 }] }]}
         >
-            <Text style={styles.reactionButtonEmoji}>{emoji}</Text>
+            <AppText style={styles.reactionButtonEmoji}>{emoji}</AppText>
         </TouchableOpacity>
     );
 }
@@ -152,7 +153,7 @@ export function ViewerCountBadge({ count }: { count: number }) {
     return (
         <View style={[styles.viewerBadge, midnightGlass as object]}>
             <i className="bi bi-eye-fill" style={{ fontSize: 12, color: theme.static.colorTextSecondary }} />
-            <Text style={[styles.viewerBadgeText, { color: theme.static.colorTextPrimary }]}>{count.toLocaleString()}</Text>
+            <AppText variant="display" style={[styles.viewerBadgeText, { color: theme.static.colorTextPrimary }]}>{count.toLocaleString()}</AppText>
         </View>
     );
 }
