@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import { midnightGlass } from '../components/glass/glassStyle';
 import { useRouter } from 'next/router';
-import { ThemeContext } from '../config';
+import { ThemeContext, alpha, palette } from '../config';
 import { ScreenWrapper } from '../components/ScreenWrapper';
 import { Navbar } from '../components/Navbar';
 import { FocusableCard } from '../components/FocusableCard';
@@ -305,8 +305,8 @@ function SuggestionRow({ title, onPress }: { title: string; onPress: () => void 
             {...focusProps}
             style={[styles.suggestionRow, focused && { backgroundColor: theme.static.colorFocusRing }]}
         >
-            <i className="bi bi-search" style={{ fontSize: 13, color: focused ? '#fff' : theme.static.colorTextSecondary }} />
-            <Text numberOfLines={1} style={[styles.suggestionText, { color: focused ? '#fff' : theme.static.colorTextPrimary }]}>
+            <i className="bi bi-search" style={{ fontSize: 13, color: focused ? palette.white : theme.static.colorTextSecondary }} />
+            <Text numberOfLines={1} style={[styles.suggestionText, { color: focused ? palette.white : theme.static.colorTextPrimary }]}>
                 {title}
             </Text>
         </TouchableOpacity>
@@ -410,8 +410,8 @@ const styles = StyleSheet.create({
         marginTop: 40,
         borderRadius: 999,
         borderWidth: 1,
-        borderColor: 'rgba(255,255,255,0.12)',
-        backgroundColor: 'rgba(255,255,255,0.04)',
+        borderColor: alpha(palette.white, 0.12),
+        backgroundColor: alpha(palette.white, 0.04),
         backdropFilter: 'blur(24px) saturate(160%)',
         WebkitBackdropFilter: 'blur(24px) saturate(160%)',
         padding: 6,
@@ -428,7 +428,7 @@ const styles = StyleSheet.create({
         borderRadius: 999,
         paddingVertical: 10,
         paddingHorizontal: 18,
-        backgroundColor: 'rgba(255,255,255,0.04)',
+        backgroundColor: alpha(palette.white, 0.04),
     },
     pageButtonText: { fontSize: 14, fontWeight: '700' },
     pageLabel: { fontSize: 14, fontWeight: '600', paddingHorizontal: 16, textAlign: 'center' },

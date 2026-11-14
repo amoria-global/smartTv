@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'next/router';
-import { ThemeContext } from '../config';
+import { ThemeContext, radii } from '../config';
+import { GlassPanel } from '../components/glass/GlassPanel';
+import { glassSurface, raisedButton } from '../components/glass/glassStyle';
 import { ScreenWrapper } from '../components/ScreenWrapper';
 import { Navbar } from '../components/Navbar';
 import { FocusableCard } from '../components/FocusableCard';
@@ -158,7 +160,10 @@ export default function EventsScreen() {
                     </View>
                 ) : videos.length === 0 ? (
                     <View style={styles.center}>
-                        <Text style={{ color: theme.static.colorTextSecondary, fontSize: 16 }}>{strings.events.empty}</Text>
+                        <GlassPanel style={styles.emptyPanel}>
+                            <i className="bi bi-calendar-event" style={{ fontSize: 28, color: theme.static.colorPrimaryLight }} />
+                            <Text style={{ color: theme.static.colorTextSoft, fontSize: 16, marginTop: 12 }}>{strings.events.empty}</Text>
+                        </GlassPanel>
                     </View>
                 ) : (
                     <View style={styles.grid}>
@@ -186,7 +191,7 @@ export default function EventsScreen() {
                 )}
 
                 {totalPages > 1 && (
-                    <View style={styles.pagination}>
+                    <View style={[styles.pagination, glassSurface(theme.static, { radius: radii.pill })]}>
                         <PageButton
                             label={strings.events.prev}
                             icon="bi-chevron-left"
@@ -234,7 +239,7 @@ function PageButton({
             {...focusProps}
             style={[
                 styles.pageButton,
-                focused && !disabled && { backgroundColor: theme.static.colorFocusRing },
+                raisedButton(theme.static, focused && !disabled ? 'primary' : 'glass', { focused: focused && !disabled }),
                 disabled && { opacity: 0.35 },
             ]}
         >
@@ -261,13 +266,8 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         gap: 4,
         marginTop: 40,
-        borderRadius: 999,
-        borderWidth: 1,
-        borderColor: 'rgba(255,255,255,0.12)',
-        backgroundColor: 'rgba(255,255,255,0.04)',
-        backdropFilter: 'blur(24px) saturate(160%)',
-        WebkitBackdropFilter: 'blur(24px) saturate(160%)',
         padding: 6,
+        overflow: 'visible',
     } as object,
     // Faint resting-state tint (not just on focus) so Previous/Next read as
     // their own pressable zones at a glance — a TV remote user scanning the
@@ -278,11 +278,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         gap: 8,
-        borderRadius: 999,
         paddingVertical: 10,
         paddingHorizontal: 18,
-        backgroundColor: 'rgba(255,255,255,0.04)',
     },
+    emptyPanel: { alignItems: 'center', paddingHorizontal: 40 },
     pageButtonText: { fontSize: 14, fontWeight: '700' },
     pageLabel: { fontSize: 14, fontWeight: '600', paddingHorizontal: 16, textAlign: 'center' },
     pageDivider: { width: 1, height: 20 },

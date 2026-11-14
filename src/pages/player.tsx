@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, Image, ActivityIndicator, TouchableOpacity, Tex
 import { useRouter } from 'next/router';
 import Hls from 'hls.js';
 import { QRCodeSVG } from 'qrcode.react';
-import { ThemeContext, ICON_LOGO } from '../config';
+import { ThemeContext, ICON_LOGO, alpha, palette } from '../config';
 import { FocusableButton } from '../components/FocusableButton';
 import { CountdownFlipCard } from '../components/CountdownFlipCard';
 import { QrHandoffCard } from '../components/QrHandoffCard';
@@ -32,6 +32,7 @@ import { useBackHandler } from '../hooks/useBackHandler';
 import { OnScreenKeyboard } from '../components/OnScreenKeyboard';
 import { useStreamReactions, FloatingReactionsOverlay, ReactionBar, ViewerCountBadge, HideReactionsButton } from '../components/StreamReactions';
 import { ChatPanel } from '../components/StreamChatPanel';
+import { phoneHandoffUrl } from '../features/tv/handoff';
 import { midnightGlass, raisedButton, glassWell } from '../components/glass/glassStyle';
 
 // Temporary way to eyeball the player chrome (watermark, controls, auto-hide)
@@ -96,6 +97,8 @@ export default function PlayerScreen() {
     const [showGiftPanel, setShowGiftPanel] = useState(false);
     const [showChatPanel, setShowChatPanel] = useState(false);
     const [showDonatePanel, setShowDonatePanel] = useState(false);
+    // "Continue on phone": a QR the viewer scans to carry on watching this event on their phone.
+    const [showPhonePanel, setShowPhonePanel] = useState(false);
     const user = useAuth((s) => s.user);
     // Free invite-only streams show a "Join Stream" gate (matching knockout's
     // web behavior) instead of auto-playing — the WHEP URL is technically
@@ -121,9 +124,10 @@ export default function PlayerScreen() {
             if (showGiftPanel) setShowGiftPanel(false);
             else if (showChatPanel) setShowChatPanel(false);
             else if (showDonatePanel) setShowDonatePanel(false);
+            else if (showPhonePanel) setShowPhonePanel(false);
             else if (inviteGateOpen) setInviteGateOpen(false);
         },
-        showGiftPanel || showChatPanel || showDonatePanel || inviteGateOpen,
+        showGiftPanel || showChatPanel || showDonatePanel || showPhonePanel || inviteGateOpen,
     );
     const [payDeviceId, setPayDeviceId] = useState<string | null>(null);
     // Only ever learned via resolveViewerIdByFingerprint (see the effect
@@ -590,15 +594,15 @@ export default function PlayerScreen() {
 
     if (loading) {
         return (
-            <View style={[styles.container, { backgroundColor: '#000', justifyContent: 'center', alignItems: 'center' }]}>
-                <ActivityIndicator size="large" color="#F20C8F" />
+            <View style={[styles.container, { backgroundColor: palette.black, justifyContent: 'center', alignItems: 'center' }]}>
+                <ActivityIndicator size="large" color={palette.accent} />
             </View>
         );
     }
 
     if (notFound || !video) {
         return (
-            <View style={[styles.container, { backgroundColor: '#000' }]}>
+            <View style={[styles.container, { backgroundColor: palette.black }]}>
                 <View style={styles.center}>
                     <i className="bi bi-emoji-frown" style={{ fontSize: 40, color: theme.static.colorAccent, marginBottom: 16 }} />
                     <Text style={[styles.title, { color: theme.static.colorTextPrimary, textAlign: 'center' }]}>
@@ -617,7 +621,7 @@ export default function PlayerScreen() {
 
     if (restricted) {
         return (
-            <View style={[styles.container, { backgroundColor: '#000' }]}>
+            <View style={[styles.container, { backgroundColor: palette.black }]}>
                 <View style={styles.center}>
                     <i className="bi bi-shield-lock" style={{ fontSize: 40, color: theme.static.colorAccent, marginBottom: 16 }} />
                     <Text style={[styles.title, { color: theme.static.colorTextPrimary, textAlign: 'center' }]}>
@@ -636,7 +640,7 @@ export default function PlayerScreen() {
 
     if (kickedMessage) {
         return (
-            <View style={[styles.container, { backgroundColor: '#000' }]}>
+            <View style={[styles.container, { backgroundColor: palette.black }]}>
                 <View style={styles.center}>
                     <i className="bi bi-tv" style={{ fontSize: 40, color: theme.static.colorError, marginBottom: 16 }} />
                     <Text style={[styles.title, { color: theme.static.colorTextPrimary, textAlign: 'center' }]}>{video.title}</Text>
@@ -658,11 +662,11 @@ export default function PlayerScreen() {
     if (paidAwaitingStream && !video.whepUrl) {
         const countingDown = msUntilStart !== null && msUntilStart > 0;
         return (
-            <View style={[styles.container, { backgroundColor: '#000' }]}>
+            <View style={[styles.container, { backgroundColor: palette.black }]}>
                 {video.imageUrl ? (
                     <>
                         <Image source={{ uri: video.imageUrl }} style={StyleSheet.absoluteFillObject} blurRadius={24} />
-                        <View style={[StyleSheet.absoluteFillObject, { backgroundColor: '#000', opacity: 0.78 }]} />
+                        <View style={[StyleSheet.absoluteFillObject, { backgroundColor: palette.black, opacity: 0.78 }]} />
                     </>
                 ) : null}
                 <View style={styles.center}>
@@ -703,11 +707,11 @@ export default function PlayerScreen() {
         const canLobby = video.status === 'UPCOMING' || video.status === 'LIVE';
         const countingDown = msUntilStart !== null && msUntilStart > 0;
         return (
-            <View style={[styles.container, { backgroundColor: '#000' }]}>
+            <View style={[styles.container, { backgroundColor: palette.black }]}>
                 {canLobby && video.imageUrl ? (
                     <>
                         <Image source={{ uri: video.imageUrl }} style={StyleSheet.absoluteFillObject} blurRadius={24} />
-                        <View style={[StyleSheet.absoluteFillObject, { backgroundColor: '#000', opacity: 0.78 }]} />
+                        <View style={[StyleSheet.absoluteFillObject, { backgroundColor: palette.black, opacity: 0.78 }]} />
                     </>
                 ) : null}
                 <View style={styles.center}>
@@ -744,7 +748,7 @@ export default function PlayerScreen() {
     }
 
     return (
-        <View style={[styles.container, { backgroundColor: '#000' }]} onTouchStart={resetHideTimer}>
+        <View style={[styles.container, { backgroundColor: palette.black }]} onTouchStart={resetHideTimer}>
             {/* Fullscreen target: video/iframe + watermark + controls together,
                 so the watermark survives going fullscreen (see fullscreenTargetRef above). */}
             <div ref={fullscreenTargetRef} style={{ position: 'absolute', inset: 0 }}>
@@ -778,7 +782,7 @@ export default function PlayerScreen() {
                         // invisible behind whatever overlay is open: a real
                         // remote-nav trap where the very first "next" press lands
                         // on a control nobody can see.
-                        tabIndex={inviteGateOpen || payGateOpen || showGiftPanel || showChatPanel || showDonatePanel ? -1 : 0}
+                        tabIndex={inviteGateOpen || payGateOpen || showGiftPanel || showChatPanel || showDonatePanel || showPhonePanel ? -1 : 0}
                         autoPlay
                         // Browsers only allow autoplay when muted (a user gesture is
                         // required for audible autoplay) — unmuted autoPlay silently
@@ -786,7 +790,7 @@ export default function PlayerScreen() {
                         // user unmutes via the native controls' speaker icon, same
                         // pattern most streaming platforms use for autoplaying video.
                         muted
-                        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', backgroundColor: '#000' }}
+                        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', backgroundColor: palette.black }}
                     />
                 )}
 
@@ -815,6 +819,7 @@ export default function PlayerScreen() {
                             {reactionsActive ? (
                                 <HideReactionsButton hidden={reactionsHidden} onPress={() => setReactionsHidden((h) => !h)} />
                             ) : null}
+                            <ContinueOnPhoneButton onPress={() => setShowPhonePanel(true)} />
                             <FullscreenButton isFullscreen={isFullscreen} onPress={toggleFullscreen} />
                         </View>
 
@@ -844,6 +849,10 @@ export default function PlayerScreen() {
 
                 {showDonatePanel ? (
                     <DonateQrPanel onClose={() => setShowDonatePanel(false)} />
+                ) : null}
+
+                {showPhonePanel ? (
+                    <ContinueOnPhonePanel eventId={video.id} onClose={() => setShowPhonePanel(false)} />
                 ) : null}
 
                 {showChatPanel && video.streamSlug ? (
@@ -927,7 +936,7 @@ function BackCircleButton({ onPress }: { onPress: () => void }) {
             {...focusProps}
             style={[styles.backCircle, focused && { backgroundColor: theme.static.colorFocusRing }]}
         >
-            <i className="bi bi-chevron-left" style={{ fontSize: 20, color: '#fff' }} />
+            <i className="bi bi-chevron-left" style={{ fontSize: 20, color: palette.white }} />
         </TouchableOpacity>
     );
 }
@@ -941,8 +950,46 @@ function FullscreenButton({ isFullscreen, onPress }: { isFullscreen: boolean; on
             {...focusProps}
             style={[styles.backCircle, focused && { backgroundColor: theme.static.colorFocusRing }]}
         >
-            <i className={`bi ${isFullscreen ? 'bi-fullscreen-exit' : 'bi-arrows-fullscreen'}`} style={{ fontSize: 16, color: '#fff' }} />
+            <i className={`bi ${isFullscreen ? 'bi-fullscreen-exit' : 'bi-arrows-fullscreen'}`} style={{ fontSize: 16, color: palette.white }} />
         </TouchableOpacity>
+    );
+}
+
+/** Small glass pill in the top bar: hands the stream back to the viewer's phone (see ContinueOnPhonePanel). */
+function ContinueOnPhoneButton({ onPress }: { onPress: () => void }) {
+    const { theme } = useContext(ThemeContext);
+    const { strings } = useTranslation();
+    const { focused, focusProps } = useFocusNav();
+    return (
+        <TouchableOpacity
+            onPress={onPress}
+            accessibilityRole="button"
+            accessibilityLabel={strings.player.continueOnPhone}
+            {...focusProps}
+            style={[styles.phoneButton, raisedButton(theme.static, focused ? 'primary' : 'glass', { focused })]}
+        >
+            <i className="bi bi-phone" style={{ fontSize: 15, color: palette.white }} />
+            <Text style={styles.phoneButtonText}>{strings.player.continueOnPhone}</Text>
+        </TouchableOpacity>
+    );
+}
+
+/** The QR for "Continue on phone". Sits over the video only while open; Back or the close button dismisses it. */
+function ContinueOnPhonePanel({ eventId, onClose }: { eventId: string; onClose: () => void }) {
+    const { strings } = useTranslation();
+    return (
+        <QrHandoffCard
+            url={phoneHandoffUrl(eventId)}
+            icon="bi-phone"
+            title={strings.player.continueOnPhoneTitle}
+            subtitle={strings.player.continueOnPhoneSubtitle}
+            steps={[
+                { icon: 'bi-camera', text: strings.player.scanStepCamera },
+                { icon: 'bi-play-circle', text: strings.player.continueOnPhoneStep },
+            ]}
+            onClose={onClose}
+            overlayZIndex={3}
+        />
     );
 }
 
@@ -958,7 +1005,7 @@ function GiftButton({ onPress }: { onPress: () => void }) {
                 raisedButton(theme.static, 'accent', { focused }),
             ]}
         >
-            <i className="bi bi-gift-fill" style={{ fontSize: 16, color: '#fff' }} />
+            <i className="bi bi-gift-fill" style={{ fontSize: 16, color: palette.white }} />
             <Text style={styles.giftButtonText}>Send a Gift</Text>
         </TouchableOpacity>
     );
@@ -977,7 +1024,7 @@ function ChatButton({ onPress }: { onPress: () => void }) {
                 focused && { transform: [{ scale: 1.05 }] },
             ]}
         >
-            <i className="bi bi-chat-dots-fill" style={{ fontSize: 16, color: '#fff' }} />
+            <i className="bi bi-chat-dots-fill" style={{ fontSize: 16, color: palette.white }} />
             <Text style={styles.giftButtonText}>Chat</Text>
         </TouchableOpacity>
     );
@@ -1087,7 +1134,7 @@ function PayGatePanel({
                 <View style={[styles.payGateCard, midnightGlass as object]}>
                     {/* LEFT — the QR the phone scans */}
                     <View style={styles.payGateQrBoxLg}>
-                        <QRCodeSVG value={payUrl} size={248} bgColor="#FFFFFF" fgColor="#0B0B10" level="M" />
+                        <QRCodeSVG value={payUrl} size={248} bgColor={palette.qrPaper} fgColor={palette.qrInk} level="M" />
                     </View>
 
                     {/* RIGHT — title, price, how-to-pay, status */}
@@ -1178,7 +1225,7 @@ function AlreadyPaidButton({ onPress, checking }: { onPress: () => void; checkin
             style={[
                 styles.alreadyPaidButton,
                 { borderColor: theme.static.colorSuccess },
-                focused && { backgroundColor: 'rgba(52, 211, 153, 0.12)' },
+                focused && { backgroundColor: alpha(palette.success, 0.12) },
             ]}
         >
             {checking ? (
@@ -1300,7 +1347,7 @@ function InviteJoinButton({ label, disabled, onPress }: { label: string; disable
                 raisedButton(theme.static, 'primary', { focused, disabled }),
             ]}
         >
-            <Text style={[styles.inviteJoinButtonText, { color: '#fff' }]}>
+            <Text style={[styles.inviteJoinButtonText, { color: palette.white }]}>
                 {label}
             </Text>
         </TouchableOpacity>
@@ -1349,16 +1396,16 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 20,
-        backgroundColor: 'rgba(22,36,60,0.7)',
+        backgroundColor: alpha(palette.card, 0.7),
         borderWidth: 1,
-        borderColor: 'rgba(170,195,240,0.2)',
+        borderColor: alpha(palette.glassEdge, 0.2),
         alignItems: 'center',
         justifyContent: 'center',
     },
-    overlayTitle: { color: '#fff', fontSize: 20, fontWeight: '700', flex: 1 },
+    overlayTitle: { color: palette.white, fontSize: 20, fontWeight: '700', flex: 1 },
     watermarkLayer: { ...StyleSheet.absoluteFillObject, alignItems: 'center', justifyContent: 'center', zIndex: 1 } as object,
     watermarkText: {
-        color: '#fff',
+        color: palette.white,
         opacity: 0.16,
         fontSize: 42,
         fontWeight: '800',
@@ -1383,12 +1430,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         borderRadius: 999,
     },
-    giftButtonText: { color: '#fff', fontSize: 14, fontWeight: '700' },
+    giftButtonText: { color: palette.white, fontSize: 14, fontWeight: '700' },
+    phoneButton: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 9, paddingHorizontal: 16 },
+    phoneButtonText: { color: palette.white, fontSize: 13, fontWeight: '700' },
     giftOverlay: {
         ...StyleSheet.absoluteFillObject,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'rgba(0,0,0,0.6)',
+        backgroundColor: alpha(palette.black, 0.6),
         zIndex: 3,
     } as object,
     giftCard: {
@@ -1406,7 +1455,7 @@ const styles = StyleSheet.create({
         width: 32,
         height: 32,
         borderRadius: 9999,
-        backgroundColor: 'rgba(255,255,255,0.12)',
+        backgroundColor: alpha(palette.white, 0.12),
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -1418,7 +1467,7 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: palette.white,
     },
     // Wide two-column pay gate (QR left · details right) — TVs are landscape,
     // so a horizontal card uses the space far better than a tall column.
@@ -1439,7 +1488,7 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: palette.white,
     },
     payGateRight: { flex: 1, alignItems: 'flex-start' },
     payGateTitleLeft: { fontSize: 28, fontWeight: '800', marginBottom: 8, letterSpacing: -0.4 },
@@ -1449,10 +1498,10 @@ const styles = StyleSheet.create({
         paddingVertical: 6,
         paddingHorizontal: 14,
         borderRadius: 999,
-        backgroundColor: 'rgba(242,12,143,0.14)',
+        backgroundColor: alpha(palette.accent, 0.14),
         marginBottom: 20,
     },
-    payGatePriceText: { color: '#FF6FBF', fontSize: 16, fontWeight: '800' },
+    payGatePriceText: { color: palette.accentLight, fontSize: 16, fontWeight: '800' },
     payGateOptions: { alignSelf: 'stretch', gap: 10, marginBottom: 4 },
     payGateOptionRow: { flexDirection: 'row', alignItems: 'center', gap: 10, justifyContent: 'flex-start' },
     payGateOptionText: { fontSize: 13, fontWeight: '600' },

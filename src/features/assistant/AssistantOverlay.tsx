@@ -1,7 +1,8 @@
 import React, { useContext, useRef, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View, ScrollView } from 'react-native';
 import { useRouter } from 'next/router';
-import { ThemeContext } from '../../config';
+import { ThemeContext, alpha, palette, radii } from '../../config';
+import { glassSurface, glassWell, raisedButton } from '../../components/glass/glassStyle';
 import { useFocusNav } from '../../hooks/useFocusNav';
 import { useBackHandler } from '../../hooks/useBackHandler';
 import { useVoiceCapture } from '../../hooks/useVoiceCapture';
@@ -144,7 +145,7 @@ export function AssistantOverlay() {
 
     return (
         <View style={styles.overlay}>
-            <View style={[styles.panel, { backgroundColor: theme.static.colorSurface, borderColor: theme.static.colorBorder }]}>
+            <View style={[glassSurface(theme.static, { radius: radii.panel, raised: true }), styles.panel]}>
                 <View style={styles.header}>
                     <View>
                         <Text style={[styles.title, { color: theme.static.colorTextPrimary }]}>{strings.assistant.title}</Text>
@@ -168,10 +169,10 @@ export function AssistantOverlay() {
                                 style={[
                                     styles.bubble,
                                     m.role === 'user' ? styles.bubbleUser : styles.bubbleAssistant,
-                                    { backgroundColor: m.role === 'user' ? theme.static.colorAccent : theme.static.colorSurfaceMuted },
+                                    m.role === 'user' ? { backgroundColor: theme.static.colorAccent } : glassWell(theme.static, radii.tile),
                                 ]}
                             >
-                                <Text style={[styles.bubbleText, { color: m.role === 'user' ? '#fff' : theme.static.colorTextPrimary }]}>
+                                <Text style={[styles.bubbleText, { color: m.role === 'user' ? palette.white : theme.static.colorTextPrimary }]}>
                                     {m.text}
                                 </Text>
                             </View>
@@ -202,7 +203,7 @@ export function AssistantOverlay() {
                         placeholder={placeholder}
                         placeholderTextColor={theme.static.colorTextSecondary}
                         editable={!loading}
-                        style={[styles.input, { color: theme.static.colorTextPrimary, borderColor: theme.static.colorBorder }]}
+                        style={[glassWell(theme.static, radii.tile), styles.input, { color: theme.static.colorTextPrimary }]}
                     />
                     <SendButton onPress={() => submit(draft)} disabled={!draft.trim() || loading} label={strings.assistant.send} />
                 </View>
@@ -229,9 +230,9 @@ function CloseButton({ onPress, label }: { onPress: () => void; label: string })
         <TouchableOpacity
             onPress={onPress}
             {...focusProps}
-            style={[styles.closeButton, focused && { backgroundColor: theme.static.colorFocusRing }]}
+            style={[styles.closeButton, raisedButton(theme.static, focused ? 'primary' : 'glass', { focused })]}
         >
-            <i className="bi bi-x-lg" style={{ fontSize: 14, color: '#fff' }} />
+            <i className="bi bi-x-lg" style={{ fontSize: 14, color: palette.white }} />
             <Text style={styles.closeButtonText}>{label}</Text>
         </TouchableOpacity>
     );
@@ -258,11 +259,11 @@ function MicButton({
             {...focusProps}
             style={[
                 styles.micButton,
-                { backgroundColor: listening ? theme.static.colorError : theme.static.colorAccent, opacity: supported ? 1 : 0.4 },
-                focused && { transform: [{ scale: 1.08 }] },
+                raisedButton(theme.static, listening ? 'live' : 'accent', { focused, disabled: !supported }),
+                !supported && { opacity: 0.4 },
             ]}
         >
-            <i className={`bi ${listening ? 'bi-mic-fill' : 'bi-mic'}`} style={{ fontSize: 18, color: '#fff' }} />
+            <i className={`bi ${listening ? 'bi-mic-fill' : 'bi-mic'}`} style={{ fontSize: 18, color: palette.white }} />
         </TouchableOpacity>
     );
 }
@@ -277,11 +278,10 @@ function SendButton({ onPress, disabled, label }: { onPress: () => void; disable
             {...focusProps}
             style={[
                 styles.sendButton,
-                { backgroundColor: disabled ? theme.static.colorSurfaceMuted : theme.static.colorAccent },
-                focused && !disabled && { transform: [{ scale: 1.04 }] },
+                raisedButton(theme.static, disabled ? 'glass' : 'accent', { focused: focused && !disabled }),
             ]}
         >
-            <Text style={[styles.sendButtonText, { color: disabled ? theme.static.colorTextSecondary : '#fff' }]}>{label}</Text>
+            <Text style={[styles.sendButtonText, { color: disabled ? theme.static.colorTextSecondary : palette.white }]}>{label}</Text>
         </TouchableOpacity>
     );
 }
@@ -291,15 +291,13 @@ const styles = StyleSheet.create({
         ...StyleSheet.absoluteFillObject,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'rgba(0,0,0,0.65)',
+        backgroundColor: alpha(palette.black, 0.65),
         zIndex: 50,
     } as object,
     panel: {
         width: 760,
         maxWidth: '92%',
         maxHeight: '86%',
-        borderRadius: 20,
-        borderWidth: 1,
         padding: 28,
     } as object,
     header: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 16 },
@@ -309,23 +307,21 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         gap: 8,
-        borderRadius: 999,
         paddingVertical: 8,
         paddingHorizontal: 14,
-        backgroundColor: 'rgba(255,255,255,0.08)',
     },
-    closeButtonText: { color: '#fff', fontSize: 12, fontWeight: '700' },
+    closeButtonText: { color: palette.white, fontSize: 12, fontWeight: '700' },
     messages: { maxHeight: 260, marginBottom: 16 },
     messagesContent: { gap: 10, paddingBottom: 4 },
     hint: { fontSize: 13, textAlign: 'center', paddingVertical: 24 },
-    bubble: { maxWidth: '80%', borderRadius: 14, paddingVertical: 10, paddingHorizontal: 14 },
+    bubble: { maxWidth: '80%', borderRadius: radii.tile, paddingVertical: 10, paddingHorizontal: 14 },
     bubbleUser: { alignSelf: 'flex-end' },
     bubbleAssistant: { alignSelf: 'flex-start' },
     bubbleText: { fontSize: 14, lineHeight: 20 },
     loadingIndicator: { marginTop: 4, alignSelf: 'flex-start' },
     inputRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 8 },
-    micButton: { width: 48, height: 48, borderRadius: 9999, alignItems: 'center', justifyContent: 'center' },
-    input: { flex: 1, borderWidth: 1, borderRadius: 10, paddingHorizontal: 16, paddingVertical: 12, fontSize: 14 },
-    sendButton: { borderRadius: 9999, paddingVertical: 12, paddingHorizontal: 20 },
+    micButton: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center' },
+    input: { flex: 1, paddingHorizontal: 16, paddingVertical: 12, fontSize: 14 },
+    sendButton: { paddingVertical: 12, paddingHorizontal: 20 },
     sendButtonText: { fontSize: 13, fontWeight: '800' },
 });

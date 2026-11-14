@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'next/router';
-import { ThemeContext } from '../config';
+import { ThemeContext, radii } from '../config';
+import { GlassPanel } from '../components/glass/GlassPanel';
+import { glassWell } from '../components/glass/glassStyle';
 import { ScreenWrapper } from '../components/ScreenWrapper';
 import { Navbar } from '../components/Navbar';
 import { FocusableCard } from '../components/FocusableCard';
@@ -78,10 +80,12 @@ export default function MyListScreen() {
                     </View>
                 ) : videos.length === 0 ? (
                     <View style={styles.emptyState}>
-                        <View style={[styles.emptyIconCircle, { backgroundColor: theme.static.colorSurfaceMuted }]}>
-                            <i className="bi bi-bookmark-heart" style={{ fontSize: 30, color: theme.static.colorPrimaryLight }} />
-                        </View>
-                        <Text style={[styles.body, { color: theme.static.colorTextSecondary }]}>{strings.myList.body}</Text>
+                        <GlassPanel style={styles.emptyPanel}>
+                            <View style={[styles.emptyIconCircle, glassWell(theme.static, radii.pill)]}>
+                                <i className="bi bi-bookmark-heart" style={{ fontSize: 30, color: theme.static.colorPrimaryLight }} />
+                            </View>
+                            <Text style={[styles.body, { color: theme.static.colorTextSoft }]}>{strings.myList.body}</Text>
+                        </GlassPanel>
                     </View>
                 ) : (
                     <View style={styles.grid}>
@@ -117,7 +121,8 @@ const styles = StyleSheet.create({
     title: { fontSize: 32, fontWeight: 'bold', marginBottom: 28 },
     center: { alignItems: 'center', justifyContent: 'center', minHeight: 300 },
     emptyState: { alignItems: 'center', justifyContent: 'center', minHeight: 340, gap: 16 },
-    emptyIconCircle: { width: 64, height: 64, borderRadius: 32, alignItems: 'center', justifyContent: 'center' },
+    emptyPanel: { alignItems: 'center', gap: 16, paddingHorizontal: 48 },
+    emptyIconCircle: { width: 64, height: 64, alignItems: 'center', justifyContent: 'center' },
     body: { fontSize: 16, maxWidth: 420, textAlign: 'center' },
     grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 24, minHeight: 340 },
 });

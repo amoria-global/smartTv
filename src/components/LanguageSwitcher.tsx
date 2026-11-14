@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { midnightGlass } from './glass/glassStyle';
-import { ThemeContext } from '../config';
+import { ThemeContext, alpha, palette } from '../config';
 import { useFocusNav } from '../hooks/useFocusNav';
 import { useBackHandler } from '../hooks/useBackHandler';
 import { useTranslation, LOCALES } from '../i18n';
@@ -28,8 +28,8 @@ export function LanguageSwitcher() {
                 {...focusProps}
                 style={[styles.langTrigger, focused && { backgroundColor: theme.static.colorFocusRing }]}
             >
-                <i className="bi bi-globe2" style={{ fontSize: 15, color: focused ? '#fff' : theme.static.colorTextPrimary }} />
-                <Text style={[styles.langTriggerText, { color: focused ? '#fff' : theme.static.colorTextPrimary }]}>
+                <i className="bi bi-globe2" style={{ fontSize: 15, color: focused ? palette.white : theme.static.colorTextPrimary }} />
+                <Text style={[styles.langTriggerText, { color: focused ? palette.white : theme.static.colorTextPrimary }]}>
                     {current.short}
                 </Text>
             </TouchableOpacity>
@@ -79,12 +79,12 @@ function LanguageOption({
             style={[styles.langOption, focused && { backgroundColor: theme.static.colorFocusRing }]}
         >
             <View style={styles.langOptionLeft}>
-                <i className="bi bi-globe2" style={{ fontSize: 16, color: focused ? '#fff' : theme.static.colorTextSecondary }} />
+                <i className="bi bi-globe2" style={{ fontSize: 16, color: focused ? palette.white : theme.static.colorTextSecondary }} />
                 <View>
                     <Text
                         style={[
                             styles.langOptionShort,
-                            { color: focused ? '#fff' : active ? theme.static.colorTextPrimary : theme.static.colorTextSecondary },
+                            { color: focused ? palette.white : active ? theme.static.colorTextPrimary : theme.static.colorTextSecondary },
                         ]}
                     >
                         {short}
@@ -92,7 +92,7 @@ function LanguageOption({
                     <Text
                         style={[
                             styles.langOptionText,
-                            { color: focused ? 'rgba(255,255,255,0.75)' : theme.static.colorTextSecondary },
+                            { color: focused ? alpha(palette.white, 0.75) : theme.static.colorTextSecondary },
                         ]}
                     >
                         {label}

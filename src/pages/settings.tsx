@@ -3,7 +3,7 @@ import { ActivityIndicator, Image, Linking, ScrollView, StyleSheet, Text, Toucha
 import { midnightGlass } from '../components/glass/glassStyle';
 import { useRouter } from 'next/router';
 import { QRCodeSVG } from 'qrcode.react';
-import { ThemeContext } from '../config';
+import { ThemeContext, alpha, palette } from '../config';
 import { ScreenWrapper } from '../components/ScreenWrapper';
 import { Navbar } from '../components/Navbar';
 import { FocusableButton } from '../components/FocusableButton';
@@ -253,8 +253,8 @@ export default function SettingsScreen() {
                                         <QRCodeSVG
                                             value={manageAccountUrl(user?.customerType)}
                                             size={128}
-                                            bgColor="#FFFFFF"
-                                            fgColor="#0B0B10"
+                                            bgColor={palette.qrPaper}
+                                            fgColor={palette.qrInk}
                                             level="M"
                                         />
                                     </View>
@@ -300,7 +300,7 @@ export default function SettingsScreen() {
                                 ) : (
                                     devices.map((d) => (
                                         <View key={d.id} style={styles.deviceRow}>
-                                            <View style={[styles.deviceIcon, { backgroundColor: 'rgba(255,255,255,0.08)' }]}>
+                                            <View style={[styles.deviceIcon, { backgroundColor: alpha(palette.white, 0.08) }]}>
                                                 <i className="bi bi-tv" style={{ fontSize: 18, color: theme.static.colorTextPrimary }} />
                                             </View>
                                             <View style={{ flex: 1 }}>
@@ -373,7 +373,7 @@ export default function SettingsScreen() {
                                 <View style={styles.summaryDivider} />
                                 <View style={styles.summaryRight}>
                                     <View style={styles.qrBox}>
-                                        <QRCodeSVG value={CONTACT_URL} size={128} bgColor="#FFFFFF" fgColor="#0B0B10" level="M" />
+                                        <QRCodeSVG value={CONTACT_URL} size={128} bgColor={palette.qrPaper} fgColor={palette.qrInk} level="M" />
                                     </View>
                                     <Text style={[styles.qrTitle, { color: theme.static.colorTextPrimary }]}>{strings.settings.scanForSupport}</Text>
                                 </View>
@@ -534,7 +534,7 @@ function SelectRow({ title, description, active, onPress }: { title: string; des
         <TouchableOpacity
             onPress={onPress}
             {...focusProps}
-            style={[styles.toggleRow, focused && { backgroundColor: 'rgba(255,255,255,0.06)' }]}
+            style={[styles.toggleRow, focused && { backgroundColor: alpha(palette.white, 0.06) }]}
         >
             <View style={{ flex: 1 }}>
                 <Text style={[styles.toggleTitle, { color: theme.static.colorTextPrimary }]}>{title}</Text>
@@ -795,7 +795,7 @@ function PinKey({ label, onPress, disabled }: { label: string; onPress: () => vo
             {...focusProps}
             style={[
                 styles.pinKey,
-                { backgroundColor: 'rgba(255,255,255,0.06)', borderColor: theme.static.colorBorder },
+                { backgroundColor: alpha(palette.white, 0.06), borderColor: theme.static.colorBorder },
                 focused && { backgroundColor: theme.static.colorBrand, borderColor: theme.static.colorFocusRing },
             ]}
         >
@@ -889,7 +889,7 @@ function LanguageRow({ label, active, onPress }: { label: string; active: boolea
         <TouchableOpacity
             onPress={onPress}
             {...focusProps}
-            style={[styles.toggleRow, focused && { backgroundColor: 'rgba(255,255,255,0.06)' }]}
+            style={[styles.toggleRow, focused && { backgroundColor: alpha(palette.white, 0.06) }]}
         >
             <View style={{ flex: 1 }}>
                 <Text style={[styles.toggleTitle, { color: theme.static.colorTextPrimary }]}>{label}</Text>
@@ -920,18 +920,18 @@ function SidebarTab({
             {...focusProps}
             style={[
                 styles.sidebarTab,
-                active && { backgroundColor: 'rgba(62, 111, 216, 0.22)', borderWidth: 1, borderColor: 'rgba(91,140,255,0.4)' },
+                active && { backgroundColor: alpha(palette.primary, 0.22), borderWidth: 1, borderColor: alpha(palette.primaryLight, 0.4) },
                 focused && { backgroundColor: theme.static.colorFocusRing },
             ]}
         >
             <i
                 className={`bi ${icon}`}
-                style={{ fontSize: 17, color: focused ? '#fff' : active ? theme.static.colorPrimaryLight : theme.static.colorTextSecondary }}
+                style={{ fontSize: 17, color: focused ? palette.white : active ? theme.static.colorPrimaryLight : theme.static.colorTextSecondary }}
             />
             <Text
                 style={[
                     styles.sidebarTabText,
-                    { color: focused ? '#fff' : active ? theme.static.colorTextPrimary : theme.static.colorTextSecondary },
+                    { color: focused ? palette.white : active ? theme.static.colorTextPrimary : theme.static.colorTextSecondary },
                 ]}
             >
                 {label}
@@ -982,7 +982,7 @@ function ActionRow({
             {...focusProps}
             style={[
                 styles.actionRow,
-                focused && { backgroundColor: 'rgba(255,255,255,0.08)', borderColor: theme.static.colorFocusRing },
+                focused && { backgroundColor: alpha(palette.white, 0.08), borderColor: theme.static.colorFocusRing },
             ]}
         >
             <i className={`bi ${icon}`} style={{ fontSize: 16, color: tone }} />
@@ -1014,9 +1014,9 @@ function ToggleRow({
             onPress={onToggle}
             disabled={loading}
             {...focusProps}
-            style={[styles.toggleRow, focused && { backgroundColor: 'rgba(255,255,255,0.06)' }]}
+            style={[styles.toggleRow, focused && { backgroundColor: alpha(palette.white, 0.06) }]}
         >
-            <View style={[styles.toggleIcon, { backgroundColor: 'rgba(255,255,255,0.08)' }]}>
+            <View style={[styles.toggleIcon, { backgroundColor: alpha(palette.white, 0.08) }]}>
                 <i className={`bi ${icon}`} style={{ fontSize: 18, color: theme.static.colorTextPrimary }} />
             </View>
             <View style={{ flex: 1 }}>
@@ -1029,7 +1029,7 @@ function ToggleRow({
                 <View
                     style={[
                         styles.switchTrack,
-                        { backgroundColor: value ? theme.static.colorPrimaryLight : 'rgba(255,255,255,0.14)' },
+                        { backgroundColor: value ? theme.static.colorPrimaryLight : alpha(palette.white, 0.14) },
                         focused && { borderColor: theme.static.colorFocusRing },
                     ]}
                 >
@@ -1045,7 +1045,7 @@ function InfoRow({ icon, title, description, badge }: { icon: string; title: str
     const { theme } = useContext(ThemeContext);
     return (
         <View style={styles.toggleRow}>
-            <View style={[styles.toggleIcon, { backgroundColor: 'rgba(255,255,255,0.08)' }]}>
+            <View style={[styles.toggleIcon, { backgroundColor: alpha(palette.white, 0.08) }]}>
                 <i className={`bi ${icon}`} style={{ fontSize: 18, color: theme.static.colorTextPrimary }} />
             </View>
             <View style={{ flex: 1 }}>
@@ -1091,9 +1091,9 @@ const styles = StyleSheet.create({
     },
     summaryLeft: { flex: 1 },
     identityRow: { flexDirection: 'row', alignItems: 'center', gap: 18, marginBottom: 24 },
-    avatar: { width: 76, height: 76, borderRadius: 38, borderWidth: 2, borderColor: 'rgba(255,255,255,0.22)' },
+    avatar: { width: 76, height: 76, borderRadius: 38, borderWidth: 2, borderColor: alpha(palette.white, 0.22) },
     avatarFallback: { alignItems: 'center', justifyContent: 'center' },
-    avatarText: { color: '#fff', fontSize: 28, fontWeight: '800' },
+    avatarText: { color: palette.white, fontSize: 28, fontWeight: '800' },
     name: { fontSize: 22, fontWeight: '700', marginBottom: 4 },
     email: { fontSize: 15 },
     statRow: { flexDirection: 'row', gap: 32, flexWrap: 'wrap' },
@@ -1101,9 +1101,9 @@ const styles = StyleSheet.create({
     statLabel: { fontSize: 12, marginBottom: 2 },
     statValue: { fontSize: 15, fontWeight: '700' },
     lastLogin: { fontSize: 13, marginTop: 20 },
-    summaryDivider: { width: 1, alignSelf: 'stretch', backgroundColor: 'rgba(255,255,255,0.12)' },
+    summaryDivider: { width: 1, alignSelf: 'stretch', backgroundColor: alpha(palette.white, 0.12) },
     summaryRight: { alignItems: 'center', width: 200 },
-    qrBox: { width: 144, height: 144, borderRadius: 12, backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center', padding: 8, marginBottom: 14 },
+    qrBox: { width: 144, height: 144, borderRadius: 12, backgroundColor: palette.white, alignItems: 'center', justifyContent: 'center', padding: 8, marginBottom: 14 },
     qrTitle: { fontSize: 15, fontWeight: '700', marginBottom: 6, textAlign: 'center' },
     qrCaption: { fontSize: 12, textAlign: 'center', lineHeight: 17 },
 
@@ -1116,17 +1116,17 @@ const styles = StyleSheet.create({
     toggleTitle: { fontSize: 16, fontWeight: '600', marginBottom: 2 },
     toggleDescription: { fontSize: 13 },
     switchTrack: { width: 48, height: 28, borderRadius: 14, padding: 3, borderWidth: 2, borderColor: 'transparent', justifyContent: 'center' },
-    switchThumb: { width: 18, height: 18, borderRadius: 9, backgroundColor: '#fff' },
+    switchThumb: { width: 18, height: 18, borderRadius: 9, backgroundColor: palette.white },
     switchThumbOn: { transform: [{ translateX: 20 }] },
-    rowDivider: { height: StyleSheet.hairlineWidth, backgroundColor: 'rgba(255,255,255,0.10)', marginVertical: 6 },
-    infoBadge: { paddingVertical: 6, paddingHorizontal: 12, borderRadius: 999, backgroundColor: 'rgba(255,255,255,0.08)' },
+    rowDivider: { height: StyleSheet.hairlineWidth, backgroundColor: alpha(palette.white, 0.1), marginVertical: 6 },
+    infoBadge: { paddingVertical: 6, paddingHorizontal: 12, borderRadius: 999, backgroundColor: alpha(palette.white, 0.08) },
     infoBadgeText: { fontSize: 12, fontWeight: '700' },
 
-    deviceRow: { flexDirection: 'row', alignItems: 'center', gap: 14, marginTop: 16, paddingTop: 16, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: 'rgba(255,255,255,0.10)' },
+    deviceRow: { flexDirection: 'row', alignItems: 'center', gap: 14, marginTop: 16, paddingTop: 16, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: alpha(palette.white, 0.1) },
     deviceIcon: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
     deviceLabel: { fontSize: 16, fontWeight: '700' },
     deviceMeta: { fontSize: 13, marginTop: 2 },
-    signOutGroup: { marginTop: 20, paddingTop: 16, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: 'rgba(255,255,255,0.10)', gap: 4 },
+    signOutGroup: { marginTop: 20, paddingTop: 16, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: alpha(palette.white, 0.1), gap: 4 },
     actionRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 10, paddingHorizontal: 8, borderRadius: 10, borderWidth: 2, borderColor: 'transparent' },
     actionRowText: { fontSize: 14, fontWeight: '700' },
 

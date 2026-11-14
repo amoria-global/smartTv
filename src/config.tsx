@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react';
-import { ImageStyle, StyleSheet, TextStyle, ViewStyle } from 'react-native';
+import { Easing, ImageStyle, Platform, StyleSheet, TextStyle, ViewStyle } from 'react-native';
 
 import {
     getScaledValue,
@@ -12,6 +12,7 @@ import {
 import CONFIG from '../platformAssets/renative.runtime.json';
 import '../platformAssets/runtime/fontManager';
 import ICON_LOGO from '../platformAssets/runtime/logo.png';
+import { alpha, fontFamilies, gradientTokens, motion, palette, radii, spacing } from './config/tokens';
 
 export function testProps(testId: string | undefined) {
     if (!testId) {
@@ -38,61 +39,91 @@ if (typeof global.performance.now !== 'function') {
     };
 }
 
-// Connekyt brand tokens (mirrors connekt-mobile/src/theme/index.ts) — same
-// primary blue / accent pink across web, mobile, and this TV app.
+// Connekyt brand tokens. The values come from ./config/tokens, which mirrors the phone app's
+// Midnight Glass palette (connekt-mobile src/theme), so phone and TV share one set of colours.
+const isWebEngine = Platform.OS === 'web';
+
+/** The typeface for each role on this engine. See fontFamilies in ./config/tokens. */
+export const fonts = isWebEngine
+    ? {
+          body: fontFamilies.web.body,
+          bodyMedium: fontFamilies.web.body,
+          bodySemibold: fontFamilies.web.body,
+          display: fontFamilies.web.display,
+          displayMedium: fontFamilies.web.display,
+      }
+    : { ...fontFamilies.native };
+
+export { palette, gradientTokens, radii, spacing, motion, alpha };
+
+/** Midnight Glass motion curve for Animated on native. */
+export const motionEasing = Easing.bezier(...motion.bezier);
+
 const staticTheme = {
-    primaryFontFamily: "'Pragati Narrow', sans-serif",
+    primaryFontFamily: fonts.body,
+    displayFontFamily: fonts.display,
     iconSize: getScaledValue(20),
     buttonSize: getScaledValue(30),
-    colorLight: '#FFFFFF',
-    colorBrand: '#3E6FD8',
-    colorBrandDark: '#2F59B8',
-    colorBrandNavy: '#083A85',
-    colorPrimaryLight: '#5B8CFF',
-    colorLive: '#FF0033',
-    colorLiveGlow: 'rgba(255,0,51,0.55)',
-    colorAccent: '#F20C8F',
-    colorAccentLight: '#ff4fae',
-    colorFocusRing: '#5B8CFF',
-    colorSuccess: '#34D399',
-    colorWarning: '#FBBF24',
-    colorError: '#F87171',
-    colorInfo: '#60A5FA',
+    colorLight: palette.white,
+    colorBrand: palette.primary,
+    colorBrandDark: palette.primaryDark,
+    colorBrandNavy: palette.navy,
+    colorPrimaryLight: palette.primaryLight,
+    colorLive: palette.live,
+    colorLiveGlow: palette.liveGlow,
+    colorAccent: palette.accent,
+    colorAccentLight: palette.accentLight,
+    colorFocusRing: palette.primaryLight,
+    colorSuccess: palette.success,
+    colorWarning: palette.warning,
+    colorError: palette.error,
+    colorInfo: palette.info,
+    colorLink: palette.link,
+    colorActive: palette.active,
+    colorActiveBg: palette.activeBg,
+    colorPending: palette.pending,
+    colorPendingBg: palette.pendingBg,
 };
 
 export const gradients = {
-    brand: ['#083A85', '#F20C8F'] as const,
-    primary: ['#5B8CFF', '#3E6FD8', '#2F59B8'] as const,
-    live: ['#FF2D55', '#FF0033', '#C8001F'] as const,
-    accent: ['#F20C8F', '#ff4fae'] as const,
-    // Bottom-up scrim used behind hero banner text/controls.
-    overlay: ['rgba(10,18,32,0)', 'rgba(10,18,32,0.85)', '#0A1220'] as const,
+    brand: gradientTokens.brand,
+    primary: gradientTokens.raisedPrimary,
+    live: gradientTokens.raisedLive,
+    accent: gradientTokens.raisedAccent,
+    overlay: gradientTokens.overlay,
 };
 
 const staticThemes = {
-    // Cinematic dark theme — near-black rather than pure black, matching a
-    // 10-foot Netflix-style TV experience.
+    // Cinematic dark theme, the phone's Midnight Glass. Near-black rather than pure black.
     dark: {
-        colorBgPrimary: '#0A1220',
-        colorSurface: '#16243C',
-        colorSurfaceMuted: '#1B2B46',
-        colorTextPrimary: '#EAF0FA',
-        colorTextSecondary: '#93A3BE',
-        colorBorder: '#2A3B58',
-        colorBorderSoft: '#1E2D47',
-        glassTop: 'rgba(32,50,82,0.62)',
-        glassBottom: 'rgba(18,30,52,0.52)',
-        glassSolid: '#16243C',
-        glassStroke: 'rgba(170,195,240,0.14)',
-        glassHighlight: 'rgba(255,255,255,0.16)',
-        glassWell: 'rgba(4,9,18,0.55)',
+        colorBgPrimary: palette.background,
+        // The TV has always called the phone's `card` step "surface"; `colorSurfaceBase` is the
+        // phone's `surface`, one step darker.
+        colorSurface: palette.card,
+        colorSurfaceBase: palette.surface,
+        colorSurfaceMuted: palette.surfaceMuted,
+        colorElevated: palette.elevated,
+        colorTextPrimary: palette.text,
+        colorTextSoft: palette.textSoft,
+        colorTextSecondary: palette.textMuted,
+        colorBorder: palette.border,
+        colorBorderSoft: palette.borderSoft,
+        glassTop: palette.glassTop,
+        glassBottom: palette.glassBottom,
+        glassSolid: palette.glassSolid,
+        glassStroke: palette.glassStroke,
+        glassHighlight: palette.glassHighlight,
+        glassWell: palette.glassWell,
         ...staticTheme,
     },
     light: {
         colorBgPrimary: '#F4F6FB',
         colorSurface: '#FFFFFF',
+        colorSurfaceBase: '#F4F6FB',
         colorSurfaceMuted: '#E9EAEE',
+        colorElevated: '#FFFFFF',
         colorTextPrimary: '#0B1626',
+        colorTextSoft: '#1F2A40',
         colorTextSecondary: '#33415C',
         colorBorder: '#D4D6DC',
         colorBorderSoft: '#E6E7EC',
@@ -132,7 +163,7 @@ const createStyleSheet = (currentTheme) =>
             backgroundColor: currentTheme.colorBgPrimary,
         },
         textH2: {
-            fontFamily: currentTheme.primaryFontFamily,
+            fontFamily: currentTheme.displayFontFamily,
             fontSize: getScaledValue(20),
             marginHorizontal: getScaledValue(20),
             color: currentTheme.colorTextPrimary,
@@ -159,7 +190,7 @@ const createStyleSheet = (currentTheme) =>
             margin: 10,
             padding: 10,
             backgroundColor: currentTheme.colorBrand,
-            borderRadius: 10,
+            borderRadius: radii.sm,
             outline: 'none',
         } as CustomStyleView,
         focusedButton: {
@@ -169,7 +200,7 @@ const createStyleSheet = (currentTheme) =>
             transform: [{ scale: 1.05 }],
         } as CustomStyleView,
         buttonText: {
-            fontFamily: currentTheme.primaryFontFamily,
+            fontFamily: currentTheme.displayFontFamily,
             fontSize: getScaledValue(15),
             color: currentTheme.colorLight,
         },
@@ -191,6 +222,7 @@ export type ThemeInterface = {
     theme: {
         static: {
             primaryFontFamily: string;
+            displayFontFamily: string;
             iconSize: number;
             buttonSize: number;
             colorLight: string;
@@ -207,8 +239,16 @@ export type ThemeInterface = {
             colorWarning: string;
             colorError: string;
             colorInfo: string;
+            colorLink: string;
+            colorActive: string;
+            colorActiveBg: string;
+            colorPending: string;
+            colorPendingBg: string;
             colorBgPrimary: string;
             colorSurface: string;
+            colorSurfaceBase: string;
+            colorElevated: string;
+            colorTextSoft: string;
             colorSurfaceMuted: string;
             colorTextPrimary: string;
             colorTextSecondary: string;

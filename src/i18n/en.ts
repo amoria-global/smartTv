@@ -232,6 +232,10 @@ const en = {
         giftTitle: 'Send a Gift',
         giftSubtitle: 'Scan with your phone to send a gift for this stream — you’ll complete the payment there.',
         giftStepPay: 'Pick a gift and pay securely',
+        continueOnPhone: 'Continue on phone',
+        continueOnPhoneTitle: 'Continue on your phone',
+        continueOnPhoneSubtitle: 'Scan to keep watching on your phone',
+        continueOnPhoneStep: 'The event opens in the Connekyt app or website',
     },
     aiRecommendations: {
         title: 'Connekyt AI',

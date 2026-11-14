@@ -4,7 +4,7 @@ import { midnightGlass, raisedButton, sceneBackground, glassWell } from '../comp
 import { useRouter } from 'next/router';
 import { QRCodeSVG } from 'qrcode.react';
 import { FocusableButton } from '../components/FocusableButton';
-import { ThemeContext, ICON_LOGO } from '../config';
+import { ThemeContext, ICON_LOGO, alpha, palette } from '../config';
 import { initiateTvPairing, login, pollTvPairingStatus } from '../features/auth/api';
 import { useAuth, isApiError } from '../store/auth';
 import { useFocusNav } from '../hooks/useFocusNav';
@@ -245,7 +245,7 @@ export default function LoginScreen() {
                         </Text>
                         {strings.login.steps.map((step, i) => (
                             <View key={step} style={[styles.stepRow, { marginBottom: gap(18) }]}>
-                                <View style={[styles.stepBadge, { borderColor: theme.static.colorPrimaryLight, backgroundColor: 'rgba(91,140,255,0.14)' }]}>
+                                <View style={[styles.stepBadge, { borderColor: theme.static.colorPrimaryLight, backgroundColor: alpha(palette.primaryLight, 0.14) }]}>
                                     <Text style={[styles.stepNumber, { color: theme.static.colorPrimaryLight }]}>{i + 1}</Text>
                                 </View>
                                 <Text style={[styles.stepText, { color: theme.static.colorTextPrimary }]}>{step}</Text>
@@ -272,7 +272,7 @@ export default function LoginScreen() {
                                     <View style={{ alignItems: 'center', paddingHorizontal: gap(16) }}>
                                         <Text
                                             accessibilityRole="alert"
-                                            style={[styles.instructions, { color: '#0A1220', textAlign: 'center', marginBottom: gap(20) }]}
+                                            style={[styles.instructions, { color: palette.background, textAlign: 'center', marginBottom: gap(20) }]}
                                         >
                                             {strings.login.pairingRevoked}
                                         </Text>
@@ -292,8 +292,8 @@ export default function LoginScreen() {
                                         // CONN-TV-1.
                                         value={JSON.stringify({ code: pairingCode })}
                                         size={Math.round(220 * qrScale)}
-                                        bgColor="#FFFFFF"
-                                        fgColor="#0B0B10"
+                                        bgColor={palette.qrPaper}
+                                        fgColor={palette.qrInk}
                                         level="M"
                                     />
                                 )}
@@ -321,7 +321,7 @@ export default function LoginScreen() {
                                 styles.input,
                                 glassWell(theme.static),
                                 { color: theme.static.colorTextPrimary, marginBottom: gap(16) },
-                                activeField === 'email' && { borderColor: theme.static.colorPrimaryLight, boxShadow: '0 0 0 3px rgba(91,140,255,0.45)' } as object,
+                                activeField === 'email' && { borderColor: theme.static.colorPrimaryLight, boxShadow: `0 0 0 3px ${alpha(palette.primaryLight, 0.45)}` } as object,
                             ]}
                         />
                         <View style={styles.passwordRow}>
@@ -337,7 +337,7 @@ export default function LoginScreen() {
                                     styles.passwordInput,
                                     glassWell(theme.static),
                                     { color: theme.static.colorTextPrimary },
-                                    activeField === 'password' && { borderColor: theme.static.colorPrimaryLight, boxShadow: '0 0 0 3px rgba(91,140,255,0.45)' } as object,
+                                    activeField === 'password' && { borderColor: theme.static.colorPrimaryLight, boxShadow: `0 0 0 3px ${alpha(palette.primaryLight, 0.45)}` } as object,
                                 ]}
                             />
                             <TouchableOpacity
@@ -400,7 +400,7 @@ function SignInErrorModal({ message, onDismiss }: { message: string; onDismiss: 
     return (
         <View style={styles.alertOverlay}>
             <View style={[styles.alertCard, styles.glass]}>
-                <View style={[styles.alertIconCircle, { backgroundColor: 'rgba(248,113,113,0.14)' }]}>
+                <View style={[styles.alertIconCircle, { backgroundColor: alpha(palette.error, 0.14) }]}>
                     <i className="bi bi-x-lg" style={{ fontSize: 26, color: theme.static.colorError }} />
                 </View>
                 <Text style={[styles.alertTitle, { color: theme.static.colorTextPrimary }]}>
@@ -441,7 +441,7 @@ function TabButton({ label, active, onPress, first }: { label: string; active: b
                 active ? raisedButton(theme.static, 'primary', { focused }) : focused ? raisedButton(theme.static, 'glass', { focused: true }) : null,
             ]}
         >
-            <Text style={[styles.tabText, { color: active ? '#fff' : theme.static.colorTextSecondary }]}>{label}</Text>
+            <Text style={[styles.tabText, { color: active ? palette.white : theme.static.colorTextSecondary }]}>{label}</Text>
         </TouchableOpacity>
     );
 }
@@ -456,7 +456,7 @@ function SignInButton({ onPress, loading, label }: { onPress: () => void; loadin
             {...focusProps}
             style={[styles.signInButton, raisedButton(theme.static, 'primary', { focused, disabled: loading })]}
         >
-            {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.signInText}>{label}</Text>}
+            {loading ? <ActivityIndicator color={palette.white} /> : <Text style={styles.signInText}>{label}</Text>}
         </TouchableOpacity>
     );
 }
@@ -520,11 +520,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginBottom: 40,
         alignSelf: 'flex-start',
-        backgroundColor: 'rgba(4, 9, 18, 0.55)',
+        backgroundColor: palette.glassWell,
         borderRadius: 999,
         borderWidth: 1,
-        borderColor: 'rgba(170, 195, 240, 0.14)',
-        boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.45)',
+        borderColor: palette.glassStroke,
+        boxShadow: `inset 0 2px 6px ${alpha(palette.black, 0.45)}`,
         padding: 5,
     } as object,
     tabButton: { paddingVertical: 14, paddingHorizontal: 28, borderRadius: 999 },
@@ -553,7 +553,7 @@ const styles = StyleSheet.create({
     showPasswordButton: { position: 'absolute', right: 16, top: 14, bottom: 16, justifyContent: 'center' },
     showPasswordText: { fontSize: 14, fontWeight: '700' },
     signInButton: { paddingVertical: 16, alignItems: 'center', marginTop: 8 },
-    signInText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+    signInText: { color: palette.white, fontSize: 16, fontWeight: '700' },
     qrCard: { borderRadius: 20, padding: 32, position: 'relative' },
     formCard: { borderRadius: 20, padding: 32, maxWidth: 480 },
     // Frosted-glass treatment: more transparent fill + a stronger backdrop
@@ -569,8 +569,8 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#FFFFFF',
-        boxShadow: '0 0 0 6px rgba(255,255,255,0.08), 0 12px 30px rgba(0,0,0,0.4)',
+        backgroundColor: palette.white,
+        boxShadow: `0 0 0 6px ${alpha(palette.white, 0.08)}, 0 12px 30px ${alpha(palette.black, 0.4)}`,
     } as object,
     // Sits in normal flow, right after centerGroup, with its own breathing
     // room above it — not pinned to the viewport bottom, so it can never
@@ -585,7 +585,7 @@ const styles = StyleSheet.create({
     footerBrand: {
         fontWeight: '800',
         letterSpacing: 0.2,
-        backgroundImage: 'linear-gradient(90deg, #4C8DFF 0%, #F20C8F 100%)',
+        backgroundImage: `linear-gradient(90deg, ${palette.primaryLight} 0%, ${palette.accent} 100%)`,
         WebkitBackgroundClip: 'text',
         WebkitTextFillColor: 'transparent',
         backgroundClip: 'text',
@@ -594,7 +594,7 @@ const styles = StyleSheet.create({
         ...StyleSheet.absoluteFillObject,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'rgba(0,0,0,0.6)',
+        backgroundColor: alpha(palette.black, 0.6),
         zIndex: 100,
         padding: 24,
     } as object,
@@ -616,5 +616,5 @@ const styles = StyleSheet.create({
     alertTitle: { fontSize: 20, fontWeight: '800', marginBottom: 8, textAlign: 'center' },
     alertMessage: { fontSize: 14, textAlign: 'center', lineHeight: 20, marginBottom: 24 },
     alertButton: { alignSelf: 'stretch', paddingVertical: 14, alignItems: 'center' },
-    alertButtonText: { color: '#fff', fontSize: 15, fontWeight: '700' },
+    alertButtonText: { color: palette.white, fontSize: 15, fontWeight: '700' },
 });

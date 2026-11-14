@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-nati
 import { midnightGlass } from '../components/glass/glassStyle';
 import { useRouter } from 'next/router';
 import { QRCodeSVG } from 'qrcode.react';
-import { ThemeContext } from '../config';
+import { ThemeContext, alpha, palette } from '../config';
 import { ScreenWrapper } from '../components/ScreenWrapper';
 import { Navbar } from '../components/Navbar';
 import { useFocusNav } from '../hooks/useFocusNav';
@@ -85,7 +85,7 @@ export default function LegalScreen() {
                     {/* QR to the canonical web version */}
                     <View style={[styles.qrCard, styles.glass]}>
                         <View style={styles.qrBox}>
-                            <QRCodeSVG value={webUrl} size={116} bgColor="#FFFFFF" fgColor="#0B0B10" level="M" />
+                            <QRCodeSVG value={webUrl} size={116} bgColor={palette.qrPaper} fgColor={palette.qrInk} level="M" />
                         </View>
                         <Text style={[styles.qrCaption, { color: theme.static.colorTextSecondary }]}>{strings.legal.scanCaption}</Text>
                     </View>
@@ -139,18 +139,18 @@ function DocTab({
             {...focusProps}
             style={[
                 styles.docTab,
-                active && { backgroundColor: 'rgba(62, 111, 216, 0.22)', borderWidth: 1, borderColor: 'rgba(91,140,255,0.4)' },
+                active && { backgroundColor: alpha(palette.primary, 0.22), borderWidth: 1, borderColor: alpha(palette.primaryLight, 0.4) },
                 focused && { backgroundColor: theme.static.colorFocusRing },
             ]}
         >
             <i
                 className={`bi ${icon}`}
-                style={{ fontSize: 16, color: focused ? '#fff' : active ? theme.static.colorPrimaryLight : theme.static.colorTextSecondary }}
+                style={{ fontSize: 16, color: focused ? palette.white : active ? theme.static.colorPrimaryLight : theme.static.colorTextSecondary }}
             />
             <Text
                 style={[
                     styles.docTabText,
-                    { color: focused ? '#fff' : active ? theme.static.colorTextPrimary : theme.static.colorTextSecondary },
+                    { color: focused ? palette.white : active ? theme.static.colorTextPrimary : theme.static.colorTextSecondary },
                 ]}
             >
                 {label}
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     railSpacer: { flex: 1 },
 
     qrCard: { borderRadius: 16, padding: 18, alignItems: 'center', gap: 12 },
-    qrBox: { width: 132, height: 132, borderRadius: 12, backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center', padding: 8 },
+    qrBox: { width: 132, height: 132, borderRadius: 12, backgroundColor: palette.white, alignItems: 'center', justifyContent: 'center', padding: 8 },
     qrCaption: { fontSize: 12, textAlign: 'center', lineHeight: 17 },
 
     reader: { flex: 1 },

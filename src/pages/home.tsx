@@ -3,7 +3,7 @@ import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, TouchableOpacit
 import { midnightGlass } from '../components/glass/glassStyle';
 import { useRouter } from 'next/router';
 import { QRCodeSVG } from 'qrcode.react';
-import { ThemeContext, ICON_LOGO } from '../config';
+import { ThemeContext, ICON_LOGO, alpha, gradientTokens, motion, palette } from '../config';
 import { useAuth } from '../store/auth';
 import { useFocusNav } from '../hooks/useFocusNav';
 import { useBackHandler } from '../hooks/useBackHandler';
@@ -107,7 +107,7 @@ export default function HomeScreen() {
             <ScreenWrapper noPadding>
                 <Navbar />
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <ActivityIndicator size="large" color="#F20C8F" />
+                    <ActivityIndicator size="large" color={palette.accent} />
                 </View>
             </ScreenWrapper>
         );
@@ -214,7 +214,7 @@ export default function HomeScreen() {
 
             {exitPrompt ? (
                 <View style={styles.exitToast} pointerEvents="none">
-                    <i className="bi bi-box-arrow-right" style={{ fontSize: 16, color: '#fff' }} />
+                    <i className="bi bi-box-arrow-right" style={{ fontSize: 16, color: palette.white }} />
                     <Text style={styles.exitToastText}>{strings.home.exitPrompt}</Text>
                 </View>
             ) : null}
@@ -253,7 +253,7 @@ function HeroRow({ videoTitle, photoTitle, liveVideoTitle }: { videoTitle: strin
 function VideoHeroTile({ src, fit, title }: { src: string; fit: 'contain' | 'cover'; title: string }) {
     return (
         <View style={styles.heroTile}>
-            <View style={[StyleSheet.absoluteFillObject, { backgroundColor: '#0A1220' }]} />
+            <View style={[StyleSheet.absoluteFillObject, { backgroundColor: palette.background }]} />
             <video
                 src={src}
                 autoPlay
@@ -317,7 +317,7 @@ function GenreTile({
             <Image source={{ uri: image }} style={StyleSheet.absoluteFillObject} resizeMode="cover" />
             <View style={styles.genreScrim} />
             <View style={styles.genreIconBadge}>
-                <i className={`bi ${icon}`} style={{ fontSize: 15, color: '#fff' }} />
+                <i className={`bi ${icon}`} style={{ fontSize: 15, color: palette.white }} />
             </View>
             <Text style={styles.genreTileText}>{label}</Text>
         </TouchableOpacity>
@@ -347,11 +347,11 @@ function PromoBanner() {
 
                 <View style={styles.promoChipRow}>
                     <View style={styles.promoChip}>
-                        <i className="bi bi-person-bounding-box" style={{ fontSize: 11, color: 'rgba(255,255,255,0.85)' }} />
+                        <i className="bi bi-person-bounding-box" style={{ fontSize: 11, color: palette.textSoft }} />
                         <Text style={styles.promoChipText}>{strings.home.promoChipSearch}</Text>
                     </View>
                     <View style={styles.promoChip}>
-                        <i className="bi bi-shield-lock-fill" style={{ fontSize: 11, color: 'rgba(255,255,255,0.85)' }} />
+                        <i className="bi bi-shield-lock-fill" style={{ fontSize: 11, color: palette.textSoft }} />
                         <Text style={styles.promoChipText}>{strings.home.promoChipPayments}</Text>
                     </View>
                 </View>
@@ -399,7 +399,7 @@ function FeatureGrid() {
                         <Text style={styles.featureHeading}>{strings.home.featureLiveTitle}</Text>
                         <Text style={styles.featureBody}>{strings.home.featureLiveBody}</Text>
                     </View>
-                    <i className="bi bi-broadcast-pin" style={{ fontSize: 44, color: 'rgba(255,255,255,0.18)' }} />
+                    <i className="bi bi-broadcast-pin" style={{ fontSize: 44, color: alpha(palette.white, 0.18) }} />
                 </View>
 
                 <View style={styles.featureRow}>
@@ -583,7 +583,7 @@ function TipsCard() {
             <div key={index} className="connekyt-tip-enter">
                 <View style={styles.tipsBody}>
                     <View style={styles.tipsIconBadge}>
-                        <i className={`bi ${tip.icon}`} style={{ fontSize: 15, color: '#fff' }} />
+                        <i className={`bi ${tip.icon}`} style={{ fontSize: 15, color: palette.white }} />
                     </View>
                     <Text style={styles.featureHeading}>{tip.title}</Text>
                     <Text style={styles.featureBody}>{tip.body}</Text>
@@ -614,7 +614,7 @@ function PageFooter() {
                 <View style={styles.pageFooterDivider} />
                 <View style={styles.pageFooterChip}>
                     <View style={styles.pageFooterChipIcon}>
-                        <i className="bi bi-telephone-fill" style={{ fontSize: 11, color: '#fff' }} />
+                        <i className="bi bi-telephone-fill" style={{ fontSize: 11, color: palette.white }} />
                     </View>
                     <Text style={styles.pageFooterChipValue}>{SUPPORT_PHONE}</Text>
                 </View>
@@ -622,7 +622,7 @@ function PageFooter() {
                 <View style={styles.pageFooterDivider} />
                 <View style={styles.pageFooterChip}>
                     <View style={styles.pageFooterChipIcon}>
-                        <i className="bi bi-envelope-fill" style={{ fontSize: 11, color: '#fff' }} />
+                        <i className="bi bi-envelope-fill" style={{ fontSize: 11, color: palette.white }} />
                     </View>
                     <Text style={styles.pageFooterChipValue}>{SUPPORT_EMAIL}</Text>
                 </View>
@@ -644,10 +644,10 @@ function ServiceQrModal({ icon, title, body, url, onClose }: { icon: string; tit
                     {...focusProps}
                     style={[styles.modalClose, focused && { backgroundColor: theme.static.colorFocusRing }]}
                 >
-                    <i className="bi bi-x-lg" style={{ fontSize: 16, color: '#fff' }} />
+                    <i className="bi bi-x-lg" style={{ fontSize: 16, color: palette.white }} />
                 </TouchableOpacity>
 
-                <View style={[styles.modalIconCircle, { backgroundColor: 'rgba(242,12,143,0.14)' }]}>
+                <View style={[styles.modalIconCircle, { backgroundColor: alpha(palette.accent, 0.14) }]}>
                     <i className={`bi ${icon}`} style={{ fontSize: 28, color: theme.static.colorAccent }} />
                 </View>
                 <Text style={[styles.modalTitle, { color: theme.static.colorTextPrimary }]}>{title}</Text>
@@ -655,7 +655,7 @@ function ServiceQrModal({ icon, title, body, url, onClose }: { icon: string; tit
                 <Text style={[styles.modalCaption, { color: theme.static.colorTextSecondary }]}>{strings.home.qrCaption}</Text>
 
                 <View style={styles.modalQrBox}>
-                    <QRCodeSVG value={url} size={200} bgColor="#FFFFFF" fgColor="#0B0B10" level="M" />
+                    <QRCodeSVG value={url} size={200} bgColor={palette.qrPaper} fgColor={palette.qrInk} level="M" />
                 </View>
             </View>
         </View>
@@ -672,20 +672,20 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         overflow: 'hidden',
         position: 'relative',
-        backgroundColor: '#16243C',
+        backgroundColor: palette.card,
         borderWidth: 1,
-        borderColor: 'rgba(170,195,240,0.18)',
-        boxShadow: '0 16 36px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.14)',
+        borderColor: alpha(palette.glassEdge, 0.18),
+        boxShadow: `0 16 36px ${alpha(palette.black, 0.4)}, inset 0 1px 0 ${alpha(palette.white, 0.14)}`,
     } as object,
     heroScrim: {
         ...StyleSheet.absoluteFillObject,
-        backgroundImage: 'linear-gradient(0deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.2) 42%, rgba(0,0,0,0) 68%)',
+        backgroundImage: `linear-gradient(0deg, ${alpha(palette.black, 0.88)} 0%, ${alpha(palette.black, 0.2)} 42%, ${alpha(palette.black, 0)} 68%)`,
     } as object,
-    heroTitle: { position: 'absolute', left: 16, right: 16, bottom: 38, color: '#fff', fontSize: 17, fontWeight: '800', lineHeight: 21 },
+    heroTitle: { position: 'absolute', left: 16, right: 16, bottom: 38, color: palette.white, fontSize: 17, fontWeight: '800', lineHeight: 21 },
     // Bottom-left brand watermark, same corner CANAL+'s own logo badge sits
     // in on its featured-show tiles.
     heroBrandBadge: { position: 'absolute', bottom: 14, left: 16 },
-    heroBrandText: { color: 'rgba(255,255,255,0.75)', fontSize: 10, fontWeight: '800', letterSpacing: 0.5 },
+    heroBrandText: { color: palette.textMuted, fontSize: 10, fontWeight: '800', letterSpacing: 0.5 },
 
     // Photo-backed tiles, CANAL+'s CINEMA/SERIES/SPORT genre row in spirit
     // (icon + short label) but now full-bleed images rather than flat
@@ -700,21 +700,22 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         overflow: 'hidden',
         position: 'relative',
-        backgroundColor: '#16243C',
+        backgroundColor: palette.card,
         borderWidth: 1,
-        borderColor: 'rgba(170,195,240,0.18)',
-        boxShadow: '0 12px 28px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.14)',
+        borderColor: alpha(palette.glassEdge, 0.18),
+        boxShadow: `0 12px 28px ${alpha(palette.black, 0.38)}, inset 0 1px 0 ${alpha(palette.white, 0.14)}`,
         transitionProperty: 'transform, box-shadow',
-        transitionDuration: '160ms',
+        transitionDuration: `${motion.fast}ms`,
+        transitionTimingFunction: motion.css,
     } as object,
     genreTileFocused: {
         transform: [{ scale: 1.05 }],
-        borderColor: 'rgba(255,255,255,0.9)',
-        boxShadow: '0 0 0 3px rgba(255,255,255,0.9), 0 0 40px 8px rgba(91,140,255,0.6), 0 22px 40px rgba(0,0,0,0.5)',
+        borderColor: alpha(palette.white, 0.9),
+        boxShadow: `0 0 0 3px ${alpha(palette.white, 0.9)}, 0 0 40px 8px ${alpha(palette.primaryLight, 0.6)}, 0 22px 40px ${alpha(palette.black, 0.5)}`,
     } as object,
     genreScrim: {
         ...StyleSheet.absoluteFillObject,
-        backgroundImage: 'linear-gradient(0deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.15) 55%, rgba(0,0,0,0.05) 100%)',
+        backgroundImage: `linear-gradient(0deg, ${alpha(palette.black, 0.85)} 0%, ${alpha(palette.black, 0.15)} 55%, ${alpha(palette.black, 0.05)} 100%)`,
     } as object,
     genreIconBadge: {
         width: 32,
@@ -722,18 +723,18 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'rgba(255,255,255,0.16)',
+        backgroundColor: alpha(palette.white, 0.16),
         borderWidth: 1,
-        borderColor: 'rgba(255,255,255,0.22)',
+        borderColor: alpha(palette.white, 0.22),
         marginBottom: 10,
     },
-    genreTileText: { color: '#fff', fontSize: 15, fontWeight: '800', letterSpacing: 0.3, textTransform: 'uppercase' },
+    genreTileText: { color: palette.white, fontSize: 15, fontWeight: '800', letterSpacing: 0.3, textTransform: 'uppercase' },
 
     modalOverlay: {
         ...StyleSheet.absoluteFillObject,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'rgba(0,0,0,0.65)',
+        backgroundColor: alpha(palette.black, 0.65),
         zIndex: 50,
     } as object,
     modalCard: {
@@ -751,7 +752,7 @@ const styles = StyleSheet.create({
         width: 32,
         height: 32,
         borderRadius: 16,
-        backgroundColor: 'rgba(255,255,255,0.12)',
+        backgroundColor: alpha(palette.white, 0.12),
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -765,7 +766,7 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: palette.white,
     },
 
     promoBanner: {
@@ -777,9 +778,9 @@ const styles = StyleSheet.create({
         padding: 32,
         borderRadius: 24,
         borderWidth: 1,
-        borderColor: 'rgba(170, 195, 240, 0.2)',
-        backgroundImage: 'linear-gradient(135deg, #0B1E4D 0%, #3B1B63 55%, #7A1458 100%)',
-        boxShadow: '0 22px 50px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.18)',
+        borderColor: alpha(palette.glassEdge, 0.2),
+        backgroundImage: `linear-gradient(135deg, ${gradientTokens.brand[0]} 0%, ${gradientTokens.brand[1]} 55%, ${gradientTokens.brand[2]} 100%)`,
+        boxShadow: `0 22px 50px ${alpha(palette.black, 0.42)}, inset 0 1px 0 ${alpha(palette.white, 0.18)}`,
         overflow: 'hidden',
     } as object,
     promoLeft: { flex: 1 },
@@ -788,33 +789,33 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'flex-start',
         gap: 6,
-        backgroundColor: '#FF0033',
-        boxShadow: '0 0 16px rgba(255,0,51,0.55)',
+        backgroundColor: palette.live,
+        boxShadow: `0 0 16px ${alpha(palette.live, 0.55)}`,
         borderRadius: 999,
         paddingVertical: 4,
         paddingHorizontal: 10,
         marginBottom: 14,
     } as object,
-    promoLiveDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: '#fff' },
-    promoLiveText: { color: '#fff', fontSize: 10, fontWeight: '800', letterSpacing: 0.5 },
-    promoBrand: { color: '#fff', fontSize: 32, fontWeight: '800' },
-    promoUnderline: { width: 56, height: 4, borderRadius: 2, backgroundColor: '#F20C8F', marginTop: 8, marginBottom: 14 },
-    promoTagline: { color: 'rgba(255,255,255,0.92)', fontSize: 18, fontWeight: '700', lineHeight: 24 },
-    promoTaglineHighlight: { color: '#F783C4' },
-    promoSubtitle: { color: 'rgba(255,255,255,0.55)', fontSize: 14, marginTop: 10, marginBottom: 18 },
+    promoLiveDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: palette.white },
+    promoLiveText: { color: palette.white, fontSize: 10, fontWeight: '800', letterSpacing: 0.5 },
+    promoBrand: { color: palette.white, fontSize: 32, fontWeight: '800' },
+    promoUnderline: { width: 56, height: 4, borderRadius: 2, backgroundColor: palette.accent, marginTop: 8, marginBottom: 14 },
+    promoTagline: { color: palette.textSoft, fontSize: 18, fontWeight: '700', lineHeight: 24 },
+    promoTaglineHighlight: { color: palette.accentLight },
+    promoSubtitle: { color: palette.textMuted, fontSize: 14, marginTop: 10, marginBottom: 18 },
     promoChipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
     promoChip: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 6,
-        backgroundColor: 'rgba(255,255,255,0.10)',
+        backgroundColor: alpha(palette.white, 0.1),
         borderWidth: 1,
-        borderColor: 'rgba(255,255,255,0.14)',
+        borderColor: alpha(palette.white, 0.14),
         borderRadius: 999,
         paddingVertical: 6,
         paddingHorizontal: 12,
     },
-    promoChipText: { color: 'rgba(255,255,255,0.85)', fontSize: 12, fontWeight: '600' },
+    promoChipText: { color: palette.textSoft, fontSize: 12, fontWeight: '600' },
     // Fanned 3-photo stack filling what used to be empty space between the
     // copy and the card's right edge — width fits the widest card's
     // rightmost extent (152 left-offset + 112 width) plus a little breathing
@@ -824,10 +825,10 @@ const styles = StyleSheet.create({
         position: 'absolute',
         borderRadius: 18,
         borderWidth: 3,
-        borderColor: 'rgba(255,255,255,0.18)',
-        backgroundColor: '#05060A',
+        borderColor: alpha(palette.white, 0.18),
+        backgroundColor: palette.black,
         overflow: 'hidden',
-        boxShadow: '0 14px 28px rgba(0,0,0,0.5)',
+        boxShadow: `0 14px 28px ${alpha(palette.black, 0.5)}`,
     } as object,
     // Left/right cards are slightly smaller and angled away from center,
     // sitting behind it (lower zIndex) — the classic "fanned photos" look.
@@ -859,7 +860,7 @@ const styles = StyleSheet.create({
     } as object,
     promoPhoneScrim: {
         ...StyleSheet.absoluteFillObject,
-        backgroundImage: 'linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 45%)',
+        backgroundImage: `linear-gradient(0deg, ${alpha(palette.black, 0.5)} 0%, ${alpha(palette.black, 0)} 45%)`,
     } as object,
 
     // Bento grid: one tall card (left) beside a wide card over a split pair
@@ -885,15 +886,15 @@ const styles = StyleSheet.create({
     // Brand-pink outline instead of the reference's blue — same "this one's
     // the highlighted option" treatment, using this app's actual accent
     // color instead of copying the reference's palette.
-    featureCardAccent: { borderColor: 'rgba(91,140,255,0.6)', boxShadow: '0 0 28px rgba(91,140,255,0.22), 0 22px 54px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.18)' } as object,
+    featureCardAccent: { borderColor: alpha(palette.primaryLight, 0.6), boxShadow: `0 0 28px ${alpha(palette.primaryLight, 0.22)}, 0 22px 54px ${alpha(palette.black, 0.42)}, inset 0 1px 0 ${alpha(palette.white, 0.18)}` } as object,
     featureEyebrowRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 10 },
-    featureEyebrowDash: { width: 16, height: 1.5, backgroundColor: 'rgba(255,255,255,0.4)' },
-    featureEyebrowText: { fontSize: 11, fontWeight: '700', letterSpacing: 1.2, textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)' },
-    featureHeading: { fontSize: 22, fontWeight: '800', color: '#fff', marginBottom: 8, lineHeight: 27 },
-    featureBody: { fontSize: 13.5, color: 'rgba(255,255,255,0.6)', lineHeight: 19, maxWidth: 320 },
+    featureEyebrowDash: { width: 16, height: 1.5, backgroundColor: alpha(palette.white, 0.4) },
+    featureEyebrowText: { fontSize: 11, fontWeight: '700', letterSpacing: 1.2, textTransform: 'uppercase', color: palette.textMuted },
+    featureHeading: { fontSize: 22, fontWeight: '800', color: palette.white, marginBottom: 8, lineHeight: 27 },
+    featureBody: { fontSize: 13.5, color: palette.textMuted, lineHeight: 19, maxWidth: 320 },
 
     mosaicWrap: { marginHorizontal: 48, marginBottom: 40 },
-    mosaicHeading: { fontSize: 20, fontWeight: '800', color: '#fff', marginBottom: 16 },
+    mosaicHeading: { fontSize: 20, fontWeight: '800', color: palette.white, marginBottom: 16 },
     // Real gaps (same 20px rhythm as FeatureGrid's own featureGrid/featureRow
     // above), not thin touching dividers — no card here should look like
     // it's overlapping or fused to its neighbor.
@@ -909,14 +910,14 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         overflow: 'hidden',
         position: 'relative',
-        backgroundColor: '#16243C',
+        backgroundColor: palette.card,
     },
     photoCardTall: { flex: 0.85, minHeight: 380 },
     photoCardWide: { minHeight: 170 },
     photoCardHalf: { flex: 1, minHeight: 170 },
     photoFeatureScrim: {
         ...StyleSheet.absoluteFillObject,
-        backgroundImage: 'linear-gradient(0deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.15) 55%, rgba(0,0,0,0.05) 100%)',
+        backgroundImage: `linear-gradient(0deg, ${alpha(palette.black, 0.85)} 0%, ${alpha(palette.black, 0.15)} 55%, ${alpha(palette.black, 0.05)} 100%)`,
     } as object,
     // Anchored to the bottom regardless of cell height — same treatment as
     // the hero row's own title overlay — rather than needing separate
@@ -947,8 +948,8 @@ const styles = StyleSheet.create({
     } as object,
     tipsHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
     tipsDots: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-    tipsDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: 'rgba(255,255,255,0.25)' },
-    tipsDotActive: { width: 16, backgroundColor: '#F20C8F' },
+    tipsDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: alpha(palette.white, 0.25) },
+    tipsDotActive: { width: 16, backgroundColor: palette.accent },
     tipsBody: {},
     tipsIconBadge: {
         width: 34,
@@ -956,7 +957,7 @@ const styles = StyleSheet.create({
         borderRadius: 17,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundImage: 'linear-gradient(135deg, #083A85 0%, #F20C8F 100%)',
+        backgroundImage: `linear-gradient(135deg, ${palette.navy} 0%, ${palette.accent} 100%)`,
         marginBottom: 12,
     } as object,
 
@@ -976,18 +977,18 @@ const styles = StyleSheet.create({
         paddingHorizontal: 30,
         ...midnightGlass,
     } as object,
-    pageFooterCredit: { fontSize: 13, fontWeight: '500', letterSpacing: 0.2, color: 'rgba(255,255,255,0.55)' },
+    pageFooterCredit: { fontSize: 13, fontWeight: '500', letterSpacing: 0.2, color: palette.textMuted },
     // Same brand→accent gradient credit treatment as the login screen's
     // own footer (see login.tsx's footerBrand).
     pageFooterBrand: {
         fontWeight: '800',
         letterSpacing: 0.2,
-        backgroundImage: 'linear-gradient(90deg, #4C8DFF 0%, #F20C8F 100%)',
+        backgroundImage: `linear-gradient(90deg, ${palette.primaryLight} 0%, ${palette.accent} 100%)`,
         WebkitBackgroundClip: 'text',
         WebkitTextFillColor: 'transparent',
         backgroundClip: 'text',
     } as object,
-    pageFooterDivider: { width: 1, height: 20, backgroundColor: 'rgba(255,255,255,0.14)' },
+    pageFooterDivider: { width: 1, height: 20, backgroundColor: alpha(palette.white, 0.14) },
     pageFooterChip: { flexDirection: 'row', alignItems: 'center', gap: 10 },
     pageFooterChipIcon: {
         width: 26,
@@ -995,9 +996,9 @@ const styles = StyleSheet.create({
         borderRadius: 9999,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundImage: 'linear-gradient(135deg, #083A85 0%, #F20C8F 100%)',
+        backgroundImage: `linear-gradient(135deg, ${palette.navy} 0%, ${palette.accent} 100%)`,
     } as object,
-    pageFooterChipValue: { fontSize: 13, fontWeight: '600', color: 'rgba(255,255,255,0.85)' },
+    pageFooterChipValue: { fontSize: 13, fontWeight: '600', color: palette.textSoft },
 
     // "Press Back again to exit" — a centered bottom capsule that fades in on
     // the first Back press at the root screen (TV cert convention).
@@ -1014,5 +1015,5 @@ const styles = StyleSheet.create({
         zIndex: 60,
         ...midnightGlass,
     } as object,
-    exitToastText: { color: '#fff', fontSize: 14, fontWeight: '700', letterSpacing: 0.2 },
+    exitToastText: { color: palette.white, fontSize: 14, fontWeight: '700', letterSpacing: 0.2 },
 });

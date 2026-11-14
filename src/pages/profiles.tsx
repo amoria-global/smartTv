@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { sceneBackground } from '../components/glass/glassStyle';
 import { useRouter } from 'next/router';
-import { ThemeContext } from '../config';
+import { ThemeContext, alpha, palette } from '../config';
 import { useFocusNav } from '../hooks/useFocusNav';
 import { useAuth } from '../store/auth';
 import { useTranslation } from '../i18n';
@@ -72,7 +72,7 @@ export default function ProfilesScreen() {
                                 {initial ? (
                                     <Text style={styles.avatarText}>{initial}</Text>
                                 ) : (
-                                    <i className="bi bi-person-fill" style={{ fontSize: 56, color: '#fff' }} />
+                                    <i className="bi bi-person-fill" style={{ fontSize: 56, color: palette.white }} />
                                 )}
                             </View>
                         )}
@@ -160,8 +160,8 @@ const styles = StyleSheet.create({
         marginBottom: 16,
     },
     avatarFallback: { alignItems: 'center', justifyContent: 'center' },
-    avatarText: { color: '#fff', fontSize: 48, fontWeight: '800' },
-    addAvatar: { alignItems: 'center', justifyContent: 'center', borderStyle: 'dashed', backgroundColor: 'rgba(255,255,255,0.06)' },
+    avatarText: { color: palette.white, fontSize: 48, fontWeight: '800' },
+    addAvatar: { alignItems: 'center', justifyContent: 'center', borderStyle: 'dashed', backgroundColor: alpha(palette.white, 0.06) },
     addPlus: { fontSize: 56, fontWeight: '300' },
     name: {
         fontSize: 20,
