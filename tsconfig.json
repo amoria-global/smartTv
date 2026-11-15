@@ -23,6 +23,8 @@
     "platformBuilds/app_web/output/types/**/*.ts"
   ],
   "exclude": [
-    "**/rn_modules"
+    "**/rn_modules",
+    "platformBuilds/app_web/output/standalone",
+    "android-shell"
   ]
 }
