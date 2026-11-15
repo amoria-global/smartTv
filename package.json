@@ -31,7 +31,8 @@
         "postinstall": "node scripts/postinstall.js",
         "test": "vitest run",
         "typecheck": "tsc --noEmit",
-        "test:watch": "vitest"
+        "test:watch": "vitest",
+        "package:web": "node scripts/package-web.js"
     },
     "version": "0.3.0",
     "dependencies": {
