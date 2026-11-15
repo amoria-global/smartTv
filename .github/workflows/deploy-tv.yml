@@ -1,0 +1,100 @@
+name: deploy-tv
+
+# Builds the TV web app (tv.connekyt.com) on every push to main and deploys it to the server.
+#
+# The server side is a restricted user, tvdeploy, whose SSH key can only do two things: upload
+# a package and ask the root-owned /usr/local/sbin/tv-deploy.sh to deploy it. That script stages
+# the package on a spare port and tests it, backs up the live files, swaps, checks the live
+# site, and restores the backup if the check fails. A bad build never replaces a good one.
+#
+# Needs one repository secret: TV_DEPLOY_SSH_KEY (the private key for tvdeploy).
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "android-shell/**"
+      - "**.md"
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-tv
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --non-interactive
+
+      - name: Generate the ReNative runtime config
+        run: |
+          node -e '
+            const fs = require("fs");
+            const out = "platformAssets/renative.runtime.json";
+            if (fs.existsSync(out)) process.exit(0);
+            const app = require("./appConfigs/app/renative.json");
+            fs.mkdirSync("platformAssets", { recursive: true });
+            fs.writeFileSync(out, JSON.stringify({ ...(app.runtime || {}), ...((app.common || {}).runtime || {}) }, null, 4));
+          '
+
+      - name: Typecheck and test
+        run: |
+          yarn typecheck
+          yarn test
+
+      - name: Build the web app
+        run: npx rnv build -p web -s release --ci
+
+      - name: Package for the server
+        run: node scripts/package-web.js
+
+      - name: Make the package paths Linux paths
+        # A build can leave Windows style paths in the server config (a distDir with
+        # backslashes), which stops the server finding its build. Normalise them, then check.
+        run: |
+          node -e '
+            const fs = require("fs");
+            const BS = String.fromCharCode(92);
+            const base = "platformBuilds/app_web/output/standalone/";
+            for (const f of ["server.js", "platformBuilds/app_web/output/required-server-files.json"]) {
+              let s = fs.readFileSync(base + f, "utf8");
+              s = s.replace(/"distDir":"([^"]*)"/g, (m, p) => "\"distDir\":\"" + p.split(BS).join("/").replace(/\/+/g, "/") + "\"");
+              fs.writeFileSync(base + f, s);
+            }
+            const server = fs.readFileSync(base + "server.js", "utf8");
+            const dist = (server.match(/"distDir":"([^"]*)"/) || [])[1];
+            console.log("distDir:", dist);
+            if (!dist || dist.includes(BS)) { console.error("distDir is not a Linux path"); process.exit(1); }
+          '
+          rm -f platformBuilds/app_web/tv-web.tgz
+          tar -czf platformBuilds/app_web/tv-web.tgz -C platformBuilds/app_web/output/standalone .
+          ls -l platformBuilds/app_web/tv-web.tgz
+
+      - name: Deploy to the server
+        env:
+          SSH_KEY: ${{ secrets.TV_DEPLOY_SSH_KEY }}
+        run: |
+          if [ -z "$SSH_KEY" ]; then echo "Secret TV_DEPLOY_SSH_KEY is not set"; exit 1; fi
+          HOST=197.243.24.101
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/tv_deploy
+          chmod 600 ~/.ssh/tv_deploy
+          # Pinned host key, so the key is only ever offered to the real server.
+          printf '%s\n' "$HOST ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDU3S93QqHZ6DmiqDKiMobdcDGRTbT36AnU+6hnwwslg" > ~/.ssh/known_hosts
+          OPTS="-i $HOME/.ssh/tv_deploy -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=20"
+          ssh $OPTS tvdeploy@$HOST upload < platformBuilds/app_web/tv-web.tgz
+          ssh $OPTS tvdeploy@$HOST deploy
