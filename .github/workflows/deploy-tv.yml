@@ -1,13 +1,15 @@
 name: deploy-tv
 
-# Builds the TV web app (tv.connekyt.com) on every push to main and deploys it to the server.
+# Builds the TV web app (tv.connekyt.com) on every push to main and publishes the build as a
+# workflow artifact, tv-web. A repository webhook then tells the server (the same signed webhook
+# the other apps use, hook id deploy-tv). The server downloads this run's artifact over HTTPS
+# with its read-only GitHub token and runs /usr/local/sbin/tv-deploy.sh, which stages the
+# package on a spare port and tests it, backs up the live files, swaps, checks the live site and
+# restores the backup if the check fails. A bad build never replaces a good one.
 #
-# The server side is a restricted user, tvdeploy, whose SSH key can only do two things: upload
-# a package and ask the root-owned /usr/local/sbin/tv-deploy.sh to deploy it. That script stages
-# the package on a spare port and tests it, backs up the live files, swaps, checks the live
-# site, and restores the backup if the check fails. A bad build never replaces a good one.
-#
-# Needs one repository secret: TV_DEPLOY_SSH_KEY (the private key for tvdeploy).
+# The webhook only fires for a successful run of this workflow on main, so the workflow name
+# below (deploy-tv) is part of the contract with the server. SSH is not used: the server's
+# port 22 is not reachable from GitHub.
 
 on:
   push:
@@ -84,17 +86,11 @@ jobs:
           tar -czf platformBuilds/app_web/tv-web.tgz -C platformBuilds/app_web/output/standalone .
           ls -l platformBuilds/app_web/tv-web.tgz
 
-      - name: Deploy to the server
-        env:
-          SSH_KEY: ${{ secrets.TV_DEPLOY_SSH_KEY }}
-        run: |
-          if [ -z "$SSH_KEY" ]; then echo "Secret TV_DEPLOY_SSH_KEY is not set"; exit 1; fi
-          HOST=197.243.24.101
-          install -m 700 -d ~/.ssh
-          printf '%s\n' "$SSH_KEY" > ~/.ssh/tv_deploy
-          chmod 600 ~/.ssh/tv_deploy
-          # Pinned host key, so the key is only ever offered to the real server.
-          printf '%s\n' "$HOST ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDU3S93QqHZ6DmiqDKiMobdcDGRTbT36AnU+6hnwwslg" > ~/.ssh/known_hosts
-          OPTS="-i $HOME/.ssh/tv_deploy -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=20"
-          ssh $OPTS tvdeploy@$HOST upload < platformBuilds/app_web/tv-web.tgz
-          ssh $OPTS tvdeploy@$HOST deploy
+      - name: Publish the build for the server
+        uses: actions/upload-artifact@v4
+        with:
+          name: tv-web
+          path: platformBuilds/app_web/tv-web.tgz
+          retention-days: 7
+          compression-level: 0
+          if-no-files-found: error
