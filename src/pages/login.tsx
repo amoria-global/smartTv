@@ -11,7 +11,6 @@ import { initiateTvPairing, login, pollTvPairingStatus } from '../features/auth/
 import { useAuth, isApiError } from '../store/auth';
 import { useFocusNav } from '../hooks/useFocusNav';
 import { useBackHandler } from '../hooks/useBackHandler';
-import { useWindowHeight } from '../hooks/useWindowHeight';
 import { useViewport } from '../hooks/useViewport';
 import { useTranslation } from '../i18n';
 import { OnScreenKeyboard } from '../components/OnScreenKeyboard';
@@ -45,8 +44,9 @@ export default function LoginScreen() {
     const { theme } = useContext(ThemeContext);
     const { strings } = useTranslation();
     const applySession = useAuth((s) => s.applySession);
-    const windowHeight = useWindowHeight();
-    const { width: windowWidth, compact } = useViewport(COMPACT_WIDTH);
+    // Measured after mount (see useViewport). Reading the height during the first render left a
+    // desktop window with the server's TV-sized spacing, so the heading ran over the logo row.
+    const { width: windowWidth, height: windowHeight, compact } = useViewport(COMPACT_WIDTH);
     // A TV frame has to fit in one view (no scroll wheel on a remote), so it shrinks
     // with the height. A phone scrolls, so it keeps full spacing instead.
     const scale = compact ? 1 : Math.max(MIN_SCALE, Math.min(1, windowHeight / NATURAL_HEIGHT));
@@ -487,7 +487,7 @@ const styles = StyleSheet.create({
     // only fills its parent's height, and if that parent hasn't propagated
     // 100% height, the page falls short of the viewport, exposing the
     // browser's default white background as a strip at the bottom.
-    root: { flex: 1, minHeight: '100vh', position: 'relative' } as object,
+    root: { flexGrow: 1, flexShrink: 0, flexBasis: 'auto', minHeight: '100vh', position: 'relative' } as object,
     // Dark scrim over the blurred backdrop photo — high enough to keep text
     // readable, low enough that the photo is still visibly there (the point
     // of the effect), matching the glassmorphism look from the Figma mock.
@@ -519,7 +519,9 @@ const styles = StyleSheet.create({
     // JSX) — flex:1 + justifyContent:'center' is safe now that every child
     // margin/font/QR-size shrinks with the viewport instead of staying
     // fixed and overflowing.
-    centerGroup: { flex: 1, justifyContent: 'center' },
+    // Grows with its content, so a window too short for it scrolls instead of the group being
+    // centred upward over the brand row, and the backdrop still reaches the bottom.
+    centerGroup: { flexGrow: 1, flexShrink: 0, justifyContent: 'center' },
     // A phone scrolls, so the group starts at the top and grows with its content. Centering
     // an overflowing group pushed it up over the brand row.
     centerGroupCompact: { flexGrow: 1, flexShrink: 0, justifyContent: 'flex-start' },
