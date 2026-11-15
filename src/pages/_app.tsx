@@ -37,13 +37,15 @@ export default function MyApp({ Component, pageProps }) {
     return (
         <ThemeProvider>
             <Head>
-                {/* Tab title and icons. The icon PNGs are the logo cropped to its visible mark, so the
-                    favicon is not a tiny mark floating in padding. */}
+                {/* Tab title and icons. The icon files are the same ones connekyt.com uses, so the tab
+                    looks the same on both. The ?v=2 query makes browsers refetch the icon instead of
+                    reusing the one they cached while this site had none. */}
                 <title>Connekyt TV</title>
                 <meta name="theme-color" content="#0A1426" />
-                <link rel="icon" type="image/png" sizes="32x32" href="/images/icon-32.png" />
-                <link rel="icon" type="image/png" sizes="192x192" href="/images/icon-192.png" />
-                <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+                <link rel="icon" href="/favicon.ico?v=2" sizes="48x48" type="image/x-icon" />
+                <link rel="icon" type="image/png" sizes="32x32" href="/images/icon-32.png?v=2" />
+                <link rel="icon" type="image/png" sizes="192x192" href="/images/icon-192.png?v=2" />
+                <link rel="apple-touch-icon" href="/images/apple-touch-icon.png?v=2" />
             </Head>
             <I18nProvider>
                 <Component {...pageProps} />

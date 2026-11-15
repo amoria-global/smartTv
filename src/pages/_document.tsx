@@ -8,7 +8,6 @@ class MyDocument extends Document {
             <Html lang="en">
                 <Head>
                     <meta name="description" content={CONFIG.welcomeMessage} />
-                    <link rel="icon" href="/images/favicon.ico" sizes="any" />
                     {/* App-wide typefaces (Space Grotesk and Inter) live in a real
                         global CSS file — see src/styles/fonts.css, imported
                         from _app.tsx. It can't go in this inline <style>:
