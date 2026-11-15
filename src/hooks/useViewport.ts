@@ -8,15 +8,15 @@ import { useEffect, useState } from 'react';
  * (not compact), so React keeps the matching markup on hydration, and the real width is read
  * right after mount. On any screen wider than the breakpoint this never changes anything.
  */
-export function useViewport(breakpoint: number): { width: number; compact: boolean } {
-    const [width, setWidth] = useState(1920);
+export function useViewport(breakpoint: number): { width: number; height: number; compact: boolean } {
+    const [size, setSize] = useState({ width: 1920, height: 1080 });
 
     useEffect(() => {
-        const onResize = () => setWidth(window.innerWidth);
+        const onResize = () => setSize({ width: window.innerWidth, height: window.innerHeight });
         onResize();
         window.addEventListener('resize', onResize);
         return () => window.removeEventListener('resize', onResize);
     }, []);
 
-    return { width, compact: width < breakpoint };
+    return { width: size.width, height: size.height, compact: size.width < breakpoint };
 }
