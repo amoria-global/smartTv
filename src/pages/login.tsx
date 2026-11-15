@@ -6,11 +6,13 @@ import { useRouter } from 'next/router';
 import { QRCodeSVG } from 'qrcode.react';
 import { FocusableButton } from '../components/FocusableButton';
 import { ThemeContext, ICON_LOGO, alpha, palette } from '../config';
+import { BrandMark } from '../components/BrandMark';
 import { initiateTvPairing, login, pollTvPairingStatus } from '../features/auth/api';
 import { useAuth, isApiError } from '../store/auth';
 import { useFocusNav } from '../hooks/useFocusNav';
 import { useBackHandler } from '../hooks/useBackHandler';
 import { useWindowHeight } from '../hooks/useWindowHeight';
+import { useWindowWidth } from '../hooks/useWindowWidth';
 import { useTranslation } from '../i18n';
 import { OnScreenKeyboard } from '../components/OnScreenKeyboard';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
@@ -23,6 +25,9 @@ import { LanguageSwitcher } from '../components/LanguageSwitcher';
 const NATURAL_HEIGHT = 1100;
 const MIN_SCALE = 0.5;
 const MIN_QR_SCALE = 0.68;
+// Below this width the screen is a phone or a narrow browser window, not a TV: stack
+// the columns, let the page scroll and use the native keyboard.
+const COMPACT_WIDTH = 820;
 
 const POLL_INTERVAL_MS = 2000;
 // Matches TvPairingService.PAIRING_TTL_MINUTES on the backend. Counting down
@@ -41,10 +46,16 @@ export default function LoginScreen() {
     const { strings } = useTranslation();
     const applySession = useAuth((s) => s.applySession);
     const windowHeight = useWindowHeight();
-    const scale = Math.max(MIN_SCALE, Math.min(1, windowHeight / NATURAL_HEIGHT));
+    const windowWidth = useWindowWidth();
+    const compact = windowWidth < COMPACT_WIDTH;
+    // A TV frame has to fit in one view (no scroll wheel on a remote), so it shrinks
+    // with the height. A phone scrolls, so it keeps full spacing instead.
+    const scale = compact ? 1 : Math.max(MIN_SCALE, Math.min(1, windowHeight / NATURAL_HEIGHT));
     const qrScale = Math.max(MIN_QR_SCALE, scale);
     const gap = (base: number) => Math.round(base * scale);
-    const qrBoxSize = Math.round(260 * qrScale);
+    const qrBoxSize = compact ? Math.max(200, Math.min(260, windowWidth - 40 - 2 * 24 - 32)) : Math.round(260 * qrScale);
+    const qrSize = Math.round(qrBoxSize * (220 / 260));
+    const cardPadding = compact ? 24 : Math.round(32 * qrScale);
 
     const [tab, setTab] = useState<'qr' | 'remote'>('qr');
 
@@ -199,23 +210,19 @@ export default function LoginScreen() {
     };
 
     return (
-        <View style={[styles.root, { backgroundColor: theme.static.colorBgPrimary }]}>
+        <View style={[styles.root, compact && styles.rootCompact, { backgroundColor: theme.static.colorBgPrimary }]}>
             <Image source={{ uri: '/images/login.png' }} style={StyleSheet.absoluteFillObject} blurRadius={18} />
             <View style={[styles.scrim, { backgroundColor: theme.static.colorBgPrimary }]} />
             <View pointerEvents="none" style={[StyleSheet.absoluteFillObject, sceneBackground('transparent')]} />
 
-            <View style={[styles.wrapper, { paddingVertical: Math.max(24, Math.round(56 * scale)) }]}>
+            <View style={[styles.wrapper, compact ? { paddingHorizontal: 20, paddingVertical: 20 } : { paddingVertical: Math.max(24, Math.round(56 * scale)) }]}>
             <View style={[styles.topRow, { marginBottom: gap(40) }]}>
-                <View style={styles.brandRow}>
-                    <Image
-                        source={ICON_LOGO}
-                        style={[styles.logo, { width: Math.round(40 * Math.max(0.75, scale)), height: Math.round(40 * Math.max(0.75, scale)) }]}
-                        resizeMode="contain"
-                    />
-                    <AppText variant="display" style={[styles.brandText, { color: theme.static.colorTextPrimary, fontSize: Math.round(22 * Math.max(0.75, scale)) }]}>
-                        Connekyt
-                    </AppText>
-                </View>
+                <BrandMark
+                    size={Math.round(34 * Math.max(0.75, scale))}
+                    color={theme.static.colorTextPrimary}
+                    fontSize={Math.round(22 * Math.max(0.75, scale))}
+                    fontWeight="700"
+                />
                 <LanguageSwitcher />
             </View>
 
@@ -225,22 +232,22 @@ export default function LoginScreen() {
                 font/QR-size below scales down together (via `scale`/`gap`/
                 `qrBoxSize`, derived from the real viewport height) so the
                 whole screen always fits on one frame, on any resolution. */}
-            <View style={styles.centerGroup}>
-            <AppText variant="display" style={[styles.heading, { color: theme.static.colorTextPrimary, fontSize: Math.round(44 * Math.max(0.58, scale)), marginBottom: gap(8) }]}>
+            <View style={compact ? styles.centerGroupCompact : styles.centerGroup}>
+            <AppText variant="display" style={[styles.heading, { color: theme.static.colorTextPrimary, fontSize: compact ? 30 : Math.round(44 * Math.max(0.58, scale)), marginBottom: gap(8) }]}>
                 {strings.login.welcomeBack}
             </AppText>
             <AppText style={[styles.subheading, { color: theme.static.colorTextSecondary, marginBottom: gap(32) }]}>
                 {strings.login.subheading}
             </AppText>
 
-            <View style={[styles.tabRow, { marginBottom: gap(40) }]}>
-                <TabButton label={strings.login.tabQr} active={tab === 'qr'} onPress={() => setTab('qr')} first />
-                <TabButton label={strings.login.tabRemote} active={tab === 'remote'} onPress={() => setTab('remote')} />
+            <View style={[styles.tabRow, compact && styles.tabRowCompact, { marginBottom: gap(compact ? 28 : 40) }]}>
+                <TabButton label={strings.login.tabQr} active={tab === 'qr'} onPress={() => setTab('qr')} first compact={compact} />
+                <TabButton label={strings.login.tabRemote} active={tab === 'remote'} onPress={() => setTab('remote')} compact={compact} />
             </View>
 
             {tab === 'qr' ? (
-                <View style={styles.columns}>
-                    <View style={styles.leftCol}>
+                <View style={compact ? styles.columnsCompactReverse : styles.columns}>
+                    <View style={compact ? styles.colCompact : styles.leftCol}>
                         <AppText style={[styles.instructions, { color: theme.static.colorTextSecondary, marginBottom: gap(24) }]}>
                             {strings.login.qrInstructions}
                         </AppText>
@@ -259,8 +266,8 @@ export default function LoginScreen() {
                         </TouchableOpacity>
                     </View>
 
-                    <View style={styles.rightCol}>
-                        <View style={[styles.qrCard, styles.glass, { padding: Math.round(32 * qrScale) }]}>
+                    <View style={compact ? styles.qrColCompact : styles.rightCol}>
+                        <View style={[styles.qrCard, styles.glass, { padding: cardPadding }]}>
                             <CornerBrackets color={theme.static.colorPrimaryLight} />
                             <View style={[styles.qrBox, { width: qrBoxSize, height: qrBoxSize }]}>
                                 {qrStatus === 'revoked' ? (
@@ -292,7 +299,7 @@ export default function LoginScreen() {
                                         // photographable, which is the whole premise of
                                         // CONN-TV-1.
                                         value={JSON.stringify({ code: pairingCode })}
-                                        size={Math.round(220 * qrScale)}
+                                        size={qrSize}
                                         bgColor={palette.qrPaper}
                                         fgColor={palette.qrInk}
                                         level="M"
@@ -304,8 +311,8 @@ export default function LoginScreen() {
                 </View>
             ) : (
                 <>
-                <View style={styles.columns}>
-                    <View style={[styles.leftCol, styles.formCard, styles.glass, { padding: Math.round(32 * qrScale) }]}>
+                <View style={compact ? styles.columnsCompact : styles.columns}>
+                    <View style={[compact ? styles.colCompact : styles.leftCol, styles.formCard, styles.glass, { padding: cardPadding }]}>
                         <AppText style={[styles.instructions, { color: theme.static.colorTextSecondary, marginBottom: gap(24) }]}>
                             {strings.login.remoteInstructions}
                         </AppText>
@@ -358,7 +365,7 @@ export default function LoginScreen() {
                         </TouchableOpacity>
                     </View>
 
-                    <View style={styles.rightCol}>
+                    {compact ? null : <View style={styles.rightCol}>
                         {keyboardVisible ? (
                             <OnScreenKeyboard onKeyPress={onKeyPress} onDone={() => setKeyboardVisible(false)} />
                         ) : (
@@ -368,7 +375,7 @@ export default function LoginScreen() {
                                 resizeMode="contain"
                             />
                         )}
-                    </View>
+                    </View>}
                 </View>
                 </>
             )}
@@ -429,7 +436,7 @@ function TryAgainButton({ onPress, label }: { onPress: () => void; label: string
     );
 }
 
-function TabButton({ label, active, onPress, first }: { label: string; active: boolean; onPress: () => void; first?: boolean }) {
+function TabButton({ label, active, onPress, first, compact }: { label: string; active: boolean; onPress: () => void; first?: boolean; compact?: boolean }) {
     const { theme } = useContext(ThemeContext);
     const { focused, focusProps } = useFocusNav();
     return (
@@ -439,6 +446,7 @@ function TabButton({ label, active, onPress, first }: { label: string; active: b
             {...focusProps}
             style={[
                 styles.tabButton,
+                compact && styles.tabButtonCompact,
                 active ? raisedButton(theme.static, 'primary', { focused }) : focused ? raisedButton(theme.static, 'glass', { focused: true }) : null,
             ]}
         >
@@ -484,6 +492,9 @@ const styles = StyleSheet.create({
     // Dark scrim over the blurred backdrop photo — high enough to keep text
     // readable, low enough that the photo is still visibly there (the point
     // of the effect), matching the glassmorphism look from the Figma mock.
+    // On a phone the page scrolls: the root must grow with its content, or the backdrop photo
+    // and scrim stop at the first screen height.
+    rootCompact: { flexGrow: 1, flexShrink: 0, flexBasis: 'auto' } as object,
     scrim: { ...StyleSheet.absoluteFillObject, opacity: 0.55 } as object,
     wrapper: { flex: 1, paddingHorizontal: 56, paddingVertical: 56 },
     // position + zIndex here (not just on the dropdown menu itself) matter:
@@ -510,6 +521,9 @@ const styles = StyleSheet.create({
     // margin/font/QR-size shrinks with the viewport instead of staying
     // fixed and overflowing.
     centerGroup: { flex: 1, justifyContent: 'center' },
+    // A phone scrolls, so the group starts at the top and grows with its content. Centering
+    // an overflowing group pushed it up over the brand row.
+    centerGroupCompact: { flexGrow: 1, flexShrink: 0, justifyContent: 'flex-start' },
     logo: { width: 40, height: 40 },
     brandText: { fontSize: 22, fontWeight: '700' },
     heading: { fontSize: 44, fontWeight: '800', marginBottom: 8 },
@@ -530,7 +544,14 @@ const styles = StyleSheet.create({
     } as object,
     tabButton: { paddingVertical: 14, paddingHorizontal: 28, borderRadius: 999 },
     tabText: { fontSize: 15, fontWeight: '700' },
+    tabRowCompact: { alignSelf: 'stretch' },
+    tabButtonCompact: { flex: 1, alignItems: 'center', paddingHorizontal: 12 },
     columns: { flexDirection: 'row', gap: 64 },
+    columnsCompact: { flexDirection: 'column', gap: 24 },
+    // The code comes first on a phone, with the steps under it.
+    columnsCompactReverse: { flexDirection: 'column-reverse', gap: 28 },
+    colCompact: { alignSelf: 'stretch' },
+    qrColCompact: { alignItems: 'center', alignSelf: 'stretch' },
     leftCol: { flex: 1, maxWidth: 480 },
     rightCol: { flex: 1, alignItems: 'center', paddingHorizontal: 40 },
     bigLogo: { width: 220, height: 220 },

@@ -2,9 +2,11 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { AppText } from './AppText';
 import { useRouter } from 'next/router';
-import { ThemeContext, ICON_LOGO, alpha, palette } from '../config';
+import { ThemeContext, alpha, palette } from '../config';
 import { useFocusNav } from '../hooks/useFocusNav';
 import { useBackHandler } from '../hooks/useBackHandler';
+import { useWindowWidth } from '../hooks/useWindowWidth';
+import { BrandMark } from './BrandMark';
 import { useAuth } from '../store/auth';
 import { useAssistant } from '../store/assistant';
 import { useTranslation } from '../i18n';
@@ -71,17 +73,16 @@ export function Navbar() {
     const tabLabel = (key: EventTabFilter) =>
         key === 'ALL' ? strings.events.tabAll : key === 'LIVE' ? strings.events.tabLive : key === 'UPCOMING' ? strings.events.tabUpcoming : strings.events.tabEnded;
 
+    const compact = useWindowWidth() < 820;
+
     return (
-        <View style={[styles.bar, { backgroundColor: alpha(palette.background, 0.62), borderBottomColor: theme.static.glassStroke, boxShadow: `inset 0 -1px 0 ${theme.static.glassStroke}, 0 10px 30px ${alpha(palette.black, 0.35)}` } as object]}>
+        <View style={[styles.bar, compact && styles.barCompact, { backgroundColor: alpha(palette.background, 0.62), borderBottomColor: theme.static.glassStroke, boxShadow: `inset 0 -1px 0 ${theme.static.glassStroke}, 0 10px 30px ${alpha(palette.black, 0.35)}` } as object]}>
             <View style={styles.left}>
-                <View style={styles.brandRow}>
-                    <Image source={ICON_LOGO} style={styles.logo} resizeMode="contain" />
-                    <AppText variant="display" style={[styles.brandText, { color: theme.static.colorTextPrimary }]}>Connekyt</AppText>
-                </View>
+                <BrandMark size={compact ? 22 : 26} color={theme.static.colorTextPrimary} fontSize={18} />
             </View>
 
-            <View style={styles.center}>
-                <View style={[styles.navTrack, glassSurface(theme.static, { radius: 999 })]}>
+            <View style={[styles.center, compact && styles.centerCompact]}>
+                <View style={[styles.navTrack, compact && styles.navTrackCompact, glassSurface(theme.static, { radius: 999 })]}>
                     <NavLink
                         label={strings.navbar.welcome}
                         isActive={router.pathname === '/home'}
@@ -102,7 +103,7 @@ export function Navbar() {
 
             <View style={styles.right}>
                 <LanguageSwitcher />
-                <IconButton icon="bi-mic-fill" onPress={openAssistant} />
+                {compact ? null : <IconButton icon="bi-mic-fill" onPress={openAssistant} />}
                 <IconButton icon="bi-search" onPress={() => router.push('/search')} />
                 <View>
                     <TouchableOpacity onPress={() => setProfileMenuOpen((v) => !v)} style={styles.avatarButton}>
@@ -265,6 +266,17 @@ const styles = StyleSheet.create({
         position: 'relative',
         zIndex: 100,
     } as object,
+    // Phone: brand and actions on the first row, the tab pill on its own scrollable row.
+    barCompact: {
+        gridTemplateColumns: '1fr auto',
+        columnGap: 8,
+        rowGap: 8,
+        paddingHorizontal: 16,
+        paddingVertical: 10,
+        height: 'auto',
+    } as object,
+    centerCompact: { gridColumn: '1 / -1', gridRow: 2, justifySelf: 'stretch', justifyContent: 'flex-start', overflowX: 'auto' } as object,
+    navTrackCompact: { flexShrink: 0 },
     left: { flexDirection: 'row', alignItems: 'center', justifySelf: 'start' } as object,
     center: { flexDirection: 'row', justifyContent: 'center', justifySelf: 'center' } as object,
     brandRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
