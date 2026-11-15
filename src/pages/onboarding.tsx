@@ -4,9 +4,10 @@ import { AppText } from '../components/AppText';
 import { raisedButton, sceneBackground } from '../components/glass/glassStyle';
 import { useFocusNav } from '../hooks/useFocusNav';
 import { useRouter } from 'next/router';
-import { ThemeContext, ICON_LOGO, alpha, palette } from '../config';
+import { ThemeContext, alpha, palette } from '../config';
 import { storage, StorageKeys } from '../services/storage';
 import { useTranslation } from '../i18n';
+import { BrandMark } from '../components/BrandMark';
 
 const SLIDE_ICONS = ['bi-broadcast', 'bi-qr-code-scan'];
 
@@ -117,10 +118,7 @@ function TopBar({ onSignIn }: { onSignIn: () => void }) {
     const { strings } = useTranslation();
     return (
         <View style={styles.topBar}>
-            <View style={styles.brandRow}>
-                <Image source={ICON_LOGO} style={styles.logo} resizeMode="contain" />
-                <AppText variant="display" style={[styles.brandText, { color: theme.static.colorTextPrimary }]}>Connekyt</AppText>
-            </View>
+            <BrandMark size={26} color={theme.static.colorTextPrimary} fontSize={18} />
             <TouchableOpacity onPress={onSignIn} style={styles.signInButton}>
                 <AppText variant="display" style={styles.signInText}>{strings.onboarding.signIn}</AppText>
             </TouchableOpacity>

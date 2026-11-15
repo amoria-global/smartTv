@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import '../styles/fonts.css';
 import '../styles/animations.css';
@@ -35,6 +36,15 @@ export default function MyApp({ Component, pageProps }) {
 
     return (
         <ThemeProvider>
+            <Head>
+                {/* Tab title and icons. The icon PNGs are the logo cropped to its visible mark, so the
+                    favicon is not a tiny mark floating in padding. */}
+                <title>Connekyt TV</title>
+                <meta name="theme-color" content="#0A1426" />
+                <link rel="icon" type="image/png" sizes="32x32" href="/images/icon-32.png" />
+                <link rel="icon" type="image/png" sizes="192x192" href="/images/icon-192.png" />
+                <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+            </Head>
             <I18nProvider>
                 <Component {...pageProps} />
                 <AssistantOverlay />
