@@ -12,7 +12,7 @@ import { useAuth, isApiError } from '../store/auth';
 import { useFocusNav } from '../hooks/useFocusNav';
 import { useBackHandler } from '../hooks/useBackHandler';
 import { useWindowHeight } from '../hooks/useWindowHeight';
-import { useWindowWidth } from '../hooks/useWindowWidth';
+import { useViewport } from '../hooks/useViewport';
 import { useTranslation } from '../i18n';
 import { OnScreenKeyboard } from '../components/OnScreenKeyboard';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
@@ -46,8 +46,7 @@ export default function LoginScreen() {
     const { strings } = useTranslation();
     const applySession = useAuth((s) => s.applySession);
     const windowHeight = useWindowHeight();
-    const windowWidth = useWindowWidth();
-    const compact = windowWidth < COMPACT_WIDTH;
+    const { width: windowWidth, compact } = useViewport(COMPACT_WIDTH);
     // A TV frame has to fit in one view (no scroll wheel on a remote), so it shrinks
     // with the height. A phone scrolls, so it keeps full spacing instead.
     const scale = compact ? 1 : Math.max(MIN_SCALE, Math.min(1, windowHeight / NATURAL_HEIGHT));

@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { ThemeContext, alpha, palette } from '../config';
 import { useFocusNav } from '../hooks/useFocusNav';
 import { useBackHandler } from '../hooks/useBackHandler';
-import { useWindowWidth } from '../hooks/useWindowWidth';
+import { useViewport } from '../hooks/useViewport';
 import { BrandMark } from './BrandMark';
 import { useAuth } from '../store/auth';
 import { useAssistant } from '../store/assistant';
@@ -73,7 +73,7 @@ export function Navbar() {
     const tabLabel = (key: EventTabFilter) =>
         key === 'ALL' ? strings.events.tabAll : key === 'LIVE' ? strings.events.tabLive : key === 'UPCOMING' ? strings.events.tabUpcoming : strings.events.tabEnded;
 
-    const compact = useWindowWidth() < 820;
+    const { compact } = useViewport(820);
 
     return (
         <View style={[styles.bar, compact && styles.barCompact, { backgroundColor: alpha(palette.background, 0.62), borderBottomColor: theme.static.glassStroke, boxShadow: `inset 0 -1px 0 ${theme.static.glassStroke}, 0 10px 30px ${alpha(palette.black, 0.35)}` } as object]}>

@@ -12,14 +12,10 @@ import { useEffect, useState } from 'react';
  * only ever runs in a real DOM (web engine), unlike native RN.
  */
 export function useWindowWidth(): number {
-    // The first render must match the server's (1920), otherwise React keeps the
-    // server-rendered class names on hydration and a phone is stuck with the TV layout.
-    // The real width is read right after mount.
-    const [width, setWidth] = useState(1920);
+    const [width, setWidth] = useState(() => (typeof window !== 'undefined' ? window.innerWidth : 1920));
 
     useEffect(() => {
         const onResize = () => setWidth(window.innerWidth);
-        onResize();
         window.addEventListener('resize', onResize);
         return () => window.removeEventListener('resize', onResize);
     }, []);
