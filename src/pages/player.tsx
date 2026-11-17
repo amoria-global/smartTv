@@ -1417,9 +1417,10 @@ const styles = StyleSheet.create({
     },
     overlayTitle: { color: palette.white, fontSize: 20, fontWeight: '700', flex: 1 },
     watermarkLayer: { ...StyleSheet.absoluteFillObject, alignItems: 'center', justifyContent: 'center', zIndex: 1 } as object,
+    // Brand watermark, kept faint so it does not compete with the picture (was 0.16 for the text and 0.65 for the logo).
     watermarkText: {
         color: palette.white,
-        opacity: 0.16,
+        opacity: 0.06,
         fontSize: 42,
         fontWeight: '800',
         letterSpacing: 6,
@@ -1430,7 +1431,7 @@ const styles = StyleSheet.create({
         right: 28,
         width: 64,
         height: 64,
-        opacity: 0.65,
+        opacity: 0.35,
     } as object,
     bottomBar: { flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' },
     bottomBarWithReactions: { justifyContent: 'space-between' },
